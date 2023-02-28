@@ -1105,7 +1105,7 @@ GameObject:
   - component: {fileID: 1725122510}
   - component: {fileID: 1725122509}
   - component: {fileID: 1725122508}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: w
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1125,10 +1125,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endPosition: {x: 0, y: 0, z: 0}
-  rayAmount: 0
-  posRange: 0
-  minAngle: 0
-  maxAngle: 0
+  rayAmount: 100
+  originSpacing: 0.01
+  endSpacing: 0.03
+  distance: 10
+  oneSideAngle: 15
 --- !u!65 &1725122509
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1138,7 +1139,7 @@ BoxCollider:
   m_GameObject: {fileID: 1725122507}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
