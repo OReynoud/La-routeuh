@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    public static CameraController instance;
     public Transform cameraTarget;
     public float smoothMove;
     public bool stopMove;
@@ -12,9 +13,15 @@ public class CameraController : MonoBehaviour
     public Vector2 oui;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        if (instance != null)
+        {
+            DestroyImmediate(gameObject);
+            return;
+        }
 
+        instance = this;
     }
 
     // Update is called once per frame
@@ -22,7 +29,7 @@ public class CameraController : MonoBehaviour
     {
         if (transform.position != cameraTarget.position && !stopMove)
         {
-            Vector3 targetPos = new Vector3(cameraTarget.position.x, transform.position.y, cameraTarget.position.z) + offset;
+            Vector3 targetPos = new Vector3(cameraTarget.position.x, cameraTarget.position.y, cameraTarget.position.z) + offset;
             transform.position = Vector3.Lerp(transform.position,targetPos,smoothMove);
         }
 
