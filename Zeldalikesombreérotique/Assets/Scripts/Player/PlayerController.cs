@@ -5,18 +5,26 @@ namespace Player
 {
     public class PlayerController : MonoBehaviour
     {
+        public static PlayerController instance;
         [Foldout("Références")]public Rigidbody rb;
         [Header("Mouvements")]
         [Space(10)]
-        [BoxGroup]public float groundSpeed;
+        [BoxGroup][Tooltip("Vitesse du joueur")]public float groundSpeed;
 
-        [Foldout("Débug")] public Vector3 playerDir;
-        [Foldout("Débug")] public bool isGrounded;
+        [Foldout("Débug")][Tooltip("Direction du déplacement du joueur")] public Vector3 playerDir;
+        [Foldout("Débug")][Tooltip("Est-ce que le joueur touche le sol?")] public bool isGrounded;
     
         private InputManager controls;
         private float _baseOffset = -2.5f;
         void Awake()
         {
+            if (instance != null)
+            {
+                DestroyImmediate(gameObject);
+                return;
+            }
+
+            instance = this;
             controls = new InputManager();
             controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
         }
