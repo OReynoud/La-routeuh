@@ -13,6 +13,7 @@ namespace Player
 
         [Foldout("Débug")][Tooltip("Direction du déplacement du joueur")] public Vector3 playerDir;
         [Foldout("Débug")][Tooltip("Est-ce que le joueur touche le sol?")] public bool isGrounded;
+        [Foldout("Débug")][Tooltip("Est-ce que le jeu fait des opérations de gros shlag?")] public bool proofOfConcept;
     
         private InputManager controls;
         private float _baseOffset = -2.5f;

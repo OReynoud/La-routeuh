@@ -12,6 +12,8 @@ public class Light : MonoBehaviour
     public float originSpacing;
     public float endSpacing;
     public float distance;
+    private float diff;
+
     
     public float oneSideAngle;
     // Start is called before the first frame update
@@ -37,18 +39,16 @@ public class Light : MonoBehaviour
             Debug.DrawRay(new Vector3(transform.position.x - originSpacing * i, 2,transform.position.z),new Vector3(endPosition.x - endSpacing * i, 2, endPosition.z)* 10, Color.blue);
         }*/
 
-        var angleDiff = (oneSideAngle * 2) / rayAmount;
+        diff = (oneSideAngle * 2) / rayAmount;
         //Debug.Log(angleDiff);
         for (int i = 0; i < rayAmount; i++)
         {
-            var origin = new Vector3(transform.position.x, 2, transform.position.z);
-            var currentAngle = oneSideAngle - angleDiff * i;
+            var origin = new Vector3(transform.position.x, 1.5f, transform.position.z);
+            var currentAngle = transform.rotation.eulerAngles.y + oneSideAngle - diff * i;
             var rot = Quaternion.AngleAxis(currentAngle,Vector3.up);
             var dir = rot * Vector3.forward;
-            Debug.Log(dir);
             if (Physics.Raycast(origin,dir, out var raycastHit, distance))
             {
-                Debug.Log("touché");
                 Debug.DrawRay(origin,dir*raycastHit.distance, Color.red);
             }
             else
