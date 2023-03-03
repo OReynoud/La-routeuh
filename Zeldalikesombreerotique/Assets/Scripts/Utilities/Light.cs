@@ -10,7 +10,7 @@ public class Light : MonoBehaviour
     [Tooltip("Nombre de raycaysts")]public int rayAmount;
     [Tooltip("distance de l'arc")]public float distance;
     private float diff;
-
+    [SerializeField] private float height;
     
     [Tooltip("Angle voulu divisé par 2 (e.g: pour faire un arc de 60, faut mettre 30)")]public float oneSideAngle;
     // Start is called before the first frame update
@@ -40,7 +40,7 @@ public class Light : MonoBehaviour
         //Debug.Log(angleDiff);
         for (int i = 0; i < rayAmount; i++)
         {
-            var origin = new Vector3(transform.position.x, 1.5f, transform.position.z);
+            var origin = new Vector3(transform.position.x, transform.position.y + height, transform.position.z);
             var currentAngle = transform.rotation.eulerAngles.y + oneSideAngle - diff * i;
             var rot = Quaternion.AngleAxis(currentAngle,Vector3.up);
             var dir = rot * Vector3.forward;
