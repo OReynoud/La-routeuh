@@ -6,16 +6,13 @@ using UnityEngine.Experimental.Rendering;
 
 public class Light : MonoBehaviour
 {
-    public Vector3 endPosition;
 
-    public int rayAmount;
-    public float originSpacing;
-    public float endSpacing;
-    public float distance;
+    [Tooltip("Nombre de raycaysts")]public int rayAmount;
+    [Tooltip("distance de l'arc")]public float distance;
     private float diff;
 
     
-    public float oneSideAngle;
+    [Tooltip("Angle voulu divisé par 2 (e.g: pour faire un arc de 60, faut mettre 30)")]public float oneSideAngle;
     // Start is called before the first frame update
     void Start()
     {
