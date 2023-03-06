@@ -11,9 +11,12 @@ namespace Player
         [Foldout("Références")]public SpringJoint joint;
         [Header("Mouvements")]
         [Space(10)]
-        [BoxGroup][Tooltip("Vitesse du joueur")]public float groundSpeed;
-        [BoxGroup][Tooltip("Vitesse du joueur quand il manipule un objet")]public float grabbedSpeed;
-        [Range(0,2)][BoxGroup] [Tooltip("Maniabilitee du perso: (a 0 c'est un robot et a 2 il a des briques de savon a la place des pieds)")] public float allowedDrift;
+        [BoxGroup][Tooltip("Accélération du joueur")]public float groundSpeed;
+        [BoxGroup][Tooltip("Accélération du joueur quand il manipule un objet")]public float grabbedSpeed;
+
+        [BoxGroup] [Tooltip("Vitesse minimale du joueur")] public float minSpeed;
+        [BoxGroup] [Tooltip("Vitesse maximale du joueur")] public float maxSpeed;
+        [Range(0,1)][BoxGroup] [Tooltip("Maniabilitée du perso: (a 0 c'est un robot et a 1 il a des briques de savon a la place des pieds)")] public float allowedDrift;
 
         [Foldout("Débug")][Tooltip("Direction du déplacement du joueur")] public Vector3 playerDir;
         [Foldout("Débug")][Tooltip("Est-ce que le joueur touche le sol?")] public bool isGrounded;
@@ -39,7 +42,7 @@ namespace Player
         }
 
         // Update is called once per frame
-        void Update()
+        void FixedUpdate()
         {
             
             CameraController.instance.offset = new Vector3(playerDir.x, CameraController.instance.offset.y,playerDir.z + _baseOffset);
@@ -52,24 +55,38 @@ namespace Player
             }
             else if(!isGrabing)
             {
-                RotateModel();
-                var dx = playerDir - rb.velocity.normalized;
-                if (Mathf.Abs(dx.x) > allowedDrift || Mathf.Abs(dx.z) > allowedDrift )
-                {
-                    rb.velocity = new Vector3(rb.velocity.x * 0.9f, rb.velocity.y, rb.velocity.z * 0.9f);
-                }
-                rb.AddForce(playerDir * (groundSpeed),ForceMode.Force);
+                ApplyForce(groundSpeed);
             }
             else if (isGrabing)
             {
-                RotateModel();
-                var dx = playerDir - rb.velocity.normalized;
-                if (Mathf.Abs(dx.x) > allowedDrift || Mathf.Abs(dx.z) > allowedDrift )
-                {
-                    rb.velocity = new Vector3(rb.velocity.x * 0.9f, rb.velocity.y, rb.velocity.z * 0.9f);
-                }
-                rb.AddForce(playerDir * (grabbedSpeed),ForceMode.Force);
+                ApplyForce(grabbedSpeed);
             }
+        }
+
+        void ApplyForce(float appliedModifier)
+        {
+            RotateModel();
+            var dx = playerDir - rb.velocity.normalized;
+            if (Mathf.Abs(dx.x) > allowedDrift)
+            {
+                rb.velocity = new Vector3(rb.velocity.x * 0.9f, rb.velocity.y, rb.velocity.z);
+            }
+
+            if (Mathf.Abs(dx.z) > allowedDrift)
+            {
+                rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z * 0.9f);
+            }
+
+            if (rb.velocity.magnitude < minSpeed)
+            {
+                rb.velocity = minSpeed * playerDir;
+            }
+            if (rb.velocity.magnitude > maxSpeed)
+            {
+                rb.velocity = maxSpeed * playerDir;
+                return;
+            }
+            rb.AddForce(playerDir * (appliedModifier),ForceMode.Force);
         }
 
         private void OnTriggerStay(Collider other)
