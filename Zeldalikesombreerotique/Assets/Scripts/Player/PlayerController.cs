@@ -44,8 +44,8 @@ namespace Player
         // Update is called once per frame
         void FixedUpdate()
         {
+            // CameraController.instance.offset = new Vector3(playerDir.x, CameraController.instance.offset.y,playerDir.z + _baseOffset);
             
-            CameraController.instance.offset = new Vector3(playerDir.x, CameraController.instance.offset.y,playerDir.z + _baseOffset);
             if (!controls.Player.Move.IsPressed() && isGrounded)
             {
 
