@@ -21,10 +21,11 @@ public class Light : MonoBehaviour
         Debug.Log(dir);*/
         var angleDiff = (oneSideAngle * 2) / rayAmount;
         Debug.Log(angleDiff);
+        //Vector3[] vertices = new Vector3[]
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         /*endPosition = PlayerController.instance.playerDir;
         for (int i = 0; i < rayAmount * 0.5f; i++)

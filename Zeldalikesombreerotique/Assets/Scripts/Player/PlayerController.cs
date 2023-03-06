@@ -16,7 +16,7 @@ namespace Player
 
         [BoxGroup] [Tooltip("Vitesse minimale du joueur")] public float minSpeed;
         [BoxGroup] [Tooltip("Vitesse maximale du joueur")] public float maxSpeed;
-        [Range(0,1)][BoxGroup] [Tooltip("Maniabilitée du perso: (a 0 c'est un robot et a 1 il a des briques de savon a la place des pieds)")] public float allowedDrift;
+        [Range(0,1)][BoxGroup] [Tooltip("Maniabilitée du perso: ( 0 c'est un robot et a 1 il a des briques de savon a la place des pieds)")] public float allowedDrift;
 
         [Foldout("Débug")][Tooltip("Direction du déplacement du joueur")] public Vector3 playerDir;
         [Foldout("Débug")][Tooltip("Est-ce que le joueur touche le sol?")] public bool isGrounded;
@@ -50,7 +50,7 @@ namespace Player
             {
 
                 playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
-                rb.velocity = playerDir;
+                rb.velocity *= 0.9f;
                 rb.angularVelocity = Vector3.zero;
             }
             else if(!isGrabing)
@@ -125,6 +125,7 @@ namespace Player
                 joint.connectedBody = objectToGrab;
                 joint.gameObject.SetActive(true);
                 isGrabing = true;
+                RotateModel();
             }
         }
 
