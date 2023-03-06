@@ -12,10 +12,8 @@ namespace Player
         [Header("Mouvements")]
         [Space(10)]
         [BoxGroup][Tooltip("Vitesse du joueur")]public float groundSpeed;
-        [BoxGroup][Tooltip("Vitesse du joueur")]public float minSpeed;
-        [BoxGroup][Tooltip("Vitesse du joueur")]public float maxSpeed;
-
-        [BoxGroup] public float grabedRotateSpeed;
+        [BoxGroup][Tooltip("Vitesse du joueur quand il manipule un objet")]public float grabbedSpeed;
+        [Range(0,2)][BoxGroup] [Tooltip("Maniabilitee du perso: (a 0 c'est un robot et a 2 il a des briques de savon a la place des pieds)")] public float allowedDrift;
 
         [Foldout("Débug")][Tooltip("Direction du déplacement du joueur")] public Vector3 playerDir;
         [Foldout("Débug")][Tooltip("Est-ce que le joueur touche le sol?")] public bool isGrounded;
@@ -43,6 +41,7 @@ namespace Player
         // Update is called once per frame
         void Update()
         {
+            
             CameraController.instance.offset = new Vector3(playerDir.x, CameraController.instance.offset.y,playerDir.z + _baseOffset);
             if (!controls.Player.Move.IsPressed() && isGrounded)
             {
@@ -54,12 +53,22 @@ namespace Player
             else if(!isGrabing)
             {
                 RotateModel();
+                var dx = playerDir - rb.velocity.normalized;
+                if (Mathf.Abs(dx.x) > allowedDrift || Mathf.Abs(dx.z) > allowedDrift )
+                {
+                    rb.velocity = new Vector3(rb.velocity.x * 0.9f, rb.velocity.y, rb.velocity.z * 0.9f);
+                }
                 rb.AddForce(playerDir * (groundSpeed),ForceMode.Force);
             }
             else if (isGrabing)
             {
                 RotateModel();
-                rb.AddForce(playerDir * (groundSpeed),ForceMode.Force);
+                var dx = playerDir - rb.velocity.normalized;
+                if (Mathf.Abs(dx.x) > allowedDrift || Mathf.Abs(dx.z) > allowedDrift )
+                {
+                    rb.velocity = new Vector3(rb.velocity.x * 0.9f, rb.velocity.y, rb.velocity.z * 0.9f);
+                }
+                rb.AddForce(playerDir * (grabbedSpeed),ForceMode.Force);
             }
         }
 
