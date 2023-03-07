@@ -1,4 +1,5 @@
 using System;
+using System.Dynamic;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -24,7 +25,12 @@ namespace Player
         [Foldout("Débug")][Tooltip("Est-ce que je joueur manipule un objet?")] public bool isGrabing;
         [Foldout("Débug")][Tooltip("Y a t-il un objet à porté que le joueur peut grab?")] public bool canGrab;
         [Foldout("Débug")][Tooltip("Quel est l'objet à grab")] public Rigidbody objectToGrab;
-    
+        public enum ObjectType
+        {
+            canCarry,
+            canMove,
+            canRotateOnly
+        }
         private InputManager controls;
         private float _baseOffset = -2.5f;
         void Awake()
@@ -91,11 +97,22 @@ namespace Player
 
         private void OnTriggerStay(Collider other)
         {
-            if (other.CompareTag("Moveable"))
+            if (other.GetComponent<DynamicObject>())
             {
                 canGrab = true;
                 objectToGrab = other.attachedRigidbody;
             }
+
+            switch (other.GetComponent<DynamicObject>().currentType)
+            {
+                case ObjectType.canCarry:
+                    break;
+                case ObjectType.canMove:
+                    break;
+                case ObjectType.canRotateOnly:
+                    break;
+            }
+            
         }
         private void OnTriggerExit(Collider other)
         {
