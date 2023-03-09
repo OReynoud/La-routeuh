@@ -19,9 +19,14 @@ public class SkinnedMeshToMesh : MonoBehaviour
         {
             Mesh m = new Mesh();
             Pyramid001.BakeMesh(m);
-            VFXGraph.SetMesh("Mesh", m);
-
-            yield return new WaitForSeconds(refreshRate);
+            
+            Vector3[] vertices = m.vertices;
+            Mesh m2 = new Mesh();
+            m2.vertices = vertices;
+            
+            VFXGraph.SetMesh("Mesh", m2);
+            
+            yield return new WaitForSeconds (refreshRate);
         }
     }
 }
