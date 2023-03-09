@@ -65,7 +65,6 @@ namespace Player
             {
                 return;
             }
-            carrySpot = transform.position + xOffset * playerDir + yOffset * Vector3.up;
             if (!controls.Player.Move.IsPressed() && isGrounded)
             {
 
@@ -82,10 +81,14 @@ namespace Player
                 ApplyForce(groundSpeed);
             }
 
+            /*if (!objectType)
+            {
+                return;
+            }
             if (objectType.currentType == ObjectType.canCarry && isGrabing)
             {
                 objectToGrab.position = carrySpot;
-            }
+            }*/
         }
 
 
@@ -190,18 +193,38 @@ namespace Player
 
         void PickupObject()
         {
-            
-            rb.velocity = Vector3.zero;
-            canMove = false;
-            objectToGrab.transform.SetParent(transform);
-            objectToGrab.useGravity = false;
-            objectToGrab.transform.DOJump(Vector3.forward + Vector3.up + transform.position, 2.5f, 1, pickUpTime).AppendCallback(() =>
+            if (isGrabing)
+            {
+                
+                rb.velocity = Vector3.zero;
+                canMove = false;
+                var rot = Quaternion.AngleAxis(transform.localRotation.eulerAngles.y, Vector3.up);
+                var currentDir = rot * Vector3.forward;
+                carrySpot = transform.position + xOffset * 1.2f * currentDir.normalized + Vector3.up;
+                objectToGrab.transform.DOJump(carrySpot, 1f, 1, pickUpTime).AppendCallback(() =>
                 {
-                    Debug.Log("oui");
-                    rb.constraints = RigidbodyConstraints.FreezeRotation;
+                    canMove = true;
+                    objectToGrab.isKinematic = true;
+                    objectToGrab.transform.SetParent(null);
+                    objectToGrab.useGravity = true;
+                    objectToGrab.isKinematic = false;
+                });
+            }
+            else
+            {
+                var rot = Quaternion.AngleAxis(transform.localRotation.eulerAngles.y, Vector3.up);
+                var currentDir = rot * Vector3.forward;
+                carrySpot = transform.position + xOffset * currentDir.normalized + yOffset * Vector3.up;
+                rb.velocity = Vector3.zero;
+                canMove = false;
+                objectToGrab.transform.SetParent(transform);
+                objectToGrab.useGravity = false;
+                objectToGrab.transform.DOJump(carrySpot, 2.5f, 1, pickUpTime).AppendCallback(() =>
+                {
                     canMove = true;
                     objectToGrab.isKinematic = true;
                 });
+            }
         }
         #endregion
         
