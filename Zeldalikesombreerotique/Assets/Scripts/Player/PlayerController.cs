@@ -31,9 +31,6 @@ namespace Player
         [Foldout("Débug")][Tooltip("Le joueur a t-il le droit de bouger?")] public bool canMove;
         [Foldout("Débug")] [Tooltip("Ou est-ce que le joueur porte son objet?")]
         private Vector3 carrySpot;
-        
-
-        public Vector3 offset = new Vector3(0,2,2);
         public enum ObjectType
         {
             canCarry,
@@ -41,8 +38,8 @@ namespace Player
             canRotateOnly
         }
         private InputManager controls;
-        [SerializeField] private float xOffset = 1f;
-        [SerializeField]private float yOffset = 2f;
+        [Foldout("Autre")][SerializeField] private float xOffset = 1f;
+        [Foldout("Autre")][SerializeField]private float yOffset = 2f;
         void Awake()
         {
             if (instance != null)
