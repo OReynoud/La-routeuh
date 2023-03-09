@@ -5,15 +5,23 @@ using UnityEngine.VFX;
 
 public class SkinnedMeshToMesh : MonoBehaviour
 {
-    public MeshRenderer 
+    public  SkinnedMeshRenderer Pyramid001;
+    public VisualEffect VFXGraph;
+    public float refreshRate;
     void Start()
     {
-        
+        StartCoroutine(UpdateVFXGraph());
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator UpdateVFXGraph()
     {
-        
+        while (gameObject.activeSelf)
+        {
+            Mesh m = new Mesh();
+            Pyramid001.BakeMesh(m);
+            VFXGraph.SetMesh("Mesh", m);
+
+            yield return new WaitForSeconds(refreshRate);
+        }
     }
 }
