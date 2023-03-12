@@ -51,6 +51,31 @@ namespace Utilities
                 if (Physics.Raycast(origin,dir, out var raycastHit, distance)) // If the raycast hits something
                 {
                     Debug.DrawRay(origin,dir*raycastHit.distance, Color.red);
+                    /*if (raycastHit.collider.CompareTag("Player")) // If the raycast hits the player
+                    {
+                        if (lightColorType.canKillPlayer) // If the light can kill the player
+                        {
+                            // Kill the player
+                        }
+                    }
+                    else if (raycastHit.collider.CompareTag("Shadow")) // If the raycast hits a shadow
+                    {
+                        if (lightColorType.canKillShadows) // If the light can kill shadows
+                        {
+                            // Kill the shadow
+                        }
+                    }
+                    else if (raycastHit.collider.CompareTag("Object")) // If the raycast hits an object
+                    {
+                        if (lightColorType.canRevealObjects) // If the light can reveal objects
+                        {
+                            // Reveal the object
+                        }
+                        else if (lightColorType.canHideObjects) // If the light can hide objects
+                        {
+                            // Hide the object
+                        }
+                    }*/
                 }
                 else // If the raycast doesn't hit anything
                 {
