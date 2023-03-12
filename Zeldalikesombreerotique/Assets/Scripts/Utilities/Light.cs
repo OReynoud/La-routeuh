@@ -1,60 +1,50 @@
-using System.Collections;
-using System.Collections.Generic;
-using Player;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
 
-public class Light : MonoBehaviour
+namespace Utilities
 {
-
-    [Tooltip("Nombre de raycaysts")]public int rayAmount;
-    [Tooltip("distance de l'arc")]public float distance;
-    private float diff;
-    [SerializeField] private float height;
-    
-    [Tooltip("Angle voulu divisé par 2 (e.g: pour faire un arc de 60, faut mettre 30)")]public float oneSideAngle;
-    // Start is called before the first frame update
-    void Start()
+    public class Light : MonoBehaviour
     {
-        /*var rot = Quaternion.AngleAxis(rayAmount,Vector3.up);
-        var dir = rot * Vector3.forward;
-        Debug.Log(dir);*/
-        var angleDiff = (oneSideAngle * 2) / rayAmount;
-        Debug.Log(angleDiff);
-        //Vector3[] vertices = new Vector3[]
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        /*endPosition = PlayerController.instance.playerDir;
-        for (int i = 0; i < rayAmount * 0.5f; i++)
+        [Tooltip("Raycast number (more raycasts = more precision)")] [SerializeField] private int rayAmount;
+        [Tooltip("Distance")] [SerializeField] private float distance;
+        [SerializeField] private float height;
+        [Tooltip("Angle")] [SerializeField] private float angle;
+        private float _halfAngle;
+        [Tooltip("Color (type) of the light")] [SerializeField] private LightColorType lightColorType;
+        
+        private void Awake()
         {
-            Debug.DrawRay(new Vector3(transform.position.x + originSpacing * i, 2,transform.position.z),new Vector3(endPosition.x + endSpacing * i, 2, endPosition.z)* 10, Color.red);
+            // Half angle calculation
+            _halfAngle = angle * 0.5f;
         }
-        for (int i = 0; i < rayAmount * 0.5f; i++)
-        {
-            Debug.DrawRay(new Vector3(transform.position.x - originSpacing * i, 2,transform.position.z),new Vector3(endPosition.x - endSpacing * i, 2, endPosition.z)* 10, Color.blue);
-        }*/
 
-        diff = (oneSideAngle * 2) / rayAmount;
-        //Debug.Log(angleDiff);
-        for (int i = 0; i < rayAmount; i++)
+        private void FixedUpdate()
         {
-            var origin = new Vector3(transform.position.x, transform.position.y + height, transform.position.z);
-            var currentAngle = transform.rotation.eulerAngles.y + oneSideAngle - diff * i;
-            var rot = Quaternion.AngleAxis(currentAngle,Vector3.up);
-            var dir = rot * Vector3.forward;
-            if (Physics.Raycast(origin,dir, out var raycastHit, distance))
-            {
-                Debug.DrawRay(origin,dir*raycastHit.distance, Color.red);
-            }
-            else
-            {
-                Debug.DrawRay(origin,dir*distance, Color.green);
-            }
+            // Optimization to avoid calling transform multiple times
+            var transform1 = transform;
+            var position = transform1.position;
+                
+            // Raycast global values
+            var origin = new Vector3(position.x, position.y + height, position.z); // Origin point
+            var diff = angle / rayAmount; // Angle difference between each raycast
             
+            // Raycast loop
+            for (var i = 0; i < rayAmount; i++)
+            {
+                // Raycast values
+                var currentAngle = transform1.rotation.eulerAngles.y + _halfAngle - diff * i; // Current angle
+                var rot = Quaternion.AngleAxis(currentAngle,Vector3.up); // Quaternion for direction calculation
+                var dir = rot * Vector3.forward; // Direction of the raycast
+                
+                // Raycast
+                if (Physics.Raycast(origin,dir, out var raycastHit, distance)) // If the raycast hits something
+                {
+                    Debug.DrawRay(origin,dir*raycastHit.distance, Color.red);
+                }
+                else // If the raycast doesn't hit anything
+                {
+                    Debug.DrawRay(origin,dir*distance, Color.green);
+                }
+            }
         }
-        //Debug.DrawRay(transform.position, endPosition * 10, Color.blue);
     }
 }
