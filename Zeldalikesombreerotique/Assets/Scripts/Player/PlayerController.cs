@@ -1,11 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.InputSystem;
+using Utilities;
 
 namespace Player
 {
@@ -20,30 +17,25 @@ namespace Player
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur quand il manipule un objet")]public float grabbedSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur")] public float minSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse maximale du joueur")] public float maxSpeed;
-        [Range(0,1)][BoxGroup("Mouvements")] [Tooltip("Maniabilitée du perso: ( 0 c'est un robot et a 1 il a des briques de savon a la place des pieds)")] 
-        public float allowedDrift;
+        [Range(0,1)][BoxGroup("Mouvements")] [Tooltip("Maniabilitée du perso: ( 0 c'est un robot et a 1 il a des briques de savon a la place des pieds)")] public float allowedDrift;
         [BoxGroup("Mouvements")] [Tooltip("Le temps que le joueur met à ramasser/poser un objet")] public float pickUpTime;
         [HorizontalLine(color: EColor.Red)]
+        
         [Foldout("Débug")][Tooltip("Direction du déplacement du joueur")] public Vector3 playerDir;
         [Foldout("Débug")][Tooltip("Est-ce que le joueur touche le sol?")] public bool isGrounded;
         [Foldout("Débug")][Tooltip("Est-ce que le jeu fait des trucs de gros shlag pour la PoC?")] public bool proofOfConcept;
-        [Foldout("Débug")][Tooltip("Est-ce que je joueur manipule un objet?")] public bool isGrabing;
+        [Foldout("Débug")][Tooltip("Est-ce que je joueur manipule un objet?")] public bool isGrabbing;
         [Foldout("Débug")][Tooltip("Y a t-il un objet à porté que le joueur peut grab?")] public bool canGrab;
         [Foldout("Débug")][Tooltip("Quel est l'objet à grab")] public Rigidbody objectToGrab;
         [Foldout("Débug")][Tooltip("Le script de l'objet à grab")] public DynamicObject objectType;
         [Foldout("Débug")][Tooltip("Le joueur a t-il le droit de bouger?")] public bool canMove;
-        [Foldout("Débug")] [Tooltip("Ou est-ce que le joueur porte son objet?")]
-        private Vector3 carrySpot;
-        public enum ObjectType
-        {
-            canCarry,
-            canMove,
-            canRotateOnly
-        }
+        [Foldout("Débug")] [Tooltip("Ou est-ce que le joueur porte son objet?")] private Vector3 carrySpot;
+        
         private InputManager controls;
-        [Foldout("Autre")][SerializeField] private float xOffset = 1f;
-        [Foldout("Autre")][SerializeField]private float yOffset = 2f;
-        void Awake()
+        [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
+        [Foldout("Autre")] [SerializeField] private float yOffset = 2f;
+
+        private void Awake()
         {
             if (instance != null)
             {
@@ -61,7 +53,7 @@ namespace Player
         }
 
         // Update is called once per frame
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             if (!canMove)
             {
@@ -74,7 +66,7 @@ namespace Player
                 rb.velocity *= 0.9f;
                 rb.angularVelocity = Vector3.zero;
             }
-            else if (isGrabing && objectType.currentType == ObjectType.canMove)
+            else if (isGrabbing && objectType.mobilityType == DynamicObject.MobilityType.CanMove)
             {
                 ApplyForce(grabbedSpeed);
             }
@@ -115,6 +107,7 @@ namespace Player
         }*/
 
         #region Actions
+        
         private void Move(Vector2 dir)
         {
             playerDir = new Vector3(dir.x,playerDir.y, dir.y);
@@ -129,13 +122,13 @@ namespace Player
             }
             objectType = objectToGrab.GetComponent<DynamicObject>();
 
-            switch (objectType.currentType)
+            switch (objectType.mobilityType)
             {
-                case ObjectType.canCarry:
+                case DynamicObject.MobilityType.CanCarry:
                     PickupObject();
                     break;
-                case ObjectType.canMove:
-                    if (isGrabing)
+                case DynamicObject.MobilityType.CanMove:
+                    if (isGrabbing)
                     {
                         joint.connectedBody = null;
                         joint.gameObject.SetActive(false);
@@ -143,17 +136,14 @@ namespace Player
                     }
                     if (canGrab && objectToGrab != null)
                     {
-                        Debug.Log("Grabbing");
                         joint.gameObject.SetActive(true);
                         joint.connectedBody = objectToGrab;
                         RotateModel();
                     }
-                    break; 
-                case ObjectType.canRotateOnly: 
                     break;
             }
             
-            isGrabing = !isGrabing;
+            isGrabbing = !isGrabbing;
         }
 
         private void ApplyForce(float appliedModifier)
@@ -162,12 +152,14 @@ namespace Player
             var dx = playerDir - rb.velocity.normalized;
             if (Mathf.Abs(dx.x) > allowedDrift)
             {
-                rb.velocity = new Vector3(rb.velocity.x * 0.9f, rb.velocity.y, rb.velocity.z);
+                var velocity = rb.velocity;
+                rb.velocity = new Vector3(velocity.x * 0.9f, velocity.y, velocity.z);
             }
 
             if (Mathf.Abs(dx.z) > allowedDrift)
             {
-                rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z * 0.9f);
+                var velocity = rb.velocity;
+                rb.velocity = new Vector3(velocity.x, velocity.y, velocity.z * 0.9f);
             }
 
             if (rb.velocity.magnitude < minSpeed)
@@ -184,7 +176,7 @@ namespace Player
         
         private void RotateModel()
         {
-            if (!isGrabing || objectType.currentType == ObjectType.canCarry)
+            if (!isGrabbing || objectType.mobilityType == DynamicObject.MobilityType.CanCarry)
             {
                 var angle = Mathf.Atan2(playerDir.x, playerDir.z)* Mathf.Rad2Deg;
                 transform.rotation = Quaternion.AngleAxis(angle,Vector3.up);
@@ -200,9 +192,8 @@ namespace Player
 
         private void PickupObject()
         {
-            if (isGrabing)
+            if (isGrabbing)
             {
-                
                 rb.velocity = Vector3.zero;
                 canMove = false;
                 var rot = Quaternion.AngleAxis(transform.localRotation.eulerAngles.y, Vector3.up);
@@ -221,10 +212,11 @@ namespace Player
             {
                 var rot = Quaternion.AngleAxis(transform.localRotation.eulerAngles.y, Vector3.up);
                 var currentDir = rot * Vector3.forward;
-                carrySpot = transform.position + xOffset * currentDir.normalized + yOffset * Vector3.up;
+                var transform1 = transform;
+                carrySpot = transform1.position + xOffset * currentDir.normalized + yOffset * Vector3.up;
                 rb.velocity = Vector3.zero;
                 canMove = false;
-                objectToGrab.transform.SetParent(transform);
+                objectToGrab.transform.SetParent(transform1);
                 objectToGrab.useGravity = false;
                 objectToGrab.transform.DOJump(carrySpot, 2.5f, 1, pickUpTime).AppendCallback(() =>
                 {
@@ -233,6 +225,7 @@ namespace Player
                 });
             }
         }
+        
         #endregion
         
         private void OnEnable()
