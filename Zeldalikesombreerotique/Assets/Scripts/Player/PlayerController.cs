@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
@@ -245,13 +246,28 @@ namespace Player
         Rigidbody GetClosestObject()
         {
             LayerMask layer = LayerMask.NameToLayer("Ignore Raycast");
-            Debug.Log(layer);
+            Debug.Log((int)layer);
             Collider[] nearbyObjects = Physics.OverlapSphere(transform.position,2);
-            float[] distances = new float[nearbyObjects.Length];
+            Debug.Log(nearbyObjects.Length);
+            List<float> distances = new List<float>();
             for (int i = 0; i < nearbyObjects.Length; i++)
             {
-                distances[i] = Vector3.Distance(nearbyObjects[i].transform.position, transform.position);
+                Debug.Log(nearbyObjects[i], nearbyObjects[i].gameObject);
+                if (nearbyObjects[i].gameObject == gameObject)
+                {
+                    distances.Add(1000);
+                    continue;
+                }
+
+                if (!nearbyObjects[i].GetComponent<DynamicObject>())
+                {
+                    distances.Add(1000);
+                    continue;
+                }
+                var distance = Vector3.Distance(nearbyObjects[i].transform.position, transform.position);
+                distances.Add(distance);
             }
+            Debug.Log(distances[(int)distances.Min()]);
             return nearbyObjects[(int)distances.Min()].GetComponent<Rigidbody>();
         }
     }
