@@ -66,7 +66,7 @@ namespace Player
             {
                 return;
             }
-            if (!controls.Player.Move.IsPressed && isGrounded)
+            if (!controls.Player.Move.IsPressed() && isGrounded)
             {
 
                 playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
