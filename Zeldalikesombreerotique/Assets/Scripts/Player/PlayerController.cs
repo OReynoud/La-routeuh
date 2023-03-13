@@ -139,21 +139,24 @@ namespace Player
                     {
                         joint.connectedBody = null;
                         joint.gameObject.SetActive(false);
-                        return;
+                        break;
                     }
                     if (canGrab && objectToGrab != null)
                     {
-                        joint.connectedBody = objectToGrab;
+                        Debug.Log("Grabbing");
                         joint.gameObject.SetActive(true);
+                        joint.connectedBody = objectToGrab;
                         RotateModel();
                     }
                     break; 
                 case ObjectType.canRotateOnly: 
                     break;
             }
+            
             isGrabing = !isGrabing;
         }
-        void ApplyForce(float appliedModifier)
+
+        private void ApplyForce(float appliedModifier)
         {
             RotateModel();
             var dx = playerDir - rb.velocity.normalized;
@@ -178,6 +181,7 @@ namespace Player
             }
             rb.AddForce(playerDir * (appliedModifier),ForceMode.Force);
         }
+        
         private void RotateModel()
         {
             if (!isGrabing || objectType.currentType == ObjectType.canCarry)
@@ -196,7 +200,7 @@ namespace Player
             transform.rotation = Quaternion.AngleAxis(angle2,Vector3.up);
         }
 
-        void PickupObject()
+        private void PickupObject()
         {
             if (isGrabing)
             {
@@ -243,32 +247,20 @@ namespace Player
             controls.Disable();
         }
 
-        Rigidbody GetClosestObject()
+        private Rigidbody GetClosestObject()
         {
-            LayerMask layer = LayerMask.NameToLayer("Ignore Raycast");
-            Debug.Log((int)layer);
-            Collider[] nearbyObjects = Physics.OverlapSphere(transform.position,2);
-            Debug.Log(nearbyObjects.Length);
-            List<float> distances = new List<float>();
-            for (int i = 0; i < nearbyObjects.Length; i++)
+            // ReSharper disable once Unity.PreferNonAllocApi
+            var nearbyObjects = Physics.OverlapSphere(transform.position,2).ToList().Select(x => x.gameObject).ToList();
+            
+            nearbyObjects.Sort((x, y) =>
             {
-                Debug.Log(nearbyObjects[i], nearbyObjects[i].gameObject);
-                if (nearbyObjects[i].gameObject == gameObject)
-                {
-                    distances.Add(1000);
-                    continue;
-                }
+                var position = transform.position;
+                return Vector3.Distance(x.transform.position, position)
+                        .CompareTo(Vector3.Distance(y.transform.position, position));
+            });
 
-                if (!nearbyObjects[i].GetComponent<DynamicObject>())
-                {
-                    distances.Add(1000);
-                    continue;
-                }
-                var distance = Vector3.Distance(nearbyObjects[i].transform.position, transform.position);
-                distances.Add(distance);
-            }
-            Debug.Log(distances[(int)distances.Min()]);
-            return nearbyObjects[(int)distances.Min()].GetComponent<Rigidbody>();
+            return nearbyObjects.Where(obj => obj.GetComponent<DynamicObject>())
+                .Select(obj => obj.GetComponent<Rigidbody>()).FirstOrDefault();
         }
     }
 }
