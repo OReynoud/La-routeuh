@@ -193,8 +193,6 @@ namespace Player
 
             Vector3 dir = objectToGrab.transform.position - transform.position;
             var dirNormed = dir.normalized;
-            //joint.connectedAnchor = new Vector3(dirNormed.x, 0, dirNormed.z);
-            //joint.anchor = transform.position;
             var angle2 = Mathf.Atan2(dirNormed.x, dirNormed.z) * Mathf.Rad2Deg;
             //transform.rotation = Quaternion.AngleAxis(angle2,Vector3.up);
             transform.rotation = Quaternion.AngleAxis(angle2,Vector3.up);
