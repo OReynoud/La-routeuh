@@ -55,25 +55,25 @@ namespace Utilities
                     {
                         if (lightColorType.canKillPlayer) // If the light can kill the player
                         {
-                            // Kill the player
+                            raycastHit.collider.gameObject.SetActive(false); // Kill the player
                         }
                     }
-                    else if (raycastHit.collider.CompareTag("Shadow")) // If the raycast hits a shadow
+                    else if (raycastHit.collider.CompareTag("Shadows")) // If the raycast hits a shadow
                     {
                         if (lightColorType.canKillShadows) // If the light can kill shadows
                         {
-                            // Kill the shadow
+                            raycastHit.collider.gameObject.SetActive(false); // Kill the shadow
                         }
                     }
-                    else if (raycastHit.collider.CompareTag("Object")) // If the raycast hits an object
+                    else if (raycastHit.collider.CompareTag("Objects")) // If the raycast hits an object
                     {
                         if (lightColorType.canRevealObjects) // If the light can reveal objects
                         {
-                            // Reveal the object
+                            raycastHit.collider.gameObject.SetActive(true); // Reveal the object
                         }
                         else if (lightColorType.canHideObjects) // If the light can hide objects
                         {
-                            // Hide the object
+                            raycastHit.collider.gameObject.SetActive(false); // Hide the object
                         }
                     }*/
                 }
