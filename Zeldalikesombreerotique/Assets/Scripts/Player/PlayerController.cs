@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
+using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.InputSystem;
 
 namespace Player
 {
@@ -51,6 +53,8 @@ namespace Player
             instance = this;
             canMove = true;
             controls = new InputManager();
+            controls.Enable();
+            controls.Player.Enable();
             controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
             controls.Player.Interact.performed += _ => Interact();
         }
@@ -62,7 +66,7 @@ namespace Player
             {
                 return;
             }
-            if (!controls.Player.Move.IsPressed() && isGrounded)
+            if (!controls.Player.Move.IsPressed && isGrounded)
             {
 
                 playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
@@ -90,7 +94,7 @@ namespace Player
 
 
 
-        private void OnTriggerStay(Collider other)
+        /*private void OnTriggerStay(Collider other)
         {
             if (other.GetComponent<DynamicObject>() && !isGrabing)
             {
@@ -107,7 +111,7 @@ namespace Player
                 objectToGrab = null;
                 objectType = null;
             }
-        }
+        }*/
 
         #region Actions
         private void Move(Vector2 dir)
@@ -117,10 +121,13 @@ namespace Player
 
         private void Interact()
         {
-            if (!objectType)
+            objectToGrab = GetClosestObject();
+            if (!objectToGrab)
             {
                 return;
             }
+            objectType = objectToGrab.GetComponent<DynamicObject>();
+
             switch (objectType.currentType)
             {
                 case ObjectType.canCarry:
@@ -233,6 +240,19 @@ namespace Player
         private void OnDisable()
         {
             controls.Disable();
+        }
+
+        Rigidbody GetClosestObject()
+        {
+            LayerMask layer = LayerMask.NameToLayer("Ignore Raycast");
+            Debug.Log(layer);
+            Collider[] nearbyObjects = Physics.OverlapSphere(transform.position,2);
+            float[] distances = new float[nearbyObjects.Length];
+            for (int i = 0; i < nearbyObjects.Length; i++)
+            {
+                distances[i] = Vector3.Distance(nearbyObjects[i].transform.position, transform.position);
+            }
+            return nearbyObjects[(int)distances.Min()].GetComponent<Rigidbody>();
         }
     }
 }
