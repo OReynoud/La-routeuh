@@ -582,9 +582,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 626255163}
+  joint: {fileID: 0}
   groundSpeed: 5
+  grabbedSpeed: 0
+  minSpeed: 0
+  maxSpeed: 0
+  allowedDrift: 0
+  pickUpTime: 0
   playerDir: {x: 0, y: 0, z: 0}
   isGrounded: 1
+  proofOfConcept: 0
+  isGrabing: 0
+  canGrab: 0
+  objectToGrab: {fileID: 0}
+  objectType: {fileID: 0}
+  canMove: 0
+  xOffset: 1
+  yOffset: 2
 --- !u!136 &626255159
 CapsuleCollider:
   m_ObjectHideFlags: 0
