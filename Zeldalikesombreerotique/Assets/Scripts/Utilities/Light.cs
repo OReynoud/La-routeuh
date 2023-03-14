@@ -14,13 +14,15 @@ namespace Utilities
         private float _physicAngle;
         private float _halfAngle;
         private float _angleInterval;
-        [Tooltip("Color (type) of the light")] [SerializeField] private LightColorType lightColorType;
+        [Tooltip("Color (type) of the light")] [SerializeField] internal LightColorType lightColorType;
         private UnityEngine.Light _lightComponent;
         private readonly Dictionary<GameObject, bool> _hiddenObjects = new();
         private readonly Dictionary<GameObject, bool> _revealedObjects = new();
-        [SerializeField] private Transform respawnPoint;
+        [Tooltip("Point where the player will respawn if they are killed by the light")] [SerializeField] internal Transform respawnPoint;
+        private Vector3 direction;
+        private readonly Dictionary<GameObject, bool> activeMirrors = new();
 
-        private void Awake()
+        private void OnEnable()
         {
             // Light component initialization
             _lightComponent = GetComponent<UnityEngine.Light>();
@@ -37,29 +39,47 @@ namespace Utilities
 
         private void FixedUpdate()
         {
+            ThrowRaycasts();
+        }
+
+        private void ThrowRaycasts()
+        {
+
             // Optimization to avoid calling transform multiple times
             var transform1 = transform;
             var position = transform1.position;
-                
+
+            transform1.rotation = direction == Vector3.zero ? transform1.rotation : Quaternion.LookRotation(direction);
+            
             // Raycast global values
             var origin = new Vector3(position.x, position.y, position.z); // Origin point
-            
+            var mirrorsToReflectRays = new Dictionary<GameObject, List<Vector3>>();
+
             // Raycast loop
             for (var i = 0; i < rayAmount + 1; i++)
             {
                 // Raycast values
                 var currentAngle = transform1.rotation.eulerAngles.y + _halfAngle - _angleInterval * i; // Current angle
-                var rot = Quaternion.AngleAxis(currentAngle,Vector3.up); // Quaternion for direction calculation
+                var rot = Quaternion.AngleAxis(currentAngle, Vector3.up); // Quaternion for direction calculation
                 var dir = rot * Vector3.forward; // Direction of the raycast
-                
+                dir.Normalize();
+
                 // Raycast
-                if (Physics.Raycast(origin,dir, out var raycastHit, distance)) // If the raycast hits something
+                if (Physics.Raycast(origin, dir, out var raycastHit, distance)) // If the raycast hits something
                 {
-                    Debug.DrawRay(origin,dir*raycastHit.distance, Color.red);
-                    
+                    Debug.DrawRay(origin, dir * raycastHit.distance, Color.red);
+
                     var hitObject = raycastHit.collider.gameObject;
-                    
-                    if (hitObject.CompareTag("Player")) // If the raycast hits the player
+
+                    if (hitObject.CompareTag("Mirror")) // If the raycast hits a mirror
+                    {
+                        if (!mirrorsToReflectRays.ContainsKey(hitObject))
+                        {
+                            mirrorsToReflectRays.Add(hitObject, new List<Vector3>());
+                        }
+                        mirrorsToReflectRays[hitObject].Add(Vector3.Reflect(dir, raycastHit.normal));
+                    }
+                    else if (hitObject.CompareTag("Player")) // If the raycast hits the player
                     {
                         if (lightColorType.canKillPlayer) // If the light can kill the player
                         {
@@ -79,8 +99,11 @@ namespace Utilities
                     else if (hitObject.CompareTag("Objects")) // If the raycast hits an object
                     {
                         var dynamicObject = hitObject.GetComponent<DynamicObject>();
-                        
-                        if (lightColorType.canRevealObjects && dynamicObject.visibilityType == DynamicObject.VisibilityType.CanBeRevealed) // If the light can reveal objects and the object can be revealed
+
+                        if (lightColorType.canRevealObjects &&
+                            dynamicObject.visibilityType ==
+                            DynamicObject.VisibilityType
+                                .CanBeRevealed) // If the light can reveal objects and the object can be revealed
                         {
                             if (_revealedObjects.ContainsKey(hitObject))
                             {
@@ -92,7 +115,10 @@ namespace Utilities
                                 _revealedObjects.Add(hitObject, true);
                             }
                         }
-                        else if (lightColorType.canHideObjects && dynamicObject.visibilityType == DynamicObject.VisibilityType.CanBeHidden) // If the light can hide objects and the object can be hidden
+                        else if (lightColorType.canHideObjects &&
+                                 dynamicObject.visibilityType ==
+                                 DynamicObject.VisibilityType
+                                     .CanBeHidden) // If the light can hide objects and the object can be hidden
                         {
                             if (_hiddenObjects.ContainsKey(hitObject))
                             {
@@ -108,7 +134,50 @@ namespace Utilities
                 }
                 else // If the raycast doesn't hit anything
                 {
-                    Debug.DrawRay(origin,dir*distance, Color.green);
+                    Debug.DrawRay(origin, dir * distance, Color.green);
+                }
+            }
+
+            foreach (var mirrorToReflectRays in mirrorsToReflectRays.Keys.ToList())
+            {
+                // Average of the reflected rays
+                var average = Vector3.zero;
+                foreach (var rayToReflect in mirrorsToReflectRays[mirrorToReflectRays])
+                {
+                    average += rayToReflect;
+                }
+                average /= mirrorsToReflectRays[mirrorToReflectRays].Count;
+                
+                // Mirror values affectation
+                var mirrorLightGameObject = mirrorToReflectRays.transform.GetChild(0).gameObject;
+                var mirrorLightComponent = mirrorLightGameObject.GetComponent<Light>();
+                
+                if (!activeMirrors.ContainsKey(mirrorToReflectRays))
+                {
+                    mirrorLightComponent.lightColorType = lightColorType;
+                    mirrorLightComponent.respawnPoint = respawnPoint;
+                    mirrorLightGameObject.transform.rotation = Quaternion.LookRotation(average);
+                    mirrorLightGameObject.SetActive(true);
+                    activeMirrors.Add(mirrorToReflectRays, true);
+                }
+                else
+                {
+                    activeMirrors[mirrorToReflectRays] = true;
+                }
+                
+                mirrorLightComponent.direction = average;
+            }
+            
+            foreach (var activeMirror in activeMirrors.Keys.ToList())
+            {
+                if (!activeMirrors[activeMirror])
+                {
+                    activeMirror.transform.GetChild(0).gameObject.SetActive(false);
+                    activeMirrors.Remove(activeMirror);
+                }
+                else
+                {
+                    activeMirrors[activeMirror] = false;
                 }
             }
 
@@ -124,7 +193,7 @@ namespace Utilities
                     _revealedObjects[revealedObject] = false;
                 }
             }
-            
+
             foreach (var hiddenObject in _hiddenObjects.Keys.ToList())
             {
                 if (!_hiddenObjects[hiddenObject])
