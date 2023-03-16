@@ -633,7 +633,7 @@ MonoBehaviour:
   maxCableLength: 15
   currentCableLength: 0
   minCollisionDistance: 0.05
-  retractionForce: 500
+  retractionForce: 100
 --- !u!120 &815862273
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -990,12 +990,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec2968c32ab9b194f99c96d9f8c8d3ce, type: 3}
---- !u!65 &1725529846 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 5137170814833329883, guid: ec2968c32ab9b194f99c96d9f8c8d3ce,
-    type: 3}
-  m_PrefabInstance: {fileID: 1725529845}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1750526881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1480,45 +1474,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6998835611127860944, guid: 77fd2c943eb0e2442bf7233e3b5054df,
-        type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329056, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 6998835611510329056, guid: 77fd2c943eb0e2442bf7233e3b5054df,
-        type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
-        type: 3}
-      propertyPath: xOffset
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
-        type: 3}
-      propertyPath: isGrabing
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
-        type: 3}
-      propertyPath: pickUpTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
-        type: 3}
-      propertyPath: grabbedSpeed
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
-        type: 3}
-      propertyPath: proofOfConcept
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329070, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
@@ -1575,47 +1534,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6998835611757184985, guid: 77fd2c943eb0e2442bf7233e3b5054df,
-        type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6998835611972276732, guid: 77fd2c943eb0e2442bf7233e3b5054df,
-        type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6998835611510329071, guid: 77fd2c943eb0e2442bf7233e3b5054df, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77fd2c943eb0e2442bf7233e3b5054df, type: 3}
---- !u!1 &6998835612094475221 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6998835611510329056, guid: 77fd2c943eb0e2442bf7233e3b5054df,
-    type: 3}
-  m_PrefabInstance: {fileID: 6998835612094475220}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &6998835612094475222 stripped
-CapsuleCollider:
-  m_CorrespondingSourceObject: {fileID: 6998835611510329059, guid: 77fd2c943eb0e2442bf7233e3b5054df,
-    type: 3}
-  m_PrefabInstance: {fileID: 6998835612094475220}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6998835612094475223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6998835612094475221}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 365edef5d15d7b44faea4b6b27bdba96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  recursionPrefab: {fileID: 0}
-  raycastLength: 0
-  recordedColliders: []
-  recordedPoints: []
-  connectedObject1: {fileID: 6998835612094475222}
-  connectedObject2: {fileID: 1725529846}
-  nearestMainTarget: {x: 0, y: 0, z: 0}
