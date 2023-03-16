@@ -1,16 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using Player;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CableHolder : MonoBehaviour
 {
-    [Tooltip("L'object manipulable par le joueur rélié à la corde")]public Transform ropeUser;
+    [Tooltip("L'object manipulable par le joueur rélié à la corde")]public Rigidbody ropeUser;
     [Tooltip("Le point fixe rélié à la corde")]public Transform anchor;
 
     [BoxGroup("Autres")]public LineRenderer rope;
     [Tooltip("Quels layers sont utilisés pour détecter la colision des cordes (plusieurs possibles)?")]public LayerMask collMask;
+
+    [Tooltip("Taille maximale du cable")]
+    public float maxCableLength;
+
+    [Tooltip("Taille actuelle du cable")][ReadOnly]public float currentCableLength;
     [BoxGroup("Autres")]public float minCollisionDistance;
+
+    [Tooltip("Force de rétraction quand le cable atteint sa longueure maximale")]
+    public float retractionForce;
 
     public List<Vector3> ropePositions { get;} = new List<Vector3>();
 
@@ -23,6 +33,17 @@ public class CableHolder : MonoBehaviour
     {
         UpdateRopePositions();
         LastSegmentGoToPlayerPos();
+        for (int i = 0; i < rope.positionCount-1; i++)
+        {
+            currentCableLength += Vector3.Distance(rope.GetPosition(i), rope.GetPosition(i + 1));
+        }
+
+        if (currentCableLength > maxCableLength)
+        {
+            var dir = ropePositions[^2] - ropeUser.position;
+            PlayerController.instance.rb.AddForce(retractionForce * dir.normalized);
+            ropeUser.AddForce(retractionForce * dir.normalized);
+        }
 
         DetectCollisionEnter();
         if (ropePositions.Count > 2) DetectCollisionExits();        
@@ -30,12 +51,11 @@ public class CableHolder : MonoBehaviour
 
     private void DetectCollisionEnter()
     {
-        RaycastHit hit;
-        if (Physics.Linecast(ropeUser.position, rope.GetPosition(ropePositions.Count - 2), out hit, collMask))
+        if (Physics.Linecast(ropeUser.position, rope.GetPosition(ropePositions.Count - 2), out var hit, collMask))
         {
             // Check for duplicated collision (two collisions at the same place).
             if (System.Math.Abs(Vector3.Distance(rope.GetPosition(ropePositions.Count - 2), hit.point)) > minCollisionDistance) {
-                ropePositions.RemoveAt(ropePositions.Count - 1);
+                ropePositions.RemoveAt(ropePositions.Count - 1); 
                 AddPosToRope(hit.point);
             }
         }
@@ -58,8 +78,10 @@ public class CableHolder : MonoBehaviour
 
     private void UpdateRopePositions()
     {
+        currentCableLength = 0;
         rope.positionCount = ropePositions.Count;
         rope.SetPositions(ropePositions.ToArray());
+
     }
 
     private void LastSegmentGoToPlayerPos() => rope.SetPosition(rope.positionCount - 1, ropeUser.position);

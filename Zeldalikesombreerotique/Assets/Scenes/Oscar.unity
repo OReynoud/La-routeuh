@@ -624,13 +624,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 487192ec145d1d349aa23ed8994dd836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ropeUser: {fileID: 815862278}
+  ropeUser: {fileID: 815862280}
   anchor: {fileID: 2019028553}
   rope: {fileID: 815862273}
   collMask:
     serializedVersion: 2
     m_Bits: 64
+  maxCableLength: 15
+  currentCableLength: 0
   minCollisionDistance: 0.05
+  retractionForce: 500
 --- !u!120 &815862273
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -730,9 +733,9 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!4 &815862278 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3615643066981745129, guid: 6ac399009a7707c4795b1db964c764f2,
+--- !u!54 &815862280 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 3615643066981745126, guid: 6ac399009a7707c4795b1db964c764f2,
     type: 3}
   m_PrefabInstance: {fileID: 1761626630}
   m_PrefabAsset: {fileID: 0}
