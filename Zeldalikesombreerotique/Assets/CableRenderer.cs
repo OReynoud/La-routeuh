@@ -5,29 +5,80 @@ using UnityEngine;
 
 public class CableRenderer : MonoBehaviour
 {
-    public int maxVertices;
     public GameObject recursionPrefab;
     public float raycastLength;
     public List<Collider> recordedColliders = new List<Collider>();
     public List<RecursiveRaycastHit> recordedPoints = new List<RecursiveRaycastHit>();
 
 
+    public Collider connectedObject1;
+    public Collider connectedObject2;
+    public Vector3 nearestMainTarget;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        nearestMainTarget = connectedObject2.transform.position;
+        //MainRaycast();
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+
+
+    private void FixedUpdate()
     {
-        /*var currentAngle = transform1.rotation.eulerAngles.y + _halfAngle - _angleInterval * i; // Current angle
-        var rot = Quaternion.AngleAxis(currentAngle,Vector3.up); // Quaternion for direction calculation
-        var dir = rot * Vector3.forward; // Direction of the raycast*/
-        GetRayCasts(-90);
-        GetRayCasts(90);
-        UseRecordedPoints();
+        var dir = nearestMainTarget - connectedObject1.transform.position;
+        var dirNormed = dir.normalized;
+        if (Physics.Raycast(connectedObject1.transform.position+ Vector3.up * 0.1f,dirNormed,out var raycastHit,
+                Vector3.Distance(connectedObject1.transform.position+ Vector3.up * 0.1f,nearestMainTarget)))
+        {
+            if (raycastHit.collider == connectedObject2)
+            {
+                Debug.DrawRay(connectedObject1.transform.position, dirNormed * raycastHit.distance, Color.magenta);
+                    //MainRaycast();
+                    return;
+            }
+
+            if (raycastHit.point != nearestMainTarget)
+            {
+                SecondaryRaycast(nearestMainTarget);   
+            }
+            nearestMainTarget = raycastHit.point;
+            Debug.DrawRay(connectedObject1.transform.position+ Vector3.up * 0.1f, dirNormed * raycastHit.distance, Color.yellow);
+            //MainRaycast();
+            return;
+        }
+        Debug.DrawRay(connectedObject1.transform.position, dirNormed * raycastHit.distance, Color.white);
+
+
     }
+    void SecondaryRaycast(Vector3 origin)
+    {
+        //Debug.Log("called" );
+        var dir = origin - connectedObject1.transform.position;
+        var dirNormed = dir.normalized;
+        Debug.DrawRay(origin,Vector3.up * 2,Color.black);
+        if (Physics.Raycast(origin,dirNormed, out var raycastHit, Vector3.Distance(connectedObject1.transform.position+ Vector3.up * 0.1f,origin)))
+        {
+            if (raycastHit.collider == connectedObject1)
+            {
+                nearestMainTarget = origin;
+                return;
+            }
+
+            StartCoroutine(MaintainRaycast(origin));
+            //SecondaryRaycast(origin);
+        }
+    }
+
+    IEnumerator MaintainRaycast(Vector3 origin)
+    {
+        yield return new WaitForFixedUpdate();
+        SecondaryRaycast(origin);
+    }
+
+    #region MaSolution
 
     void GetRayCasts(float side)
     {
@@ -66,4 +117,7 @@ public class CableRenderer : MonoBehaviour
         var currentPoint = Instantiate(recursionPrefab, pos, Quaternion.identity, transform).GetComponent<RecursiveRaycastHit>();
         recordedPoints.Add(currentPoint);
     }
+
+    #endregion
+    
 }

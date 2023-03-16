@@ -1,75 +1,69 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class CableHolder : MonoBehaviour
 {
+    [Tooltip("L'object manipulable par le joueur rélié à la corde")]public Transform ropeUser;
+    [Tooltip("Le point fixe rélié à la corde")]public Transform anchor;
 
-    public float RigidbodyMass = 1f;
-    public float ColliderRadius = 0.1f;
-    public float JointSpring = 0.1f;
-    public float JointDamper = 5f;
-    public Vector3 RotationOffset;
-    public Vector3 PositionOffset;
+    [BoxGroup("Autres")]public LineRenderer rope;
+    [Tooltip("Quels layers sont utilisés pour détecter la colision des cordes (plusieurs possibles)?")]public LayerMask collMask;
+    [BoxGroup("Autres")]public float minCollisionDistance;
 
-    protected List<Transform> CopySource;
-    protected List<Transform> CopyDestination;
-    protected static GameObject RigidBodyContainer;
+    public List<Vector3> ropePositions { get;} = new List<Vector3>();
 
-    void Awake()
-    {
-        if(RigidBodyContainer == null)
-            RigidBodyContainer = new GameObject("RopeRigidbodyContainer");
-
-        CopySource = new List<Transform>();
-        CopyDestination = new List<Transform>();
-
-        //add children
-        AddChildren(transform);
+    private void Awake()
+    { 
+        AddPosToRope(anchor.position);
     }
 
-    private void AddChildren(Transform parent)
+    private void FixedUpdate()
     {
-        for (int i = 0; i < parent.childCount; i++)
+        UpdateRopePositions();
+        LastSegmentGoToPlayerPos();
+
+        DetectCollisionEnter();
+        if (ropePositions.Count > 2) DetectCollisionExits();        
+    }
+
+    private void DetectCollisionEnter()
+    {
+        RaycastHit hit;
+        if (Physics.Linecast(ropeUser.position, rope.GetPosition(ropePositions.Count - 2), out hit, collMask))
         {
-            var child = parent.GetChild(i);
-            var representative = new GameObject(child.gameObject.name);
-            representative.transform.parent = RigidBodyContainer.transform;
-            //rigidbody
-            var childRigidbody = representative.gameObject.AddComponent<Rigidbody>();
-            childRigidbody.useGravity = true;
-            childRigidbody.isKinematic = false;
-            childRigidbody.freezeRotation = true;
-            childRigidbody.mass = RigidbodyMass;
-
-            //collider
-            var collider = representative.gameObject.AddComponent<SphereCollider>();
-            collider.center = Vector3.zero;
-            collider.radius = ColliderRadius;
-
-            //DistanceJoint
-            var joint = representative.gameObject.AddComponent<DistanceJoint3D>();
-            joint.ConnectedRigidbody = parent;
-            joint.DetermineDistanceOnStart = true;
-            joint.Spring = JointSpring;
-            joint.Damper = JointDamper;
-            joint.DetermineDistanceOnStart = false;
-            joint.Distance = Vector3.Distance(parent.position, child.position);
-
-            //add copy source
-            CopySource.Add(representative.transform);
-            CopyDestination.Add(child);
-
-            AddChildren(child);
+            // Check for duplicated collision (two collisions at the same place).
+            if (System.Math.Abs(Vector3.Distance(rope.GetPosition(ropePositions.Count - 2), hit.point)) > minCollisionDistance) {
+                ropePositions.RemoveAt(ropePositions.Count - 1);
+                AddPosToRope(hit.point);
+            }
         }
     }
 
-    public void Update()
+    private void DetectCollisionExits()
     {
-        for (int i = 0; i < CopySource.Count; i++)
+        RaycastHit hit;
+        if (!Physics.Linecast(ropeUser.position, rope.GetPosition(ropePositions.Count - 3), out hit, collMask))
         {
-            CopyDestination[i].position = CopySource[i].position + PositionOffset;
-            CopyDestination[i].rotation = CopySource[i].rotation * Quaternion.Euler(RotationOffset);
+            ropePositions.RemoveAt(ropePositions.Count - 2);
         }
     }
+
+    private void AddPosToRope(Vector3 _pos)
+    {
+        ropePositions.Add(_pos);
+        ropePositions.Add(ropeUser.position); //Always the last pos must be the player
+    }
+
+    private void UpdateRopePositions()
+    {
+        rope.positionCount = ropePositions.Count;
+        rope.SetPositions(ropePositions.ToArray());
+    }
+
+    private void LastSegmentGoToPlayerPos() => rope.SetPosition(rope.positionCount - 1, ropeUser.position);
 }
+
+
+
