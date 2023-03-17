@@ -5,7 +5,7 @@ using UnityEngine.VFX;
 
 public class SkinnedMeshToMesh : MonoBehaviour
 {
-    public  SkinnedMeshRenderer Pyramid001;
+    public SkinnedMeshRenderer Beta_Surface;
     public VisualEffect VFXGraph;
     public float refreshRate;
     void Start()
@@ -18,7 +18,7 @@ public class SkinnedMeshToMesh : MonoBehaviour
         while (gameObject.activeSelf)
         {
             Mesh m = new Mesh();
-            Pyramid001.BakeMesh(m);
+            Beta_Surface.BakeMesh(m);
             
             Vector3[] vertices = m.vertices;
             Mesh m2 = new Mesh();
