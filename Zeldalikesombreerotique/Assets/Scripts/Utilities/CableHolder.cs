@@ -18,6 +18,7 @@ public class CableHolder : MonoBehaviour
 
     [Tooltip("Taille actuelle du cable")][ReadOnly]public float currentCableLength;
     [BoxGroup("Autres")]public float minCollisionDistance;
+    [BoxGroup("Autres")] public float debugAngle;
 
     [Tooltip("Force de rétraction quand le cable atteint sa longueure maximale")]
     public float retractionForce;
@@ -64,10 +65,33 @@ public class CableHolder : MonoBehaviour
     private void DetectCollisionExits()
     {
         RaycastHit hit;
-        if (!Physics.Linecast(ropeUser.position, rope.GetPosition(ropePositions.Count - 3), out hit, collMask))
+        var dir = ropePositions[^3] - ropeUser.position;
+        var dirNormed = dir.normalized;
+        var leftSafety = dirNormed + Quaternion.AngleAxis(debugAngle, Vector3.up) * Vector3.forward;
+        var rightSafety = dirNormed - Quaternion.AngleAxis(debugAngle, Vector3.up) * Vector3.forward;
+        Debug.DrawRay(ropeUser.position,dirNormed * Vector3.Distance(ropeUser.position,ropePositions[^3]), Color.green);
+        Debug.DrawRay(ropeUser.position,leftSafety * Vector3.Distance(ropeUser.position,ropePositions[^3]), Color.red);
+        Debug.DrawRay(ropeUser.position, rightSafety * Vector3.Distance(ropeUser.position, ropePositions[^3]), Color.red);
+        if (Physics.Linecast(ropeUser.position, rope.GetPosition(ropePositions.Count - 3), out hit, collMask))
+        {
+            return;
+        }
+
+        if (ropePositions.Count != 3)
         {
             ropePositions.RemoveAt(ropePositions.Count - 2);
+            return;
         }
+
+        if (Physics.Raycast(ropeUser.position,leftSafety,Vector3.Distance(ropeUser.position,ropePositions[^3]),collMask))
+        {
+            return;
+        }
+        if (Physics.Raycast(ropeUser.position,rightSafety,Vector3.Distance(ropeUser.position,ropePositions[^3]),collMask))
+        {
+            return;
+        }
+        ropePositions.RemoveAt(ropePositions.Count - 2);
     }
 
     private void AddPosToRope(Vector3 _pos)
