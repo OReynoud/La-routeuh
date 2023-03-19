@@ -26,7 +26,6 @@ namespace Player
         [Foldout("Débug")][Tooltip("Est-ce que le joueur touche le sol?")] public bool isGrounded;
         [Foldout("Débug")][Tooltip("Est-ce que le jeu fait des trucs de gros shlag pour la PoC?")] public bool proofOfConcept;
         [Foldout("Débug")][Tooltip("Est-ce que je joueur manipule un objet?")] public bool isGrabbing;
-        [Foldout("Débug")][Tooltip("Y a t-il un objet à porté que le joueur peut grab?")] public bool canGrab;
         [Foldout("Débug")][Tooltip("Quel est l'objet à grab")] public Rigidbody objectToGrab;
         [Foldout("Débug")][Tooltip("Le script de l'objet à grab")] public DynamicObject objectType;
         [Foldout("Débug")][Tooltip("Le joueur a t-il le droit de bouger?")] public bool canMove;
@@ -142,7 +141,7 @@ namespace Player
                         joint.gameObject.SetActive(false);
                         break;
                     }
-                    if (canGrab && objectToGrab != null)
+                    if (objectToGrab != null)
                     {
                         var dir = objectToGrab.position - transform.position;
                         dir.y = 0;
