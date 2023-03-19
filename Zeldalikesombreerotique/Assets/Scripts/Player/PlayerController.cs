@@ -11,6 +11,7 @@ namespace Player
         public static PlayerController instance;
         [Foldout("Références")]public Rigidbody rb;
         [Foldout("Références")]public SpringJoint joint;
+        [Foldout("Références")] public Animator rig;
         [HorizontalLine(color: EColor.Black)]
         
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur")]public float groundSpeed;
@@ -30,6 +31,7 @@ namespace Player
         [Foldout("Débug")][Tooltip("Le script de l'objet à grab")] public DynamicObject objectType;
         [Foldout("Débug")][Tooltip("Le joueur a t-il le droit de bouger?")] public bool canMove;
         [Foldout("Débug")] [Tooltip("Ou est-ce que le joueur porte son objet?")] private Vector3 carrySpot;
+        [SerializeField][Foldout("Autre")] [Tooltip("Multiplicateur negatif de vitesse d'animation en fonction de la vitesse du joueur")] private float topSpeed;
         
         private InputManager controls;
         [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
@@ -55,13 +57,19 @@ namespace Player
         // Update is called once per frame
         private void FixedUpdate()
         {
+            var speedFactor = rb.velocity.magnitude / topSpeed;
+            Debug.Log(speedFactor);
+            rig.SetFloat("Speed",speedFactor);
             if (!canMove)
             {
+                
+                rig.SetBool("isWalking", false);
                 return;
             }
             if (!controls.Player.Move.IsPressed() && isGrounded)
             {
-
+                
+                rig.SetBool("isWalking", false);
                 playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
                 rb.velocity *= 0.9f;
                 rb.angularVelocity = Vector3.zero;
@@ -149,6 +157,7 @@ namespace Player
         private void ApplyForce(float appliedModifier)
         {
             RotateModel();
+            rig.SetBool("isWalking", true);
             var dx = playerDir - rb.velocity.normalized;
             if (Mathf.Abs(dx.x) > allowedDrift)
             {
