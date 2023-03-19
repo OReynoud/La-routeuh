@@ -68,7 +68,6 @@ public class CableHolder : MonoBehaviour
         RaycastHit hit;
         var dir = ropePositions[^3] - ropeUser.position;
         var dirNormed = dir.normalized;
-        Debug.Log(Mathf.Atan2(dirNormed.x,dirNormed.z)*Mathf.Rad2Deg);
         var leftSafety = Quaternion.AngleAxis(Mathf.Atan2(dirNormed.x,dirNormed.z)*Mathf.Rad2Deg + debugAngle,Vector3.up) * Vector3.forward;
         var rightSafety = Quaternion.AngleAxis(Mathf.Atan2(dirNormed.x,dirNormed.z)*Mathf.Rad2Deg - debugAngle,Vector3.up) * Vector3.forward;
         if (Physics.Linecast(ropeUser.position, rope.GetPosition(ropePositions.Count - 3), out hit, collMask))
