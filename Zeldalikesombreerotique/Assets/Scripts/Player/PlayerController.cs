@@ -121,38 +121,47 @@ namespace Player
 
         private void Interact()
         {
-            objectToGrab = GetClosestObject();
-            if (!objectToGrab)
+            if (!isGrabbing)
             {
-                return;
-            }
-            objectType = objectToGrab.GetComponent<DynamicObject>();
+                objectToGrab = GetClosestObject();
+                if (!objectToGrab)
+                {
+                    return;
+                }
+                objectType = objectToGrab.GetComponent<DynamicObject>();
 
-            switch (objectType.mobilityType)
-            {
-                case DynamicObject.MobilityType.CanCarry:
-                    PickupObject();
-                    break;
-                case DynamicObject.MobilityType.CanMove:
-                    if (isGrabbing)
-                    {
-                        joint.connectedBody = null;
-                        joint.gameObject.SetActive(false);
+                switch (objectType.mobilityType)
+                {
+                    case DynamicObject.MobilityType.CanCarry:
+                        PickupObject();
                         break;
-                    }
-                    if (objectToGrab != null)
-                    {
+                    case DynamicObject.MobilityType.CanMove:
                         var dir = objectToGrab.position - transform.position;
                         dir.y = 0;
                         objectToGrab.transform.Translate(dir.normalized * 0.2f);
                         joint.gameObject.SetActive(true);
                         joint.connectedBody = objectToGrab;
                         RotateModel();
-                    }
-                    break;
-            }
+                        break;
+                }
             
-            isGrabbing = !isGrabbing;
+                isGrabbing = true;
+            }
+            else
+            {
+                switch (objectType.mobilityType)
+                {
+                    case DynamicObject.MobilityType.CanCarry:
+                        PickupObject();
+                        break;
+                    case DynamicObject.MobilityType.CanMove:
+                        joint.connectedBody = null;
+                        joint.gameObject.SetActive(false);
+                        break;
+                }
+                
+                isGrabbing = false;
+            }
         }
 
         private void ApplyForce(float appliedModifier)
