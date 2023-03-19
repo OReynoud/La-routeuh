@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using NaughtyAttributes;
 using Player;
 using UnityEngine;
 
@@ -21,6 +22,9 @@ namespace Utilities
         [Tooltip("Point where the player will respawn if they are killed by the light")] [SerializeField] internal Transform respawnPoint;
         private Vector3 direction;
         private readonly Dictionary<GameObject, bool> activeMirrors = new();
+        [Tooltip("Does the light need a battery to be switched on?")] [SerializeField] private bool doesNeedABattery;
+        [Tooltip("Battery area detection object")] [ShowIf("doesNeedABattery")] [SerializeField] private GameObject batteryDetectionObject;
+        [Tooltip("Radius of the detection area for the battery")] [ShowIf("doesNeedABattery")] [SerializeField] private float batteryDetectionRadius;
 
         private void OnEnable()
         {
@@ -35,6 +39,15 @@ namespace Utilities
             _physicAngle = angle - angleTolerance; // Angle without the tolerance
             _halfAngle = _physicAngle * 0.5f; // Half angle calculation
             _angleInterval = _physicAngle / rayAmount; // Angle difference between each raycast
+            
+            // Battery detection
+            if (doesNeedABattery)
+            {
+                batteryDetectionObject.SetActive(true);
+                batteryDetectionObject.GetComponent<CapsuleCollider>().radius = batteryDetectionRadius;
+                doesNeedABattery = false;
+                gameObject.SetActive(false);
+            }
         }
 
         private void FixedUpdate()

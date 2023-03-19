@@ -154,7 +154,7 @@ MonoBehaviour:
   joint: {fileID: 6998835611972276733}
   rig: {fileID: 4203414672384100727}
   groundSpeed: 10
-  grabbedSpeed: 8
+  grabbedSpeed: 6
   minSpeed: 2
   maxSpeed: 6
   allowedDrift: 0.5
@@ -163,7 +163,6 @@ MonoBehaviour:
   isGrounded: 1
   proofOfConcept: 0
   isGrabbing: 0
-  canGrab: 1
   objectToGrab: {fileID: 0}
   objectType: {fileID: 0}
   canMove: 0
@@ -382,12 +381,12 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7833355741215019789}
+    m_TransformParent: {fileID: 4240483729445110158}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: a71bd10de32397a4f8199dde3f0b45bc,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a71bd10de32397a4f8199dde3f0b45bc,
         type: 3}
@@ -397,37 +396,37 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: a71bd10de32397a4f8199dde3f0b45bc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.010390043
+      value: -0.00051112357
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a71bd10de32397a4f8199dde3f0b45bc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.531
+      value: -0.014437817
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a71bd10de32397a4f8199dde3f0b45bc,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.04471612
+      value: -0.04656919
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a71bd10de32397a4f8199dde3f0b45bc,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9715731
+      value: 0.9637629
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a71bd10de32397a4f8199dde3f0b45bc,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.2304478
+      value: 0.26170442
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a71bd10de32397a4f8199dde3f0b45bc,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0014843224
+      value: -0.021964531
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a71bd10de32397a4f8199dde3f0b45bc,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.05419865
+      value: 0.046791527
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a71bd10de32397a4f8199dde3f0b45bc,
         type: 3}
@@ -652,14 +651,7 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: 52fa4b7a997c1ef4c9d709c6be9cccfb,
         type: 3}
       propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'mixamorig:Hips'\n\tTransform 'mixamorig:LeftFoot'\n\tTransform
-        'mixamorig:LeftHandThumb2'\n\tTransform 'mixamorig:LeftHandIndex1'\n\tTransform
-        'mixamorig:LeftHandPinky2'\n\tTransform 'mixamorig:RightHandRing2'\n\tTransform
-        'mixamorig:Spine1'\n\tTransform 'mixamorig:LeftToeBase'\n\tTransform 'mixamorig:LeftHandThumb3'\n\tTransform
-        'mixamorig:RightArm'\n\tand more ...\n\tFrom animation clip 'Unarmed Walk
-        Forward'"
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 52fa4b7a997c1ef4c9d709c6be9cccfb,
         type: 3}
@@ -676,6 +668,12 @@ PrefabInstance:
 --- !u!95 &4203414672384100727 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 52fa4b7a997c1ef4c9d709c6be9cccfb,
+    type: 3}
+  m_PrefabInstance: {fileID: 7727916334651946214}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4240483729445110158 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3321919801592875672, guid: 52fa4b7a997c1ef4c9d709c6be9cccfb,
     type: 3}
   m_PrefabInstance: {fileID: 7727916334651946214}
   m_PrefabAsset: {fileID: 0}
