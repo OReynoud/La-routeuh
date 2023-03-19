@@ -36,6 +36,7 @@ namespace Player
         private InputManager controls;
         [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
         [Foldout("Autre")] [SerializeField] private float yOffset = 2f;
+        
 
         private void Awake()
         {
@@ -58,17 +59,17 @@ namespace Player
         private void FixedUpdate()
         {
             var speedFactor = rb.velocity.magnitude / topSpeed;
-            rig.SetFloat("Speed",speedFactor);
+            if (!proofOfConcept) rig.SetFloat("Speed",speedFactor);
             if (!canMove)
             {
                 
-                rig.SetBool("isWalking", false);
+                if (!proofOfConcept)rig.SetBool("isWalking", false);
                 return;
             }
             if (!controls.Player.Move.IsPressed() && isGrounded)
             {
                 
-                rig.SetBool("isWalking", false);
+                if (!proofOfConcept)rig.SetBool("isWalking", false);
                 playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
                 rb.velocity *= 0.9f;
                 rb.angularVelocity = Vector3.zero;
@@ -159,7 +160,7 @@ namespace Player
         private void ApplyForce(float appliedModifier)
         {
             RotateModel();
-            rig.SetBool("isWalking", true);
+            if (!proofOfConcept)rig.SetBool("isWalking", true);
             var dx = playerDir - rb.velocity.normalized;
             if (Mathf.Abs(dx.x) > allowedDrift)
             {
