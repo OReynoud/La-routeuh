@@ -4,6 +4,7 @@ using NaughtyAttributes;
 using Player;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CableHolder : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class CableHolder : MonoBehaviour
 
     [Tooltip("Taille actuelle du cable")][ReadOnly]public float currentCableLength;
     [BoxGroup("Autres")]public float minCollisionDistance;
-    [BoxGroup("Autres")] public float debugAngle;
+    [FormerlySerializedAs("debugAngle1")] [BoxGroup("Autres")] public float debugAngle;
 
     [Tooltip("Force de rétraction quand le cable atteint sa longueure maximale")]
     public float retractionForce;
@@ -67,11 +68,9 @@ public class CableHolder : MonoBehaviour
         RaycastHit hit;
         var dir = ropePositions[^3] - ropeUser.position;
         var dirNormed = dir.normalized;
-        var leftSafety = dirNormed + Quaternion.Euler(0,debugAngle,0) * Vector3.forward;
-        var rightSafety = dirNormed - Quaternion.Euler(0,debugAngle,0) * Vector3.forward;
-        Debug.DrawRay(ropeUser.position,dirNormed * Vector3.Distance(ropeUser.position,ropePositions[^3]), Color.green);
-        Debug.DrawRay(ropeUser.position,leftSafety * Vector3.Distance(ropeUser.position,ropePositions[^3]), Color.red);
-        Debug.DrawRay(ropeUser.position, rightSafety * Vector3.Distance(ropeUser.position, ropePositions[^3]), Color.red);
+        Debug.Log(Mathf.Atan2(dirNormed.x,dirNormed.z)*Mathf.Rad2Deg);
+        var leftSafety = Quaternion.AngleAxis(Mathf.Atan2(dirNormed.x,dirNormed.z)*Mathf.Rad2Deg + debugAngle,Vector3.up) * Vector3.forward;
+        var rightSafety = Quaternion.AngleAxis(Mathf.Atan2(dirNormed.x,dirNormed.z)*Mathf.Rad2Deg - debugAngle,Vector3.up) * Vector3.forward;
         if (Physics.Linecast(ropeUser.position, rope.GetPosition(ropePositions.Count - 3), out hit, collMask))
         {
             return;
