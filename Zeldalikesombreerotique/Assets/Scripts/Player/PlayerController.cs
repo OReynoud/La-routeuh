@@ -58,7 +58,6 @@ namespace Player
         private void FixedUpdate()
         {
             var speedFactor = rb.velocity.magnitude / topSpeed;
-            Debug.Log(speedFactor);
             rig.SetFloat("Speed",speedFactor);
             if (!canMove)
             {
@@ -144,6 +143,9 @@ namespace Player
                     }
                     if (canGrab && objectToGrab != null)
                     {
+                        var dir = objectToGrab.position - transform.position;
+                        dir.y = 0;
+                        objectToGrab.transform.Translate(dir.normalized * 0.5f);
                         joint.gameObject.SetActive(true);
                         joint.connectedBody = objectToGrab;
                         RotateModel();
