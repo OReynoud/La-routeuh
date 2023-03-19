@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 5120759815100935262}
   m_Layer: 0
   m_Name: Player PoC
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -307,7 +307,7 @@ MonoBehaviour:
   joint: {fileID: 5120759814074760077}
   rig: {fileID: 0}
   groundSpeed: 25
-  grabbedSpeed: 0
+  grabbedSpeed: 5
   minSpeed: 3
   maxSpeed: 5
   allowedDrift: 0
@@ -316,7 +316,6 @@ MonoBehaviour:
   isGrounded: 1
   proofOfConcept: 1
   isGrabbing: 0
-  canGrab: 0
   objectToGrab: {fileID: 0}
   objectType: {fileID: 0}
   canMove: 0
