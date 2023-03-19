@@ -30,7 +30,6 @@ namespace Player
         [Foldout("Débug")][Tooltip("Le script de l'objet à grab")] public DynamicObject objectType;
         [Foldout("Débug")][Tooltip("Le joueur a t-il le droit de bouger?")] public bool canMove;
         [Foldout("Débug")] [Tooltip("Ou est-ce que le joueur porte son objet?")] private Vector3 carrySpot;
-        [SerializeField][Foldout("Autre")] [Tooltip("Multiplicateur negatif de vitesse d'animation en fonction de la vitesse du joueur")] private float topSpeed;
         
         private InputManager controls;
         [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
@@ -57,7 +56,7 @@ namespace Player
         // Update is called once per frame
         private void FixedUpdate()
         {
-            var speedFactor = rb.velocity.magnitude / topSpeed;
+            var speedFactor = rb.velocity.magnitude / maxSpeed;
             if (!proofOfConcept) rig.SetFloat("Speed",speedFactor);
             if (!canMove)
             {
@@ -122,38 +121,47 @@ namespace Player
 
         private void Interact()
         {
-            objectToGrab = GetClosestObject();
-            if (!objectToGrab)
+            if (!isGrabbing)
             {
-                return;
-            }
-            objectType = objectToGrab.GetComponent<DynamicObject>();
+                objectToGrab = GetClosestObject();
+                if (!objectToGrab)
+                {
+                    return;
+                }
+                objectType = objectToGrab.GetComponent<DynamicObject>();
 
-            switch (objectType.mobilityType)
-            {
-                case DynamicObject.MobilityType.CanCarry:
-                    PickupObject();
-                    break;
-                case DynamicObject.MobilityType.CanMove:
-                    if (isGrabbing)
-                    {
-                        joint.connectedBody = null;
-                        joint.gameObject.SetActive(false);
+                switch (objectType.mobilityType)
+                {
+                    case DynamicObject.MobilityType.CanCarry:
+                        PickupObject();
                         break;
-                    }
-                    if (objectToGrab != null)
-                    {
+                    case DynamicObject.MobilityType.CanMove:
                         var dir = objectToGrab.position - transform.position;
                         dir.y = 0;
-                        objectToGrab.transform.Translate(dir.normalized * 0.5f);
+                        objectToGrab.transform.Translate(dir.normalized * 0.2f);
                         joint.gameObject.SetActive(true);
                         joint.connectedBody = objectToGrab;
                         RotateModel();
-                    }
-                    break;
-            }
+                        break;
+                }
             
-            isGrabbing = !isGrabbing;
+                isGrabbing = true;
+            }
+            else
+            {
+                switch (objectType.mobilityType)
+                {
+                    case DynamicObject.MobilityType.CanCarry:
+                        PickupObject();
+                        break;
+                    case DynamicObject.MobilityType.CanMove:
+                        joint.connectedBody = null;
+                        joint.gameObject.SetActive(false);
+                        break;
+                }
+                
+                isGrabbing = false;
+            }
         }
 
         private void ApplyForce(float appliedModifier)

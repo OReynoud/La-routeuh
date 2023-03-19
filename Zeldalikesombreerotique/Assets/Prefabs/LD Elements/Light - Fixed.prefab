@@ -83,6 +83,66 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &5686027795227653822
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2461199674230112879}
+  - component: {fileID: 5155124439939407700}
+  - component: {fileID: 7691874131707476358}
+  m_Layer: 0
+  m_Name: BatteryDetectionArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2461199674230112879
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5686027795227653822}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7364421258706179683}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5155124439939407700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5686027795227653822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5460c9e893bcf294cb570429a87834f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lightObject: {fileID: 0}
+--- !u!136 &7691874131707476358
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5686027795227653822}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 3
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6981756994739781268
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,11 +191,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rayAmount: 50
   distance: 10
-  height: 0
   angle: 90
   angleTolerance: 5
   lightColorType: {fileID: 11400000, guid: 17bd55439d1ec384ca530bcb35471ab2, type: 2}
   respawnPoint: {fileID: 0}
+  doesNeedABattery: 0
+  batteryDetectionObject: {fileID: 5686027795227653822}
+  batteryDetectionRadius: 0.5
 --- !u!108 &3728747550233016929
 Light:
   m_ObjectHideFlags: 0
@@ -250,6 +312,7 @@ Transform:
   m_Children:
   - {fileID: 4159328662163238653}
   - {fileID: 2928208755098848515}
+  - {fileID: 2461199674230112879}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
