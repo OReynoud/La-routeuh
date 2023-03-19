@@ -25,6 +25,7 @@ namespace Utilities
         [Tooltip("Does the light need a battery to be switched on?")] [SerializeField] private bool doesNeedABattery;
         [Tooltip("Battery area detection object")] [ShowIf("doesNeedABattery")] [SerializeField] private GameObject batteryDetectionObject;
         [Tooltip("Radius of the detection area for the battery")] [ShowIf("doesNeedABattery")] [SerializeField] private float batteryDetectionRadius;
+        [Tooltip("Mesh of the light")] [SerializeField] private GameObject meshObject;
 
         private void OnEnable()
         {
@@ -45,6 +46,9 @@ namespace Utilities
             {
                 batteryDetectionObject.SetActive(true);
                 batteryDetectionObject.GetComponent<CapsuleCollider>().radius = batteryDetectionRadius;
+                var material = meshObject.GetComponent<MeshRenderer>().material;
+                var materialColor = material.color;
+                material.color = new Color(materialColor.r, materialColor.g, materialColor.b, 0.5f);
                 doesNeedABattery = false;
                 gameObject.SetActive(false);
             }

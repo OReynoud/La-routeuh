@@ -5,7 +5,8 @@ namespace Utilities
 {
     public class BatteryDetection : MonoBehaviour
     {
-        [SerializeField] private GameObject lightObject;
+        [Tooltip("Light game object")] [SerializeField] private GameObject lightObject;
+        [Tooltip("Mesh of the light")] [SerializeField] private GameObject meshObject;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -13,6 +14,9 @@ namespace Utilities
             {
                 PlayerController.instance.isGrabbing = false;
                 Destroy(other.gameObject);
+                var material = meshObject.GetComponent<MeshRenderer>().material;
+                var materialColor = material.color;
+                material.color = new Color(materialColor.r, materialColor.g, materialColor.b, 1f);
                 lightObject.SetActive(true);
                 gameObject.SetActive(false);
             }
