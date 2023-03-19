@@ -17,8 +17,8 @@ namespace Utilities
         private float _angleInterval;
         [Tooltip("Color (type) of the light")] [SerializeField] internal LightColorType lightColorType;
         private UnityEngine.Light _lightComponent;
-        private readonly Dictionary<GameObject, bool> _hiddenObjects = new();
-        private readonly Dictionary<GameObject, bool> _revealedObjects = new();
+        private readonly Dictionary<GameObject, bool> hiddenObjects = new();
+        private readonly Dictionary<GameObject, bool> revealedObjects = new();
         [Tooltip("Point where the player will respawn if they are killed by the light")] [SerializeField] internal Transform respawnPoint;
         private Vector3 direction;
         private readonly Dictionary<GameObject, bool> activeMirrors = new();
@@ -26,6 +26,7 @@ namespace Utilities
         [Tooltip("Battery area detection object")] [ShowIf("doesNeedABattery")] [SerializeField] private GameObject batteryDetectionObject;
         [Tooltip("Radius of the detection area for the battery")] [ShowIf("doesNeedABattery")] [SerializeField] private float batteryDetectionRadius;
         [Tooltip("Mesh of the light")] [SerializeField] private GameObject meshObject;
+        private readonly Dictionary<GameObject, bool> lightedObjects = new();
 
         private void OnEnable()
         {
@@ -48,7 +49,7 @@ namespace Utilities
                 batteryDetectionObject.GetComponent<CapsuleCollider>().radius = batteryDetectionRadius;
                 var material = meshObject.GetComponent<MeshRenderer>().material;
                 var materialColor = material.color;
-                material.color = new Color(materialColor.r, materialColor.g, materialColor.b, 0.5f);
+                material.color = new Color(materialColor.r, materialColor.g, materialColor.b, 0.4f);
                 doesNeedABattery = false;
                 gameObject.SetActive(false);
             }
@@ -96,6 +97,7 @@ namespace Utilities
                         }
                         mirrorsToReflectRays[hitObject].Add(Vector3.Reflect(dir, raycastHit.normal));
                     }
+                    
                     else if (hitObject.CompareTag("Player")) // If the raycast hits the player
                     {
                         if (lightColorType.canKillPlayer) // If the light can kill the player
@@ -106,6 +108,7 @@ namespace Utilities
                             PlayerController.instance.isGrabbing = false;
                         }
                     }
+                    
                     else if (hitObject.CompareTag("Shadows")) // If the raycast hits a shadow
                     {
                         if (lightColorType.canKillShadows) // If the light can kill shadows
@@ -113,42 +116,54 @@ namespace Utilities
                             hitObject.SetActive(false); // Kill the shadow
                         }
                     }
+                    
                     else if (hitObject.CompareTag("Objects")) // If the raycast hits an object
                     {
                         var dynamicObject = hitObject.GetComponent<DynamicObject>();
 
-                        if (lightColorType.canRevealObjects &&
-                            dynamicObject.visibilityType ==
-                            DynamicObject.VisibilityType
-                                .CanBeRevealed) // If the light can reveal objects and the object can be revealed
+                        if (lightColorType.canRevealObjects && dynamicObject.visibilityType == DynamicObject.VisibilityType.CanBeRevealed) // If the light can reveal objects and the object can be revealed
                         {
-                            if (_revealedObjects.ContainsKey(hitObject))
+                            if (revealedObjects.ContainsKey(hitObject))
                             {
-                                _revealedObjects[hitObject] = true;
+                                revealedObjects[hitObject] = true;
                             }
                             else
                             {
                                 dynamicObject.meshObjectForVisibility.SetActive(true); // Reveal the object
-                                _revealedObjects.Add(hitObject, true);
+                                revealedObjects.Add(hitObject, true);
                             }
                         }
-                        else if (lightColorType.canHideObjects &&
-                                 dynamicObject.visibilityType ==
-                                 DynamicObject.VisibilityType
-                                     .CanBeHidden) // If the light can hide objects and the object can be hidden
+                        else if (lightColorType.canHideObjects && dynamicObject.visibilityType == DynamicObject.VisibilityType.CanBeHidden) // If the light can hide objects and the object can be hidden
                         {
-                            if (_hiddenObjects.ContainsKey(hitObject))
+                            if (hiddenObjects.ContainsKey(hitObject))
                             {
-                                _hiddenObjects[hitObject] = true;
+                                hiddenObjects[hitObject] = true;
                             }
                             else
                             {
                                 dynamicObject.meshObjectForVisibility.SetActive(false); // Hide the object
-                                _hiddenObjects.Add(hitObject, true);
+                                hiddenObjects.Add(hitObject, true);
                             }
                         }
                     }
+                    
+                    else if (hitObject.CompareTag("ElementToLight")) // If the raycast hits an element to light
+                    {
+                        if (lightedObjects.ContainsKey(hitObject))
+                        {
+                            lightedObjects[hitObject] = true;
+                        }
+                        else
+                        {
+                            var material = hitObject.GetComponentInChildren<MeshRenderer>().material;
+                            var materialColor = material.color;
+                            material.color = new Color(materialColor.r, materialColor.g, materialColor.b, 1f); // Light the element
+                            hitObject.GetComponent<ElementToLight>().isLighted = true;
+                            lightedObjects.Add(hitObject, true);
+                        }
+                    }
                 }
+                
                 else // If the raycast doesn't hit anything
                 {
                     Debug.DrawRay(origin, dir * distance, Color.green);
@@ -198,29 +213,45 @@ namespace Utilities
                 }
             }
 
-            foreach (var revealedObject in _revealedObjects.Keys.ToList())
+            foreach (var revealedObject in revealedObjects.Keys.ToList())
             {
-                if (!_revealedObjects[revealedObject])
+                if (!revealedObjects[revealedObject])
                 {
                     revealedObject.GetComponent<DynamicObject>().meshObjectForVisibility.SetActive(false);
-                    _revealedObjects.Remove(revealedObject);
+                    revealedObjects.Remove(revealedObject);
                 }
                 else
                 {
-                    _revealedObjects[revealedObject] = false;
+                    revealedObjects[revealedObject] = false;
                 }
             }
 
-            foreach (var hiddenObject in _hiddenObjects.Keys.ToList())
+            foreach (var hiddenObject in hiddenObjects.Keys.ToList())
             {
-                if (!_hiddenObjects[hiddenObject])
+                if (!hiddenObjects[hiddenObject])
                 {
                     hiddenObject.GetComponent<DynamicObject>().meshObjectForVisibility.SetActive(true);
-                    _hiddenObjects.Remove(hiddenObject);
+                    hiddenObjects.Remove(hiddenObject);
                 }
                 else
                 {
-                    _hiddenObjects[hiddenObject] = false;
+                    hiddenObjects[hiddenObject] = false;
+                }
+            }
+
+            foreach (var lightedObject in lightedObjects.Keys.ToList())
+            {
+                if (!lightedObjects[lightedObject])
+                {
+                    var material = lightedObject.GetComponentInChildren<MeshRenderer>().material;
+                    var materialColor = material.color;
+                    material.color = new Color(materialColor.r, materialColor.g, materialColor.b, 0.1f);
+                    lightedObject.GetComponent<ElementToLight>().isLighted = false;
+                    lightedObjects.Remove(lightedObject);
+                }
+                else
+                {
+                    lightedObjects[lightedObject] = false;
                 }
             }
         }
