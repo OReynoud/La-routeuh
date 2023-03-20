@@ -220,22 +220,6 @@ namespace Player
             
             rb.AddForce(playerDir * ((appliedModifier) * sprintSpeed),ForceMode.Force);
         }
-        
-        private void RotateModel()
-        {
-            if (!isGrabbing || objectType.mobilityType == DynamicObject.MobilityType.CanCarry)
-            {
-                var angle = Mathf.Atan2(playerDir.x, playerDir.z)* Mathf.Rad2Deg;
-                transform.rotation = Quaternion.AngleAxis(angle,Vector3.up);
-                return;
-            }
-
-            Vector3 dir = objectToGrab.transform.position - transform.position;
-            var dirNormed = dir.normalized;
-            var angle2 = Mathf.Atan2(dirNormed.x, dirNormed.z) * Mathf.Rad2Deg;
-            //transform.rotation = Quaternion.AngleAxis(angle2,Vector3.up);
-            transform.rotation = Quaternion.AngleAxis(angle2,Vector3.up);
-        }
 
         private void PickupObject()
         {
@@ -274,6 +258,20 @@ namespace Player
         }
         
         #endregion
+        private void RotateModel()
+        {
+            if (!isGrabbing || objectType.mobilityType == DynamicObject.MobilityType.CanCarry)
+            {
+                var angle = Mathf.Atan2(playerDir.x, playerDir.z)* Mathf.Rad2Deg;
+                transform.rotation = Quaternion.AngleAxis(angle,Vector3.up);
+                return;
+            }
+
+            Vector3 dir = objectToGrab.transform.position - transform.position;
+            var dirNormed = dir.normalized;
+            var angle2 = Mathf.Atan2(dirNormed.x, dirNormed.z) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(angle2,Vector3.up);
+        }
         
         private void OnEnable()
         {
