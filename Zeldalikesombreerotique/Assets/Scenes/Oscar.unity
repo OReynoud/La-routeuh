@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -155,7 +155,7 @@ MonoBehaviour:
   cameraTarget: {fileID: 626255162}
   smoothMove: 0.05
   stopMove: 0
-  offset: {x: 0, y: 8, z: -2}
+  offset: {x: 0, y: 5, z: -2}
   oui: {x: 0, y: 0}
 --- !u!4 &200820126
 Transform:
@@ -1271,6 +1271,10 @@ MonoBehaviour:
   angleTolerance: 0
   lightColorType: {fileID: 0}
   respawnPoint: {fileID: 0}
+  doesNeedABattery: 0
+  batteryDetectionObject: {fileID: 0}
+  batteryDetectionRadius: 0
+  meshObject: {fileID: 0}
 --- !u!114 &739458899716801879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1289,6 +1293,10 @@ MonoBehaviour:
   angleTolerance: 0
   lightColorType: {fileID: 0}
   respawnPoint: {fileID: 0}
+  doesNeedABattery: 0
+  batteryDetectionObject: {fileID: 0}
+  batteryDetectionRadius: 0
+  meshObject: {fileID: 0}
 --- !u!114 &739458899749166584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1307,6 +1315,10 @@ MonoBehaviour:
   angleTolerance: 0
   lightColorType: {fileID: 0}
   respawnPoint: {fileID: 0}
+  doesNeedABattery: 0
+  batteryDetectionObject: {fileID: 0}
+  batteryDetectionRadius: 0
+  meshObject: {fileID: 0}
 --- !u!54 &3615643068731746887
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1666,6 +1678,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
+        type: 3}
+      propertyPath: sprintSpeed
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329070, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}

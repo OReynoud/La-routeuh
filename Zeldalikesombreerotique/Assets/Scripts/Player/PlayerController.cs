@@ -15,6 +15,7 @@ namespace Player
         [HorizontalLine(color: EColor.Black)]
         
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur")]public float groundSpeed;
+        [BoxGroup("Mouvements")] [Tooltip("Vitesse de course")]public float sprintSpeed;
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur quand il manipule un objet")]public float grabbedSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur")] public float minSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse maximale du joueur")] public float maxSpeed;
@@ -30,6 +31,8 @@ namespace Player
         [Foldout("Débug")][Tooltip("Le script de l'objet à grab")] public DynamicObject objectType;
         [Foldout("Débug")][Tooltip("Le joueur a t-il le droit de bouger?")] public bool canMove;
         [Foldout("Débug")] [Tooltip("Ou est-ce que le joueur porte son objet?")] private Vector3 carrySpot;
+        
+        [Foldout("Débug")] public bool isSprinting;
         
         private InputManager controls;
         [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
@@ -51,6 +54,12 @@ namespace Player
             controls.Player.Enable();
             controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
             controls.Player.Interact.performed += _ => Interact();
+            controls.Player.Sprint.performed += _ => TogleSprint();
+        }
+
+        private void TogleSprint()
+        {
+            isSprinting = !isSprinting;
         }
 
         // Update is called once per frame
@@ -136,7 +145,7 @@ namespace Player
                         PickupObject();
                         break;
                     case DynamicObject.MobilityType.CanMove:
-                        var dir = objectToGrab.position - transform.position;
+                        var dir = transform.position - objectToGrab.position;
                         dir.y = 0;
                         objectToGrab.transform.Translate(dir.normalized * 0.2f);
                         joint.gameObject.SetActive(true);
@@ -185,12 +194,31 @@ namespace Player
             {
                 rb.velocity = minSpeed * playerDir;
             }
-            if (rb.velocity.magnitude > maxSpeed)
+
+            if (!isSprinting)
             {
-                rb.velocity = maxSpeed * playerDir;
+                if (rb.velocity.magnitude > maxSpeed)
+                {
+                    rb.velocity = maxSpeed * playerDir;
+                    return;
+                }
+            }
+            else
+            {
+                if (rb.velocity.magnitude > maxSpeed * 2)
+                {
+                    rb.velocity = playerDir * (maxSpeed * 2);
+                    return;
+                }
+            }
+
+            if (!isSprinting)
+            {
+                rb.AddForce(playerDir * (appliedModifier),ForceMode.Force);
                 return;
             }
-            rb.AddForce(playerDir * (appliedModifier),ForceMode.Force);
+            
+            rb.AddForce(playerDir * ((appliedModifier) * sprintSpeed),ForceMode.Force);
         }
         
         private void RotateModel()
