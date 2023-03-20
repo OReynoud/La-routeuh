@@ -6,8 +6,8 @@ namespace Utilities
     public class LoopingMap : MonoBehaviour
     {
         [SerializeField] private Transform newPosition;
-        [SerializeField] private GameObject mapPartToMove;
-        [SerializeField] private List<GameObject> mapPartsToDisable = new();
+        [SerializeField] internal GameObject mapPartToMove;
+        [SerializeField] internal List<GameObject> mapPartsToDisable = new();
     
         private void OnTriggerEnter(Collider other)
         {
