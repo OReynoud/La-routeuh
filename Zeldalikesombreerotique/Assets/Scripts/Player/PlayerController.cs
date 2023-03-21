@@ -57,7 +57,7 @@ namespace Player
             controls.Player.Sprint.performed += _ => TogleSprint();
         }
 
-        private void TogleSprint()
+        private void TogleSprint() 
         {
             isSprinting = !isSprinting;
         }
