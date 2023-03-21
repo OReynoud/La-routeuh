@@ -28,6 +28,7 @@ namespace Utilities
         [Tooltip("Mesh of the light")] [SerializeField] private GameObject meshObject;
         private readonly Dictionary<GameObject, bool> lightedObjects = new();
 
+        Vector3[] rayOutPosition;
         private void OnEnable()
         {
             // Light component initialization
@@ -73,6 +74,8 @@ namespace Utilities
             var origin = new Vector3(position.x, position.y, position.z); // Origin point
             var mirrorsToReflectRays = new Dictionary<GameObject, List<Vector3>>();
 
+            rayOutPosition = new Vector3[rayAmount + 1];
+            
             // Raycast loop
             for (var i = 0; i < rayAmount + 1; i++)
             {
@@ -82,10 +85,13 @@ namespace Utilities
                 var dir = rot * Vector3.forward; // Direction of the raycast
                 dir.Normalize();
 
+                rayOutPosition[i] = transform.position + dir * distance;
                 // Raycast
                 if (Physics.Raycast(origin, dir, out var raycastHit, distance)) // If the raycast hits something
                 {
                     Debug.DrawRay(origin, dir * raycastHit.distance, Color.red);
+                    
+                    rayOutPosition[i] = raycastHit.point;
 
                     var hitObject = raycastHit.collider.gameObject;
 
@@ -169,6 +175,8 @@ namespace Utilities
                     Debug.DrawRay(origin, dir * distance, Color.green);
                 }
             }
+
+            CreateMesh();
 
             foreach (var mirrorToReflectRays in mirrorsToReflectRays.Keys.ToList())
             {
@@ -254,6 +262,31 @@ namespace Utilities
                     lightedObjects[lightedObject] = false;
                 }
             }
+        }
+
+        public  MeshFilter meshFilter;
+        private void CreateMesh()
+        {
+            var verts = new Vector3[rayOutPosition.Length * 3];
+            var tris  = new int[rayOutPosition.Length * 3];
+
+            var index = 0;
+            for (var i = 0; i < rayOutPosition.Length-1; i++)
+            {
+                verts[index + 0] = transform.InverseTransformPoint(rayOutPosition[i + 0]);
+                verts[index + 1] = transform.InverseTransformPoint(rayOutPosition[i + 1]);
+                verts[index + 2] = Vector3.zero;
+                        
+                tris[index + 0] = index + 0;
+                tris[index + 2] = index + 1;
+                tris[index + 1] = index + 2;
+                
+                index +=3;
+            }
+            
+            var mesh = new Mesh { vertices = verts, triangles = tris };
+
+            meshFilter.mesh = mesh;
         }
     }
 }
