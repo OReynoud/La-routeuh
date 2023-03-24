@@ -15,7 +15,7 @@ namespace Player
         [HorizontalLine(color: EColor.Black)]
         
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur")]public float groundSpeed;
-        [BoxGroup("Mouvements")] [Tooltip("Vitesse de course")]public float sprintSpeed;
+        [BoxGroup("Mouvements")] [Tooltip("Multiplie la groundSpeed")]public float sprintSpeed;
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur quand il manipule un objet")]public float grabbedSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur")] public float minSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse maximale du joueur")] public float maxSpeed;
@@ -32,7 +32,7 @@ namespace Player
         [Foldout("Débug")][Tooltip("Le joueur a t-il le droit de bouger?")] public bool canMove;
         [Foldout("Débug")] [Tooltip("Ou est-ce que le joueur porte son objet?")] private Vector3 carrySpot;
         
-        [Foldout("Débug")] public bool isSprinting;
+        [Foldout("Débug")] [Tooltip("Double la vitesse max du joueur")]public bool isSprinting;
         
         private InputManager controls;
         [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
@@ -57,10 +57,7 @@ namespace Player
             controls.Player.Sprint.performed += _ => TogleSprint();
         }
 
-        private void TogleSprint() 
-        {
-            isSprinting = !isSprinting;
-        }
+
 
         // Update is called once per frame
         private void FixedUpdate()
@@ -89,40 +86,13 @@ namespace Player
             {
                 ApplyForce(groundSpeed);
             }
-
-            /*if (!objectType)
-            {
-                return;
-            }
-            if (objectType.currentType == ObjectType.canCarry && isGrabing)
-            {
-                objectToGrab.position = carrySpot;
-            }*/
         }
-
-
-
-        /*private void OnTriggerStay(Collider other)
-        {
-            if (other.GetComponent<DynamicObject>() && !isGrabing)
-            {
-                canGrab = true;
-                objectToGrab = other.attachedRigidbody;
-                objectType = other.GetComponent<DynamicObject>();
-            }
-        }
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.CompareTag("Moveable") && !isGrabing)
-            {
-                canGrab = false;
-                objectToGrab = null;
-                objectType = null;
-            }
-        }*/
 
         #region Actions
-        
+        private void TogleSprint() 
+        {
+            isSprinting = !isSprinting;
+        }
         private void Move(Vector2 dir)
         {
             playerDir = new Vector3(dir.x,playerDir.y, dir.y);
