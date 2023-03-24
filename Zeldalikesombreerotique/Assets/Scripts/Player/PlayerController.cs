@@ -147,10 +147,16 @@ namespace Player
                     case DynamicObject.MobilityType.CanMove:
                         var dir = objectToGrab.position - transform.position;
                         dir.y = 0;
-                        objectToGrab.transform.Translate(dir.normalized * 0.2f);
-                        joint.gameObject.SetActive(true);
-                        joint.connectedBody = objectToGrab;
+                        canMove = false;
+                        rb.velocity = Vector3.zero;
                         RotateModel();
+                        objectToGrab.transform.DOMove(objectToGrab.transform.position + dir.normalized * 0.2f,0.2f).OnComplete(
+                            () =>
+                            {
+                                canMove = true;
+                                joint.gameObject.SetActive(true);
+                                joint.connectedBody = objectToGrab;
+                            });
                         break;
                 }
             
