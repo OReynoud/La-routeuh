@@ -43,8 +43,12 @@ public class CableHolder : MonoBehaviour
         if (currentCableLength > maxCableLength)
         {
             var dir = ropePositions[^2] - ropeUser.position;
-            PlayerController.instance.rb.AddForce(retractionForce * dir.normalized);
-            ropeUser.AddForce(retractionForce * dir.normalized);
+            if (PlayerController.instance.isGrabbing)
+            {
+                PlayerController.instance.rb.velocity = Vector3.zero;
+                PlayerController.instance.rb.AddForce(retractionForce * dir.normalized);
+            }
+            ropeUser.AddForce(dir.normalized * (retractionForce * (currentCableLength - maxCableLength)));
         }
 
         DetectCollisionEnter();

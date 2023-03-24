@@ -145,7 +145,7 @@ namespace Player
                         PickupObject();
                         break;
                     case DynamicObject.MobilityType.CanMove:
-                        var dir = transform.position - objectToGrab.position;
+                        var dir = objectToGrab.position - transform.position;
                         dir.y = 0;
                         objectToGrab.transform.Translate(dir.normalized * 0.2f);
                         joint.gameObject.SetActive(true);
