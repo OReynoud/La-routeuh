@@ -34,7 +34,7 @@ namespace Player
         
         [Foldout("Débug")] [Tooltip("Double la vitesse max du joueur")]public bool isSprinting;
         
-        private InputManager controls;
+        public InputManager controls;
         [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
         [Foldout("Autre")] [SerializeField] private float yOffset = 2f;
         
@@ -66,7 +66,6 @@ namespace Player
             if (!proofOfConcept) rig.SetFloat("Speed",speedFactor);
             if (!canMove)
             {
-                
                 if (!proofOfConcept)rig.SetBool("isWalking", false);
                 return;
             }
