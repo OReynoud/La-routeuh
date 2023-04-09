@@ -1,4 +1,5 @@
 using System.Linq;
+using Cinemachine;
 using NaughtyAttributes;
 using UnityEngine;
 using DG.Tweening;
@@ -12,6 +13,7 @@ namespace Player
         [Foldout("Références")]public Rigidbody rb;
         [Foldout("Références")]public SpringJoint joint;
         [Foldout("Références")] public Animator rig;
+        [Foldout("Références")] public Collider playerColl;
         [HorizontalLine(color: EColor.Black)]
         
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur")]public float groundSpeed;
@@ -33,10 +35,16 @@ namespace Player
         [Foldout("Débug")] [Tooltip("Ou est-ce que le joueur porte son objet?")] private Vector3 carrySpot;
         
         [Foldout("Débug")] [Tooltip("Double la vitesse max du joueur")]public bool isSprinting;
+        [Foldout("Débug")] [Tooltip("")]public bool willTriggerCinematic;
+        [Foldout("Débug")] [Tooltip("")]public Transform tpLocation;
+        
+        [Foldout("Débug")] [Tooltip("")]public bool isProtected;
         
         public InputManager controls;
         [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
         [Foldout("Autre")] [SerializeField] private float yOffset = 2f;
+        
+        public CinemachineStateDrivenCamera cinemachineCamera;
         
 
         private void Awake()
@@ -55,6 +63,7 @@ namespace Player
             controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
             controls.Player.Interact.performed += _ => Interact();
             controls.Player.Sprint.performed += _ => TogleSprint();
+            cinemachineCamera.Follow = transform;
         }
 
 
@@ -99,6 +108,25 @@ namespace Player
 
         private void Interact()
         {
+            if (willTriggerCinematic)
+            {
+                controls.Disable();
+                objectToGrab = GetClosestObject();
+                var dir = tpLocation.position - objectToGrab.position;
+                var angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+                var rotationValue = Quaternion.AngleAxis(angle, Vector3.up);
+                cinemachineCamera.Follow = objectToGrab.transform;
+                objectToGrab.transform.DOLocalRotate(rotationValue.eulerAngles, 1).OnComplete(()=>
+                {
+                    objectToGrab.transform.DOJump(tpLocation.position, 2, 1, 3).AppendCallback((() =>
+                    {
+                        controls.Enable();
+                        cinemachineCamera.Follow = transform;
+                        willTriggerCinematic = false;
+                    }));
+                }); 
+                return;
+            }
             if (!isGrabbing)
             {
                 objectToGrab = GetClosestObject();
@@ -107,6 +135,11 @@ namespace Player
                     return;
                 }
                 objectType = objectToGrab.GetComponent<DynamicObject>();
+                if (objectToGrab.GetComponent<ObjectReseter>())
+                {
+                    objectToGrab.GetComponent<ObjectReseter>().ResetObjects();
+                    return;
+                }
 
                 switch (objectType.mobilityType)
                 {

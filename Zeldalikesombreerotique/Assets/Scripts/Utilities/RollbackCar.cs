@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Player;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ public class RollbackCar : MonoBehaviour
     public float forceIncrements;
     public float MaxTimeOfAppliedForce;
     public float timeApplied;
+    public bool flyToHub;
     
     
     
@@ -25,6 +27,18 @@ public class RollbackCar : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+
+        if (flyToHub)
+        {
+            var nearbyObjects= Physics.OverlapSphere(transform.position, 2);
+            foreach (var item in nearbyObjects)
+            {
+                if (item == PlayerController.instance.playerColl)
+                {
+                    PlayerController.instance.willTriggerCinematic = true;
+                }
+            }
+        }
         
         if (PlayerController.instance.isGrabbing && PlayerController.instance.objectToGrab == rb && rb.velocity.magnitude > .1f)
         {
@@ -32,16 +46,11 @@ public class RollbackCar : MonoBehaviour
             var difValue  = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
             if (difValue > 1)
             {
-                
-            }
-
-            if (difValue > 1)
-            {
                 storedForce += (difValue - 1) * forceIncrements;
             }
             else
             {
-                storedForce -= difValue * forceIncrements;
+                storedForce -= (difValue +0.5f)* forceIncrements;
             }
 
             if (storedForce < 0)

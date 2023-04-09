@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
@@ -27,6 +29,12 @@ namespace Utilities
         [Tooltip("Radius of the detection area for the battery")] [ShowIf("doesNeedABattery")] [SerializeField] private float batteryDetectionRadius;
         [Tooltip("Mesh of the light")] [SerializeField] private GameObject meshObject;
         private readonly Dictionary<GameObject, bool> lightedObjects = new();
+        [SerializeField] private bool isBlinking;
+
+        [ShowIf("isBlinking")] [SerializeField]
+        private float blinkInterval;
+
+        public Light light;
 
         Vector3[] rayOutPosition;
         private void OnEnable()
@@ -56,6 +64,18 @@ namespace Utilities
             }
         }
 
+        private void Start()
+        {
+            StartCoroutine(Blink1());
+        }
+
+        private IEnumerator Blink1()
+        {
+            yield return new WaitForSeconds(blinkInterval);
+            StartCoroutine(Blink1());
+            GetComponent<Light>().enabled = !GetComponent<Light>().enabled;
+            light.enabled = !light.enabled;
+        }
         private void FixedUpdate()
         {
             ThrowRaycasts();
@@ -150,6 +170,10 @@ namespace Utilities
                                 dynamicObject.meshObjectForVisibility.SetActive(false); // Hide the object
                                 hiddenObjects.Add(hitObject, true);
                             }
+                        }
+                        else if (dynamicObject.visibilityType == DynamicObject.VisibilityType.DelayedReappear)
+                        {
+                            dynamicObject.mesh.material.color = Color.clear;
                         }
                     }
                     

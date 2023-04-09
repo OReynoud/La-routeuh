@@ -1,3 +1,4 @@
+using Player;
 using UnityEngine;
 
 namespace Utilities
@@ -8,7 +9,7 @@ namespace Utilities
     
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Player"))
+            if (other.gameObject.CompareTag("Player") && !PlayerController.instance.isProtected)
             {
                 other.gameObject.transform.position = respawnPoint.position;
             }
