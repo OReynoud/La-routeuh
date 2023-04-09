@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
@@ -21,7 +22,7 @@ public class RollbackCar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -79,6 +80,16 @@ public class RollbackCar : MonoBehaviour
         else if (timeApplied<0 && !PlayerController.instance.isGrabbing)
         {
             storedForce = 0;
+        }
+    }
+
+    private void OnCollisionStay(Collision collisionInfo)
+    {
+        if (collisionInfo.gameObject.CompareTag("Wall"))
+        {
+            Destroy(collisionInfo.gameObject);
+            Destroy(gameObject);
+            
         }
     }
 }

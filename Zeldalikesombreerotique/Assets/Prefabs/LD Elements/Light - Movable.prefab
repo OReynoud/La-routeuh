@@ -81,6 +81,11 @@ MonoBehaviour:
   mobilityType: 2
   visibilityType: 0
   meshObjectForVisibility: {fileID: 6432496968642503585}
+  _collider: {fileID: 0}
+  reappearanceSpeed: 0
+  pushTimer: 0
+  hasToppled: 0
+  toppleForce: 0
 --- !u!1 &5464327597180388002
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +143,10 @@ MonoBehaviour:
   batteryDetectionObject: {fileID: 8730482711693917073}
   batteryDetectionRadius: 1
   meshObject: {fileID: 6432496968642503585}
-  meshFilter: {fileID: 0}
+  isBlinking: 0
+  blinkInterval: 0
+  light: {fileID: 1102654443044267497}
+  meshFilter: {fileID: 843384831496739854}
 --- !u!108 &1102654443044267497
 Light:
   m_ObjectHideFlags: 0
