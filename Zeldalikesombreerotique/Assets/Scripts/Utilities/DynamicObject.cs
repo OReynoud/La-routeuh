@@ -65,7 +65,7 @@ namespace Utilities
                 rb.AddForceAtPosition(toppleForce* dir.normalized,transform.position + Vector3.up * 3);
                 PlayerController.instance.controls.Disable();
                 PlayerController.instance.isProtected = true;
-                transform.DOScale(transform.localScale, 1).OnComplete((() =>
+                transform.DOScale(transform.localScale, 1.5f).OnComplete((() =>
                 {
                     rb.isKinematic = true;
                     transform.DOMove(transform.position + Vector3.down * 0.5f, 0.5f).OnComplete((() =>
