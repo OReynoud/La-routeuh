@@ -71,10 +71,18 @@ namespace Utilities
 
         private IEnumerator Blink1()
         {
-            yield return new WaitForSeconds(blinkInterval);
-            StartCoroutine(Blink1());
-            GetComponent<Light>().enabled = !GetComponent<Light>().enabled;
-            light.enabled = !light.enabled;
+            if(!isBlinking)
+            {
+                yield return new WaitForSeconds(blinkInterval);
+                StartCoroutine(Blink1());
+            }
+            else
+            {
+                yield return new WaitForSeconds(blinkInterval);
+                StartCoroutine(Blink1());
+                GetComponent<Light>().enabled = !GetComponent<Light>().enabled;
+                light.enabled = !light.enabled;
+            }
         }
         private void FixedUpdate()
         {
