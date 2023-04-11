@@ -44,6 +44,7 @@ namespace Utilities
             // Light component initialization
             _lightComponent = GetComponent<UnityEngine.Light>();
             _lightComponent.color = lightColorType.color;
+            lightMeshRenderer.material.color = lightColorType.color;
             _lightComponent.range = distance;
             _lightComponent.spotAngle = angle;
             _lightComponent.innerSpotAngle = angle;
