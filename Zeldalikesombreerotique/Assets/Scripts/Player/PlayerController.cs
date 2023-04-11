@@ -123,6 +123,7 @@ namespace Player
                         controls.Enable();
                         cinemachineCamera.Follow = transform;
                         willTriggerCinematic = false;
+                        objectToGrab.GetComponent<RollbackCar>().flyToHub = false;
                     }));
                 }); 
                 return;
