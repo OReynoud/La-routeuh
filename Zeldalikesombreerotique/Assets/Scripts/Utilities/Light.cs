@@ -19,16 +19,17 @@ namespace Utilities
         private float _angleInterval;
         [Tooltip("Color (type) of the light")] [SerializeField] internal LightColorType lightColorType;
         private UnityEngine.Light _lightComponent;
-        private readonly Dictionary<GameObject, bool> hiddenObjects = new();
-        private readonly Dictionary<GameObject, bool> revealedObjects = new();
+        private readonly Dictionary<GameObject, bool> _hiddenObjects = new();
+        private readonly Dictionary<GameObject, bool> _revealedObjects = new();
         [Tooltip("Point where the player will respawn if they are killed by the light")] [SerializeField] internal Transform respawnPoint;
-        private Vector3 direction;
-        private readonly Dictionary<GameObject, bool> activeMirrors = new();
+        private Vector3 _direction;
+        private readonly Dictionary<GameObject, bool> _activeMirrors = new();
         [Tooltip("Does the light need a battery to be switched on?")] [SerializeField] private bool doesNeedABattery;
         [Tooltip("Battery area detection object")] [ShowIf("doesNeedABattery")] [SerializeField] private GameObject batteryDetectionObject;
         [Tooltip("Radius of the detection area for the battery")] [ShowIf("doesNeedABattery")] [SerializeField] private float batteryDetectionRadius;
         [Tooltip("Mesh of the light")] [SerializeField] private GameObject meshObject;
-        private readonly Dictionary<GameObject, bool> lightedObjects = new();
+        private readonly Dictionary<GameObject, bool> _lightedObjects = new();
+        private readonly Dictionary<GameObject, bool> _lightedHoles = new();
         [SerializeField] private bool isBlinking;
 
         [ShowIf("isBlinking")] [SerializeField]
@@ -37,8 +38,9 @@ namespace Utilities
         public Light light;
         public MeshRenderer lightMeshRenderer;
 
-        Vector3[] rayOutPosition;
-        private void OnEnable()
+        private Vector3[] _rayOutPosition;
+        
+        private void Awake()
         {
             // Light component initialization
             _lightComponent = GetComponent<UnityEngine.Light>();
@@ -70,6 +72,11 @@ namespace Utilities
             StartCoroutine(Blink1());
         }
 
+        private void OnDisable()
+        {
+            CheckDictionaries();
+        }
+
         private IEnumerator Blink1()
         {
             if(!isBlinking)
@@ -98,13 +105,13 @@ namespace Utilities
             var transform1 = transform;
             var position = transform1.position;
 
-            transform1.rotation = direction == Vector3.zero ? transform1.rotation : Quaternion.LookRotation(direction);
+            transform1.rotation = _direction == Vector3.zero ? transform1.rotation : Quaternion.LookRotation(_direction);
             
             // Raycast global values
             var origin = new Vector3(position.x, position.y, position.z); // Origin point
             var mirrorsToReflectRays = new Dictionary<GameObject, List<Vector3>>();
 
-            rayOutPosition = new Vector3[rayAmount + 1];
+            _rayOutPosition = new Vector3[rayAmount + 1];
             
             // Raycast loop
             for (var i = 0; i < rayAmount + 1; i++)
@@ -115,13 +122,13 @@ namespace Utilities
                 var dir = rot * Vector3.forward; // Direction of the raycast
                 dir.Normalize();
 
-                rayOutPosition[i] = transform.position + dir * distance;
+                _rayOutPosition[i] = transform.position + dir * distance;
                 // Raycast
                 if (Physics.Raycast(origin, dir, out var raycastHit, distance)) // If the raycast hits something
                 {
                     Debug.DrawRay(origin, dir * raycastHit.distance, Color.red);
                     
-                    rayOutPosition[i] = raycastHit.point;
+                    _rayOutPosition[i] = raycastHit.point;
 
                     var hitObject = raycastHit.collider.gameObject;
 
@@ -159,26 +166,26 @@ namespace Utilities
 
                         if (lightColorType.canRevealObjects && dynamicObject.visibilityType == DynamicObject.VisibilityType.CanBeRevealed) // If the light can reveal objects and the object can be revealed
                         {
-                            if (revealedObjects.ContainsKey(hitObject))
+                            if (_revealedObjects.ContainsKey(hitObject))
                             {
-                                revealedObjects[hitObject] = true;
+                                _revealedObjects[hitObject] = true;
                             }
                             else
                             {
                                 dynamicObject.meshObjectForVisibility.SetActive(true); // Reveal the object
-                                revealedObjects.Add(hitObject, true);
+                                _revealedObjects.Add(hitObject, true);
                             }
                         }
                         else if (lightColorType.canHideObjects && dynamicObject.visibilityType == DynamicObject.VisibilityType.CanBeHidden) // If the light can hide objects and the object can be hidden
                         {
-                            if (hiddenObjects.ContainsKey(hitObject))
+                            if (_hiddenObjects.ContainsKey(hitObject))
                             {
-                                hiddenObjects[hitObject] = true;
+                                _hiddenObjects[hitObject] = true;
                             }
                             else
                             {
                                 dynamicObject.meshObjectForVisibility.SetActive(false); // Hide the object
-                                hiddenObjects.Add(hitObject, true);
+                                _hiddenObjects.Add(hitObject, true);
                             }
                         }
                         else if (dynamicObject.visibilityType == DynamicObject.VisibilityType.DelayedReappear)
@@ -189,9 +196,9 @@ namespace Utilities
                     
                     else if (hitObject.CompareTag("ElementToLight")) // If the raycast hits an element to light
                     {
-                        if (lightedObjects.ContainsKey(hitObject))
+                        if (_lightedObjects.ContainsKey(hitObject))
                         {
-                            lightedObjects[hitObject] = true;
+                            _lightedObjects[hitObject] = true;
                         }
                         else
                         {
@@ -199,7 +206,20 @@ namespace Utilities
                             var materialColor = material.color;
                             material.color = new Color(materialColor.r, materialColor.g, materialColor.b, 1f); // Light the element
                             hitObject.GetComponent<ElementToLight>().isLighted = true;
-                            lightedObjects.Add(hitObject, true);
+                            _lightedObjects.Add(hitObject, true);
+                        }
+                    }
+                    
+                    else if (hitObject.CompareTag("HoleWithObject")) // If the raycast hits a hole
+                    {
+                        if (_lightedHoles.ContainsKey(hitObject))
+                        {
+                            _lightedHoles[hitObject] = true;
+                        }
+                        else
+                        {
+                            hitObject.GetComponent<HoleWithObject>().ShowObject(); // Disable the collider
+                            _lightedHoles.Add(hitObject, true);
                         }
                     }
                 }
@@ -212,88 +232,110 @@ namespace Utilities
 
             CreateMesh();
 
-            foreach (var mirrorToReflectRays in mirrorsToReflectRays.Keys.ToList())
+            CheckDictionaries(mirrorsToReflectRays);
+        }
+
+        private void CheckDictionaries(Dictionary<GameObject, List<Vector3>> mirrorsToReflectRays = null)
+        {
+            if (mirrorsToReflectRays != null)
             {
-                // Average of the reflected rays
-                var average = Vector3.zero;
-                foreach (var rayToReflect in mirrorsToReflectRays[mirrorToReflectRays])
+                foreach (var mirrorToReflectRays in mirrorsToReflectRays.Keys.ToList())
                 {
-                    average += rayToReflect;
+                    // Average of the reflected rays
+                    var average = Vector3.zero;
+                    foreach (var rayToReflect in mirrorsToReflectRays[mirrorToReflectRays])
+                    {
+                        average += rayToReflect;
+                    }
+
+                    average /= mirrorsToReflectRays[mirrorToReflectRays].Count;
+
+                    // Mirror values affectation
+                    var mirrorLightGameObject = mirrorToReflectRays.transform.GetChild(0).gameObject;
+                    var mirrorLightComponent = mirrorLightGameObject.GetComponent<Light>();
+
+                    if (!_activeMirrors.ContainsKey(mirrorToReflectRays))
+                    {
+                        mirrorLightComponent.lightColorType = lightColorType;
+                        mirrorLightComponent.respawnPoint = respawnPoint;
+                        mirrorLightGameObject.transform.rotation = Quaternion.LookRotation(average);
+                        mirrorLightGameObject.SetActive(true);
+                        _activeMirrors.Add(mirrorToReflectRays, true);
+                    }
+                    else
+                    {
+                        _activeMirrors[mirrorToReflectRays] = true;
+                    }
+
+                    mirrorLightComponent._direction = average;
                 }
-                average /= mirrorsToReflectRays[mirrorToReflectRays].Count;
-                
-                // Mirror values affectation
-                var mirrorLightGameObject = mirrorToReflectRays.transform.GetChild(0).gameObject;
-                var mirrorLightComponent = mirrorLightGameObject.GetComponent<Light>();
-                
-                if (!activeMirrors.ContainsKey(mirrorToReflectRays))
-                {
-                    mirrorLightComponent.lightColorType = lightColorType;
-                    mirrorLightComponent.respawnPoint = respawnPoint;
-                    mirrorLightGameObject.transform.rotation = Quaternion.LookRotation(average);
-                    mirrorLightGameObject.SetActive(true);
-                    activeMirrors.Add(mirrorToReflectRays, true);
-                }
-                else
-                {
-                    activeMirrors[mirrorToReflectRays] = true;
-                }
-                
-                mirrorLightComponent.direction = average;
             }
-            
-            foreach (var activeMirror in activeMirrors.Keys.ToList())
+
+            foreach (var activeMirror in _activeMirrors.Keys.ToList())
             {
-                if (!activeMirrors[activeMirror])
+                if (!_activeMirrors[activeMirror])
                 {
                     activeMirror.transform.GetChild(0).gameObject.SetActive(false);
-                    activeMirrors.Remove(activeMirror);
+                    _activeMirrors.Remove(activeMirror);
                 }
                 else
                 {
-                    activeMirrors[activeMirror] = false;
+                    _activeMirrors[activeMirror] = false;
                 }
             }
 
-            foreach (var revealedObject in revealedObjects.Keys.ToList())
+            foreach (var revealedObject in _revealedObjects.Keys.ToList())
             {
-                if (!revealedObjects[revealedObject])
+                if (!_revealedObjects[revealedObject])
                 {
                     revealedObject.GetComponent<DynamicObject>().meshObjectForVisibility.SetActive(false);
-                    revealedObjects.Remove(revealedObject);
+                    _revealedObjects.Remove(revealedObject);
                 }
                 else
                 {
-                    revealedObjects[revealedObject] = false;
+                    _revealedObjects[revealedObject] = false;
                 }
             }
 
-            foreach (var hiddenObject in hiddenObjects.Keys.ToList())
+            foreach (var hiddenObject in _hiddenObjects.Keys.ToList())
             {
-                if (!hiddenObjects[hiddenObject])
+                if (!_hiddenObjects[hiddenObject])
                 {
                     hiddenObject.GetComponent<DynamicObject>().meshObjectForVisibility.SetActive(true);
-                    hiddenObjects.Remove(hiddenObject);
+                    _hiddenObjects.Remove(hiddenObject);
                 }
                 else
                 {
-                    hiddenObjects[hiddenObject] = false;
+                    _hiddenObjects[hiddenObject] = false;
                 }
             }
 
-            foreach (var lightedObject in lightedObjects.Keys.ToList())
+            foreach (var lightedObject in _lightedObjects.Keys.ToList())
             {
-                if (!lightedObjects[lightedObject])
+                if (!_lightedObjects[lightedObject])
                 {
                     var material = lightedObject.GetComponentInChildren<MeshRenderer>().material;
                     var materialColor = material.color;
                     material.color = new Color(materialColor.r, materialColor.g, materialColor.b, 0.1f);
                     lightedObject.GetComponent<ElementToLight>().isLighted = false;
-                    lightedObjects.Remove(lightedObject);
+                    _lightedObjects.Remove(lightedObject);
                 }
                 else
                 {
-                    lightedObjects[lightedObject] = false;
+                    _lightedObjects[lightedObject] = false;
+                }
+            }
+
+            foreach (var lightedHole in _lightedHoles.Keys.ToList())
+            {
+                if (!_lightedHoles[lightedHole])
+                {
+                    lightedHole.GetComponent<HoleWithObject>().HideObject(); // Enable the collider
+                    _lightedHoles.Remove(lightedHole);
+                }
+                else
+                {
+                    _lightedHoles[lightedHole] = false;
                 }
             }
         }
@@ -301,14 +343,14 @@ namespace Utilities
         public  MeshFilter meshFilter;
         private void CreateMesh()
         {
-            var verts = new Vector3[rayOutPosition.Length * 3];
-            var tris  = new int[rayOutPosition.Length * 3];
+            var verts = new Vector3[_rayOutPosition.Length * 3];
+            var tris  = new int[_rayOutPosition.Length * 3];
 
             var index = 0;
-            for (var i = 0; i < rayOutPosition.Length-1; i++)
+            for (var i = 0; i < _rayOutPosition.Length-1; i++)
             {
-                verts[index + 0] = transform.InverseTransformPoint(rayOutPosition[i + 0]);
-                verts[index + 1] = transform.InverseTransformPoint(rayOutPosition[i + 1]);
+                verts[index + 0] = transform.InverseTransformPoint(_rayOutPosition[i + 0]);
+                verts[index + 1] = transform.InverseTransformPoint(_rayOutPosition[i + 1]);
                 verts[index + 2] = Vector3.zero;
                         
                 tris[index + 0] = index + 0;
