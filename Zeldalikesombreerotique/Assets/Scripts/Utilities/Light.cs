@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -122,117 +121,142 @@ namespace Utilities
                 var dir = rot * Vector3.forward; // Direction of the raycast
                 dir.Normalize();
 
-                _rayOutPosition[i] = transform.position + dir * distance;
-                // Raycast
-                if (Physics.Raycast(origin, dir, out var raycastHit, distance)) // If the raycast hits something
-                {
-                    Debug.DrawRay(origin, dir * raycastHit.distance, Color.red);
-                    
-                    _rayOutPosition[i] = raycastHit.point;
-
-                    var hitObject = raycastHit.collider.gameObject;
-
-                    if (hitObject.CompareTag("Mirror")) // If the raycast hits a mirror
-                    {
-                        if (!mirrorsToReflectRays.ContainsKey(hitObject))
-                        {
-                            mirrorsToReflectRays.Add(hitObject, new List<Vector3>());
-                        }
-                        mirrorsToReflectRays[hitObject].Add(Vector3.Reflect(dir, raycastHit.normal));
-                    }
-                    
-                    else if (hitObject.CompareTag("Player")) // If the raycast hits the player
-                    {
-                        if (lightColorType.canKillPlayer) // If the light can kill the player
-                        {
-                            PlayerController.instance.transform.position = respawnPoint.position; // Respawn the player
-                            PlayerController.instance.joint.connectedBody = null;
-                            PlayerController.instance.joint.gameObject.SetActive(false);
-                            PlayerController.instance.isGrabbing = false;
-                        }
-                    }
-                    
-                    else if (hitObject.CompareTag("Shadows")) // If the raycast hits a shadow
-                    {
-                        if (lightColorType.canKillShadows) // If the light can kill shadows
-                        {
-                            hitObject.SetActive(false); // Kill the shadow
-                        }
-                    }
-                    
-                    else if (hitObject.CompareTag("Objects")) // If the raycast hits an object
-                    {
-                        var dynamicObject = hitObject.GetComponent<DynamicObject>();
-
-                        if (lightColorType.canRevealObjects && dynamicObject.visibilityType == DynamicObject.VisibilityType.CanBeRevealed) // If the light can reveal objects and the object can be revealed
-                        {
-                            if (_revealedObjects.ContainsKey(hitObject))
-                            {
-                                _revealedObjects[hitObject] = true;
-                            }
-                            else
-                            {
-                                dynamicObject.meshObjectForVisibility.SetActive(true); // Reveal the object
-                                _revealedObjects.Add(hitObject, true);
-                            }
-                        }
-                        else if (lightColorType.canHideObjects && dynamicObject.visibilityType == DynamicObject.VisibilityType.CanBeHidden) // If the light can hide objects and the object can be hidden
-                        {
-                            if (_hiddenObjects.ContainsKey(hitObject))
-                            {
-                                _hiddenObjects[hitObject] = true;
-                            }
-                            else
-                            {
-                                dynamicObject.meshObjectForVisibility.SetActive(false); // Hide the object
-                                _hiddenObjects.Add(hitObject, true);
-                            }
-                        }
-                        else if (dynamicObject.visibilityType == DynamicObject.VisibilityType.DelayedReappear)
-                        {
-                            dynamicObject.mesh.material.color = Color.clear;
-                        }
-                    }
-                    
-                    else if (hitObject.CompareTag("ElementToLight")) // If the raycast hits an element to light
-                    {
-                        if (_lightedObjects.ContainsKey(hitObject))
-                        {
-                            _lightedObjects[hitObject] = true;
-                        }
-                        else
-                        {
-                            var material = hitObject.GetComponentInChildren<MeshRenderer>().material;
-                            var materialColor = material.color;
-                            material.color = new Color(materialColor.r, materialColor.g, materialColor.b, 1f); // Light the element
-                            hitObject.GetComponent<ElementToLight>().isLighted = true;
-                            _lightedObjects.Add(hitObject, true);
-                        }
-                    }
-                    
-                    else if (hitObject.CompareTag("HoleWithObject")) // If the raycast hits a hole
-                    {
-                        if (_lightedHoles.ContainsKey(hitObject))
-                        {
-                            _lightedHoles[hitObject] = true;
-                        }
-                        else
-                        {
-                            hitObject.GetComponent<HoleWithObject>().ShowObject(); // Disable the collider
-                            _lightedHoles.Add(hitObject, true);
-                        }
-                    }
-                }
-                
-                else // If the raycast doesn't hit anything
-                {
-                    Debug.DrawRay(origin, dir * distance, Color.green);
-                }
+                ThrowRaycast(origin, dir, distance, i, mirrorsToReflectRays);
             }
 
             CreateMesh();
 
             CheckDictionaries(mirrorsToReflectRays);
+        }
+
+        private void ThrowRaycast(Vector3 origin, Vector3 dir, float dist, int i, IDictionary<GameObject, List<Vector3>> mirrorsToReflectRays)
+        {
+            // Raycast
+            if (Physics.Raycast(origin, dir, out var raycastHit, dist)) // If the raycast hits something
+            {
+                Debug.DrawRay(origin, dir * raycastHit.distance, Color.red);
+
+                _rayOutPosition[i] = raycastHit.point;
+
+                var hitObject = raycastHit.collider.gameObject;
+
+                if (hitObject.CompareTag("Mirror")) // If the raycast hits a mirror
+                {
+                    if (!mirrorsToReflectRays.ContainsKey(hitObject))
+                    {
+                        mirrorsToReflectRays.Add(hitObject, new List<Vector3>());
+                    }
+
+                    mirrorsToReflectRays[hitObject].Add(Vector3.Reflect(dir, raycastHit.normal));
+                }
+
+                else if (hitObject.CompareTag("Player")) // If the raycast hits the player
+                {
+                    if (lightColorType.canKillPlayer) // If the light can kill the player
+                    {
+                        PlayerController.instance.transform.position = respawnPoint.position; // Respawn the player
+                        PlayerController.instance.joint.connectedBody = null;
+                        PlayerController.instance.joint.gameObject.SetActive(false);
+                        PlayerController.instance.isGrabbing = false;
+                    }
+                }
+
+                else if (hitObject.CompareTag("Shadows")) // If the raycast hits a shadow
+                {
+                    if (lightColorType.canKillShadows) // If the light can kill shadows
+                    {
+                        hitObject.SetActive(false); // Kill the shadow
+                    }
+                }
+
+                else if (hitObject.CompareTag("Objects")) // If the raycast hits an object
+                {
+                    var dynamicObject = hitObject.GetComponent<DynamicObject>();
+
+                    if (lightColorType.canRevealObjects && dynamicObject.visibilityType == DynamicObject.VisibilityType.CanBeRevealed) // If the light can reveal objects and the object can be revealed
+                    {
+                        if (_revealedObjects.ContainsKey(hitObject))
+                        {
+                            _revealedObjects[hitObject] = true;
+                        }
+                        else
+                        {
+                            dynamicObject.meshObjectForVisibility.SetActive(true); // Reveal the object
+                            _revealedObjects.Add(hitObject, true);
+                        }
+                    }
+                    else if (lightColorType.canHideObjects && dynamicObject.visibilityType == DynamicObject.VisibilityType.CanBeHidden) // If the light can hide objects and the object can be hidden
+                    {
+                        if (_hiddenObjects.ContainsKey(hitObject))
+                        {
+                            _hiddenObjects[hitObject] = true;
+                        }
+                        else
+                        {
+                            dynamicObject.meshObjectForVisibility.SetActive(false); // Hide the object
+                            _hiddenObjects.Add(hitObject, true);
+                        }
+                    }
+                    else if (dynamicObject.visibilityType == DynamicObject.VisibilityType.DelayedReappear)
+                    {
+                        dynamicObject.mesh.material.color = Color.clear;
+                    }
+                }
+
+                else if (hitObject.CompareTag("ElementToLight")) // If the raycast hits an element to light
+                {
+                    if (_lightedObjects.ContainsKey(hitObject))
+                    {
+                        _lightedObjects[hitObject] = true;
+                    }
+                    else
+                    {
+                        var material = hitObject.GetComponentInChildren<MeshRenderer>().material;
+                        var materialColor = material.color;
+                        material.color = new Color(materialColor.r, materialColor.g, materialColor.b, 1f); // Light the element
+                        hitObject.GetComponent<ElementToLight>().isLighted = true;
+                        _lightedObjects.Add(hitObject, true);
+                    }
+                }
+
+                else if (hitObject.CompareTag("HoleWithObject")) // If the raycast hits a hole
+                {
+                    if (_lightedHoles.ContainsKey(hitObject))
+                    {
+                        _lightedHoles[hitObject] = true;
+                    }
+                    else
+                    {
+                        hitObject.GetComponent<HoleWithObject>().ShowObject(); // Disable the collider
+                        _lightedHoles.Add(hitObject, true);
+                    }
+                }
+
+                else if (hitObject.CompareTag("Footprint")) // If the raycast hits a footprint
+                {
+                    if (_revealedObjects.ContainsKey(hitObject))
+                    {
+                        _revealedObjects[hitObject] = true;
+                    }
+                    else
+                    {
+                        hitObject.GetComponent<DynamicObject>().meshObjectForVisibility.SetActive(true); // Reveal the object
+                        _revealedObjects.Add(hitObject, true);
+                    }
+                    
+                    var footprintCollider = hitObject.GetComponent<CapsuleCollider>();
+                    var radius = footprintCollider.radius;
+                    var newOrigin = raycastHit.point + dir * (radius * 2f);
+                    var newDistance = dist - raycastHit.distance - radius * 2f;
+                    ThrowRaycast(newOrigin, dir,newDistance, i, mirrorsToReflectRays);
+                }
+            }
+
+            else // If the raycast doesn't hit anything
+            {
+                Debug.DrawRay(origin, dir * dist, Color.green);
+                _rayOutPosition[i] = transform.position + dir * distance;
+            }
         }
 
         private void CheckDictionaries(Dictionary<GameObject, List<Vector3>> mirrorsToReflectRays = null)
