@@ -25,7 +25,7 @@ namespace Utilities
         [SerializeField] internal MobilityType mobilityType;
         [SerializeField] internal VisibilityType visibilityType;
         [SerializeField] internal GameObject meshObjectForVisibility;
-        [SerializeField] internal Collider _collider;
+        [SerializeField] internal Collider _childCollider;
         internal MeshRenderer mesh;
         public float reappearanceSpeed;
         public float pushTimer;
@@ -46,11 +46,11 @@ namespace Utilities
                 mesh.material.color = Color.Lerp(mesh.material.color, Color.white, reappearanceSpeed);
                 if (mesh.material.color.a > 0.9f)
                 {
-                    _collider.enabled = true;
+                    _childCollider.enabled = true;
                 }
                 else
                 {
-                    _collider.enabled = false;
+                    _childCollider.enabled = false;
                 }
             }
 
