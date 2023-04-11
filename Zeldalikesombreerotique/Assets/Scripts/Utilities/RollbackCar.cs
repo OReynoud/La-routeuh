@@ -2,20 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using NaughtyAttributes;
 using Player;
 using UnityEngine;
 
 public class RollbackCar : MonoBehaviour
 {
-    public Rigidbody rb;
+    internal Rigidbody rb;
 
-    public float storedForce;
+    [ShowNonSerializedField]private float storedForce;
 
-    public float maxStoredForce;
-    public float forceIncrements;
-    public float MaxTimeOfAppliedForce;
-    public float timeApplied;
-    public bool flyToHub;
+    [Tooltip("Force maximale que peut avoir la voiture")]public float maxStoredForce;
+    [Tooltip("Vitesse à laquelle la voiture se charge ou décharge de force")]public float forceIncrements;
+    [Tooltip("Temps durant lequel la force sera appliqué à la voiture, plus c'est long, plus la voiture ira loin sans nécessairement aller plus vite")]public float MaxTimeOfAppliedForce;
+    [ShowNonSerializedField]private float timeApplied;
+    [Tooltip("Détermine si la voiture va se tp au hub")]public bool flyToHub;
     
     
     

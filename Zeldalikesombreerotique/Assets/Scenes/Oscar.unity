@@ -604,6 +604,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6141568900015210663, guid: ecd2ba5953ed72542a3fd3dad44b29a6,
+        type: 3}
+      propertyPath: visibilityType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8623852286714757522, guid: ecd2ba5953ed72542a3fd3dad44b29a6,
         type: 3}
       propertyPath: m_Name
@@ -1142,6 +1147,28 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!1 &1543518165 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8623852286714757522, guid: ecd2ba5953ed72542a3fd3dad44b29a6,
+    type: 3}
+  m_PrefabInstance: {fileID: 744240720}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1543518170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543518165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 485e6a40df3602d4ab8f544410aebcc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxStoredForce: 0
+  forceIncrements: 0
+  MaxTimeOfAppliedForce: 0
+  flyToHub: 0
 --- !u!1001 &2012068896
 PrefabInstance:
   m_ObjectHideFlags: 0

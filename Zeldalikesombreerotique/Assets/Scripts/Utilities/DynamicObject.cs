@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using NaughtyAttributes;
 using Player;
 using UnityEngine;
 
@@ -25,13 +26,13 @@ namespace Utilities
         [SerializeField] internal MobilityType mobilityType;
         [SerializeField] internal VisibilityType visibilityType;
         [SerializeField] internal GameObject meshObjectForVisibility;
-        [SerializeField] internal Collider _childCollider;
+        [ShowIf("visibilityType",VisibilityType.DelayedReappear)] [SerializeField] [Tooltip("Le collider dans le mesh en enfant du préfab")]internal Collider _childCollider;
         internal MeshRenderer mesh;
-        public float reappearanceSpeed;
-        public float pushTimer;
-        public bool hasToppled;
+        [ShowIf("visibilityType",VisibilityType.DelayedReappear)][SerializeField][Tooltip("Valeur entre 0 et 1, détermine la vitesse à laquelle l'ombre réapparait")] internal float reappearanceSpeed;
+        private float pushTimer;
+        [Tooltip("Est'ce que l'objet a essayé de se renverser?")]public bool hasToppled;
         private Rigidbody rb;
-        public float toppleForce;
+        [Tooltip("La force utilisée pour renverser l'objet(les plus gros objets nécessiteront plus de force)")]public float toppleForce;
 
         private void Awake()
         {
@@ -95,7 +96,7 @@ namespace Utilities
 
         private void OnTriggerStay(Collider other)
         {
-            if (other.gameObject.CompareTag("Shadows"))
+            if (other.gameObject.CompareTag("Shadows") && !hasToppled)
             {
                 pushTimer += Time.deltaTime;
             }
