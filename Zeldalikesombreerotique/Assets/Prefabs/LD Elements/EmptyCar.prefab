@@ -59,8 +59,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4, y: 2, z: 2}
-  m_Center: {x: -0.5, y: 1, z: 0}
+  m_Size: {x: 4, y: 4, z: 2}
+  m_Center: {x: -0.5, y: 2, z: 0}
 --- !u!1 &2956319969320190717
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,7 +121,7 @@ MonoBehaviour:
   isBlinking: 0
   blinkInterval: 0
   light: {fileID: 2956319969320190707}
-  lightMeshRenderer: {fileID: 0}
+  lightMeshRenderer: {fileID: 2956319970014094368}
   meshFilter: {fileID: 2956319970014094369}
 --- !u!108 &2956319969320190707
 Light:
@@ -228,8 +228,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2956319969593428588}
-  m_LocalRotation: {x: -0, y: -0.19936797, z: -0, w: 0.97992474}
-  m_LocalPosition: {x: 28.73, y: 0, z: 55.379997}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -238,7 +238,7 @@ Transform:
   - {fileID: 2956319968034799556}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -23, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2956319970014094370
 GameObject:
   m_ObjectHideFlags: 0

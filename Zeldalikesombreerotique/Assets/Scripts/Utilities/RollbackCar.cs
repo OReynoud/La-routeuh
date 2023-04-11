@@ -29,7 +29,7 @@ public class RollbackCar : MonoBehaviour
     void FixedUpdate()
     {
 
-        if (flyToHub)
+     /*   if (flyToHub)
         {
             var nearbyObjects= Physics.OverlapSphere(transform.position, 2);
             foreach (var item in nearbyObjects)
@@ -38,8 +38,8 @@ public class RollbackCar : MonoBehaviour
                 {
                     PlayerController.instance.willTriggerCinematic = true;
                 }
-            }
-        }
+            } 
+        } */
         
         if (PlayerController.instance.isGrabbing && PlayerController.instance.objectToGrab == rb && rb.velocity.magnitude > .1f)
         {

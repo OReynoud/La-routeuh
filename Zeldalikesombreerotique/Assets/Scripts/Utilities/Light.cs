@@ -34,7 +34,7 @@ namespace Utilities
         [ShowIf("isBlinking")] [SerializeField]
         private float blinkInterval;
 
-        public Light light;
+        public new Light light;
         public MeshRenderer lightMeshRenderer;
 
         private Vector3[] _rayOutPosition;
@@ -44,6 +44,8 @@ namespace Utilities
             // Light component initialization
             _lightComponent = GetComponent<UnityEngine.Light>();
             _lightComponent.color = lightColorType.color;
+            lightMeshRenderer.material.color = new Color(lightColorType.color.r, lightColorType.color.g, lightColorType.color.b, 0.5f);
+            lightMeshRenderer.material.SetColor(EmissionColor, lightColorType.color);
             _lightComponent.range = distance;
             _lightComponent.spotAngle = angle;
             _lightComponent.innerSpotAngle = angle;
@@ -368,6 +370,8 @@ namespace Utilities
         }
 
         public  MeshFilter meshFilter;
+        private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
+
         private void CreateMesh()
         {
             var verts = new Vector3[_rayOutPosition.Length * 3];

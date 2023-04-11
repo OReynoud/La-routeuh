@@ -68,7 +68,11 @@ public class Puzzle2ProgressManager : MonoBehaviour
                 }
                 lights[oui - 1].SetActive(false);
                 lights[oui].SetActive(true);
-                wallsToDisable[oui - 1].SetActive(false);
+                if (wallsToDisable[oui - 1])
+                {
+                    wallsToDisable[oui - 1].SetActive(false);
+                }
+
             }
         }
     }
