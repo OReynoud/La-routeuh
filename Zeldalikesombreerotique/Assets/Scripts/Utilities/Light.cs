@@ -81,6 +81,7 @@ namespace Utilities
                 yield return new WaitForSeconds(blinkInterval);
                 StartCoroutine(Blink1());
                 light.enabled = !light.enabled;
+                enabled = !enabled;
             }
         }
         private void FixedUpdate()
