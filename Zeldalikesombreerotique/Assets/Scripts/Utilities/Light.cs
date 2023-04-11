@@ -80,7 +80,6 @@ namespace Utilities
             {
                 yield return new WaitForSeconds(blinkInterval);
                 StartCoroutine(Blink1());
-                GetComponent<Light>().enabled = !GetComponent<Light>().enabled;
                 light.enabled = !light.enabled;
             }
         }
