@@ -35,6 +35,7 @@ namespace Utilities
         private float blinkInterval;
 
         public Light light;
+        public MeshRenderer lightMeshRenderer;
 
         Vector3[] rayOutPosition;
         private void OnEnable()
@@ -82,6 +83,7 @@ namespace Utilities
                 StartCoroutine(Blink1());
                 light.enabled = !light.enabled;
                 enabled = !enabled;
+                lightMeshRenderer.enabled = !lightMeshRenderer.enabled;
             }
         }
         private void FixedUpdate()
