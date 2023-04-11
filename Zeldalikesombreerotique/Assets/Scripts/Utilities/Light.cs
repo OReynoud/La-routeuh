@@ -57,7 +57,10 @@ namespace Utilities
             if (doesNeedABattery)
             {
                 batteryDetectionObject.SetActive(true);
-                batteryDetectionObject.GetComponent<CapsuleCollider>().radius = batteryDetectionRadius;
+                if (batteryDetectionObject.TryGetComponent(out CapsuleCollider batteryDetectionCollider))
+                {
+                    batteryDetectionCollider.radius = batteryDetectionRadius;
+                }
                 var material = meshObject.GetComponent<MeshRenderer>().material;
                 var materialColor = material.color;
                 material.color = new Color(materialColor.r, materialColor.g, materialColor.b, 0.4f);
