@@ -153,7 +153,9 @@ MonoBehaviour:
   rb: {fileID: 6998835611510329064}
   joint: {fileID: 6998835611972276733}
   rig: {fileID: 4203414672384100727}
+  playerColl: {fileID: 0}
   groundSpeed: 10
+  sprintSpeed: 0
   grabbedSpeed: 6
   minSpeed: 2
   maxSpeed: 6
@@ -166,9 +168,13 @@ MonoBehaviour:
   objectToGrab: {fileID: 0}
   objectType: {fileID: 0}
   canMove: 0
-  topSpeed: 6
+  isSprinting: 0
+  willTriggerCinematic: 0
+  tpLocation: {fileID: 0}
+  isProtected: 0
   xOffset: 1
   yOffset: 2
+  cinemachineCamera: {fileID: 0}
 --- !u!54 &6998835611510329064
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -199,7 +205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Beta_Surface: {fileID: 4497872222496653597}
   VFXGraph: {fileID: 1628631488}
-  refreshRate: 0
+  refreshRate: 0.1
 --- !u!95 &2108141470
 Animator:
   serializedVersion: 5

@@ -55,6 +55,7 @@ namespace Player
                 return;
             }
 
+            Physics.reuseCollisionCallbacks = true;
             instance = this;
             canMove = true;
             controls = new InputManager();
