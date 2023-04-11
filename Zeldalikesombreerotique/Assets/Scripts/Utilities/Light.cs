@@ -38,9 +38,13 @@ namespace Utilities
         public MeshRenderer lightMeshRenderer;
 
         Vector3[] rayOutPosition;
-        private void OnEnable()
+        private void Awake()
         {
             // Light component initialization
+            if (_lightComponent)
+            {
+                return;
+            }
             _lightComponent = GetComponent<UnityEngine.Light>();
             _lightComponent.color = lightColorType.color;
             _lightComponent.range = distance;
