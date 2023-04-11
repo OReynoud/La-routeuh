@@ -34,7 +34,7 @@ namespace Utilities
         [ShowIf("isBlinking")] [SerializeField]
         private float blinkInterval;
 
-        public Light light;
+        public new Light light;
         public MeshRenderer lightMeshRenderer;
 
         private Vector3[] _rayOutPosition;
