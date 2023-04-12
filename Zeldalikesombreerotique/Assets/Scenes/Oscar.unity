@@ -366,7 +366,7 @@ PrefabInstance:
     - target: {fileID: 8515450841429629018, guid: 192d61611533de64c86c53e28cddb584,
         type: 3}
       propertyPath: m_Constraints
-      value: 112
+      value: 80
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 192d61611533de64c86c53e28cddb584, type: 3}
@@ -1917,12 +1917,17 @@ PrefabInstance:
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
       propertyPath: groundSpeed
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
       propertyPath: sprintSpeed
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
+        type: 3}
+      propertyPath: rotationSpeed
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
@@ -1934,6 +1939,11 @@ PrefabInstance:
       propertyPath: cinemachineCamera
       value: 
       objectReference: {fileID: 268783587}
+    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
+        type: 3}
+      propertyPath: pushingPulling_Rotate
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329064, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
       propertyPath: m_Constraints

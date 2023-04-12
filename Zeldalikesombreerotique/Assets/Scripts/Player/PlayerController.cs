@@ -22,6 +22,8 @@ namespace Player
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur quand il manipule un objet")]public float grabbedSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur")] public float minSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse maximale du joueur")] public float maxSpeed;
+        
+        [BoxGroup("Mouvements")] [Tooltip("Vitesse de rotation")] public float rotationSpeed;
 
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur quand il a grab un objet")]
         public float grabbedMinFactor;
@@ -48,6 +50,9 @@ namespace Player
         public InputManager controls;
         [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
         [Foldout("Autre")] [SerializeField] private float yOffset = 2f;
+
+        private RigidbodyConstraints _baseConstraints =
+            RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX;
         
         public CinemachineStateDrivenCamera cinemachineCamera;
         
@@ -85,15 +90,16 @@ namespace Player
                 if (!proofOfConcept)rig.SetBool("isWalking", false);
                 return;
             }
-            if (!controls.Player.Move.IsPressed() && isGrounded)
+            if (!controls.Player.Move.IsPressed() && isGrounded && !pushingPulling_Rotate)
             {
                 
                 if (!proofOfConcept)rig.SetBool("isWalking", false);
                 playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
                 rb.velocity *= 0.9f;
                 rb.angularVelocity = Vector3.zero;
+                return;
             }
-            else if (isGrabbing && objectType.mobilityType == DynamicObject.MobilityType.CanMove)
+            if (isGrabbing && objectType.mobilityType == DynamicObject.MobilityType.CanMove)
             {
                 ApplyForce(grabbedSpeed);
             }
@@ -193,7 +199,8 @@ namespace Player
                         joint.gameObject.SetActive(false);
                         break;
                 }
-                
+
+                pushingPulling_Rotate = false;
                 isGrabbing = false;
             }
         }
@@ -204,6 +211,8 @@ namespace Player
             {
                 pushingPulling_Rotate = !pushingPulling_Rotate;
             }
+
+            objectToGrab.constraints = _baseConstraints | RigidbodyConstraints.FreezePosition;
         }
 
         private void ApplyForce(float appliedModifier)
@@ -244,8 +253,9 @@ namespace Player
                     return;
                 }
             }
-
-            if (isGrabbing)
+            
+                // Pousser/tirrer
+            if (isGrabbing && !pushingPulling_Rotate)
             {
                 var differential = playerDir - transform.forward;
                 var absDiff = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
@@ -265,7 +275,7 @@ namespace Player
                     }
                     rb.AddForce(playerDir * appliedModifier);
                 }
-                else
+                else if(absDiff > 2f)
                 { 
                     playerDir = new Vector3(-fwrd.x, playerDir.y, -fwrd.z);
                     if (rb.velocity.magnitude < minSpeed * grabbedMinFactor)
@@ -278,6 +288,22 @@ namespace Player
                         return;
                     }
                     rb.AddForce(playerDir * appliedModifier);
+                }
+                return;
+            }
+
+            if (isGrabbing && pushingPulling_Rotate && playerDir.magnitude > 0)
+            {
+                var avatarOrientation = -transform.forward;
+                var diff = playerDir - avatarOrientation;
+                var absDiff = Mathf.Abs(diff.x) + Mathf.Abs(diff.z);
+                if (absDiff > 1f)
+                {
+                    transform.RotateAround(objectToGrab.position,transform.forward, rotationSpeed);
+                }
+                else
+                {
+                    transform.RotateAround(objectToGrab.position,transform.forward, rotationSpeed * absDiff);
                 }
                 return;
             }
