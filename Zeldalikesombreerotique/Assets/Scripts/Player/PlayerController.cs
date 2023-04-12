@@ -4,6 +4,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using DG.Tweening;
 using Utilities;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Player
 {
@@ -21,6 +22,9 @@ namespace Player
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur quand il manipule un objet")]public float grabbedSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur")] public float minSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse maximale du joueur")] public float maxSpeed;
+
+        [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur quand il a grab un objet")]
+        public float grabbedMinFactor;
         [Range(0,1)][BoxGroup("Mouvements")] [Tooltip("Maniabilitée du perso: ( 0 c'est un robot et a 1 il a des briques de savon a la place des pieds)")] public float allowedDrift;
         [BoxGroup("Mouvements")] [Tooltip("Le temps que le joueur met à ramasser/poser un objet")] public float pickUpTime;
         [HorizontalLine(color: EColor.Red)]
@@ -29,6 +33,7 @@ namespace Player
         [Foldout("Débug")][Tooltip("Est-ce que le joueur touche le sol?")] public bool isGrounded;
         [Foldout("Débug")][Tooltip("Est-ce que le jeu fait des trucs de gros shlag pour la PoC?")] public bool proofOfConcept;
         [Foldout("Débug")][Tooltip("Est-ce que je joueur manipule un objet?")] public bool isGrabbing;
+        [Foldout("Débug")] [Tooltip("Pousser tirer quand c'est faux et rotate quand c'est vrai")] public bool pushingPulling_Rotate;
         [Foldout("Débug")][Tooltip("Quel est l'objet à grab")] public Rigidbody objectToGrab;
         [Foldout("Débug")][Tooltip("Le script de l'objet à grab")] public DynamicObject objectType;
         [Foldout("Débug")][Tooltip("Le joueur a t-il le droit de bouger?")] public bool canMove;
@@ -64,6 +69,7 @@ namespace Player
             controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
             controls.Player.Interact.performed += _ => Interact();
             controls.Player.Sprint.performed += _ => TogleSprint();
+            controls.Player.SecondaryInput.performed += _ => SecondaryInteract();
             cinemachineCamera.Follow = transform;
         }
 
@@ -131,40 +137,49 @@ namespace Player
             }
             if (!isGrabbing)
             {
+                controls.Disable();
                 objectToGrab = GetClosestObject();
                 if (!objectToGrab)
                 {
                     return;
                 }
-                objectType = objectToGrab.GetComponent<DynamicObject>();
-                if (objectToGrab.GetComponent<ObjectReseter>())
-                {
-                    objectToGrab.GetComponent<ObjectReseter>().ResetObjects();
-                    return;
-                }
 
-                switch (objectType.mobilityType)
-                {
-                    case DynamicObject.MobilityType.CanCarry:
-                        PickupObject();
-                        break;
-                    case DynamicObject.MobilityType.CanMove:
-                        var dir = objectToGrab.position - transform.position;
-                        dir.y = 0;
-                        canMove = false;
-                        rb.velocity = Vector3.zero;
-                        RotateModel();
-                        objectToGrab.transform.DOMove(objectToGrab.transform.position + dir.normalized * 0.2f,0.2f).OnComplete(
-                            () =>
-                            {
-                                canMove = true;
-                                joint.gameObject.SetActive(true);
-                                joint.connectedBody = objectToGrab;
-                            });
-                        break;
-                }
-            
-                isGrabbing = true;
+                var pos = new Vector3(objectToGrab.transform.position.x - objectToGrab.transform.forward.x,
+                    transform.position.y,
+                    objectToGrab.transform.position.z - objectToGrab.transform.forward.z);
+                transform.DOMove(pos, 0.5f).OnComplete((
+                    () =>
+                    {
+                        
+                        objectType = objectToGrab.GetComponent<DynamicObject>();
+                        if (objectToGrab.GetComponent<ObjectReseter>())
+                        {
+                            objectToGrab.GetComponent<ObjectReseter>().ResetObjects();
+                            return;
+                        }
+                        switch (objectType.mobilityType)
+                        {
+                            case DynamicObject.MobilityType.CanCarry:
+                                PickupObject();
+                                break;
+                            case DynamicObject.MobilityType.CanMove:
+                                var dir = objectToGrab.position - transform.position;
+                                dir.y = 0;
+                                canMove = false;
+                                rb.velocity = Vector3.zero;
+                                RotateModel();
+                                objectToGrab.transform.DOMove(objectToGrab.transform.position + dir.normalized * 0.2f,0.2f).OnComplete(
+                                    () =>
+                                    {
+                                        canMove = true;
+                                        joint.gameObject.SetActive(true);
+                                        joint.connectedBody = objectToGrab;
+                                    });
+                                break;
+                        }
+                        controls.Enable();
+                        isGrabbing = true;
+                    }));
             }
             else
             {
@@ -180,6 +195,14 @@ namespace Player
                 }
                 
                 isGrabbing = false;
+            }
+        }
+
+        void SecondaryInteract()
+        {
+            if (isGrabbing)
+            {
+                pushingPulling_Rotate = !pushingPulling_Rotate;
             }
         }
 
@@ -199,8 +222,8 @@ namespace Player
                 var velocity = rb.velocity;
                 rb.velocity = new Vector3(velocity.x, velocity.y, velocity.z * 0.9f);
             }
-
-            if (rb.velocity.magnitude < minSpeed)
+                        
+            if (rb.velocity.magnitude < minSpeed && !isGrabbing)
             {
                 rb.velocity = minSpeed * playerDir;
             }
@@ -222,6 +245,42 @@ namespace Player
                 }
             }
 
+            if (isGrabbing)
+            {
+                var differential = playerDir - transform.forward;
+                var absDiff = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
+                var fwrd = objectToGrab.transform.forward;
+                var ctxMax = maxSpeed / objectToGrab.mass;
+                if (absDiff < 2f)
+                {
+                    playerDir = new Vector3(fwrd.x, playerDir.y, fwrd.z);
+                    if (rb.velocity.magnitude < minSpeed * grabbedMinFactor)
+                    {
+                        rb.velocity = minSpeed * playerDir;
+                    }
+                    if (rb.velocity.magnitude > ctxMax)
+                    {
+                        rb.velocity = ctxMax * playerDir;
+                        return;
+                    }
+                    rb.AddForce(playerDir * appliedModifier);
+                }
+                else
+                { 
+                    playerDir = new Vector3(-fwrd.x, playerDir.y, -fwrd.z);
+                    if (rb.velocity.magnitude < minSpeed * grabbedMinFactor)
+                    {
+                        rb.velocity = minSpeed * playerDir;
+                    }
+                    if (rb.velocity.magnitude > ctxMax)
+                    {
+                        rb.velocity = (ctxMax) * playerDir;
+                        return;
+                    }
+                    rb.AddForce(playerDir * appliedModifier);
+                }
+                return;
+            }
             if (!isSprinting)
             {
                 rb.AddForce(playerDir * (appliedModifier),ForceMode.Force);
@@ -229,6 +288,8 @@ namespace Player
             }
             
             rb.AddForce(playerDir * ((appliedModifier) * sprintSpeed),ForceMode.Force);
+
+
         }
 
         private void PickupObject()

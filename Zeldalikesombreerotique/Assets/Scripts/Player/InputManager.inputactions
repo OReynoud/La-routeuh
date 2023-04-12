@@ -31,6 +31,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SecondaryInput",
+                    "type": "Button",
+                    "id": "e402e382-1e21-427a-87f6-8a40ef13665f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -92,7 +101,7 @@
                 {
                     "name": "2D Vector",
                     "id": "df9036a4-bc1a-4a57-8a96-2eea8ccc7732",
-                    "path": "2DVector(mode=2)",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -212,17 +221,6 @@
                 },
                 {
                     "name": "",
-                    "id": "2fd18db5-a7c9-4ed3-b907-cd1f6c9de4fe",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "7f0b9cea-08b0-4028-aae1-deb0972fb5ce",
                     "path": "<XInputController>/buttonSouth",
                     "interactions": "",
@@ -256,12 +254,23 @@
                 },
                 {
                     "name": "",
-                    "id": "8804ddda-8af0-4d06-b271-1e1738499628",
-                    "path": "<Gamepad>/rightShoulder",
+                    "id": "04598657-7868-4d2b-a9ee-e72fc7dd84ce",
+                    "path": "<XInputController>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Sprint",
+                    "action": "SecondaryInput",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "71adaef3-e9e8-44fc-9868-bfbbc9f2576c",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecondaryInput",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
