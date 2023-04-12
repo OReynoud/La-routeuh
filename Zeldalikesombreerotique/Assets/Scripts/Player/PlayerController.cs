@@ -22,9 +22,6 @@ namespace Player
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur quand il manipule un objet")]public float grabbedSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur")] public float minSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse maximale du joueur")] public float maxSpeed;
-        
-        [BoxGroup("Mouvements")] [Tooltip("Vitesse de rotation")] public float rotationSpeed;
-
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur quand il a grab un objet")]
         public float grabbedMinFactor;
         [Range(0,1)][BoxGroup("Mouvements")] [Tooltip("Maniabilitée du perso: ( 0 c'est un robot et a 1 il a des briques de savon a la place des pieds)")] public float allowedDrift;
@@ -288,22 +285,6 @@ namespace Player
                         return;
                     }
                     rb.AddForce(playerDir * appliedModifier);
-                }
-                return;
-            }
-
-            if (isGrabbing && pushingPulling_Rotate && playerDir.magnitude > 0)
-            {
-                var avatarOrientation = -transform.forward;
-                var diff = playerDir - avatarOrientation;
-                var absDiff = Mathf.Abs(diff.x) + Mathf.Abs(diff.z);
-                if (absDiff > 1f)
-                {
-                    transform.RotateAround(objectToGrab.position,transform.forward, rotationSpeed);
-                }
-                else
-                {
-                    transform.RotateAround(objectToGrab.position,transform.forward, rotationSpeed * absDiff);
                 }
                 return;
             }
