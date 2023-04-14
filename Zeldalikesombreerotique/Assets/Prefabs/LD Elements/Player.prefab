@@ -151,15 +151,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 6998835611510329064}
-  joint: {fileID: 6998835611972276733}
+  joint: {fileID: 1531545555}
   rig: {fileID: 4203414672384100727}
   playerColl: {fileID: 6998835611510329059}
   groundSpeed: 15
   sprintSpeed: 10
   grabbedSpeed: 8
-  minSpeed: 4
-  maxSpeed: 6
-  rotationSpeed: 2
+  minSpeed: 3
+  maxSpeed: 5
   grabbedMinFactor: 0.4
   allowedDrift: 0.5
   pickUpTime: 0
@@ -322,7 +321,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6998835611972276734}
   - component: {fileID: 6998835611972276735}
-  - component: {fileID: 6998835611972276733}
+  - component: {fileID: 1531545555}
   m_Layer: 0
   m_Name: Mass
   m_TagString: Untagged
@@ -361,8 +360,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 94
   m_CollisionDetection: 0
---- !u!145 &6998835611972276733
-SpringJoint:
+--- !u!138 &1531545555
+FixedJoint:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -370,18 +369,9 @@ SpringJoint:
   m_GameObject: {fileID: 6998835611972276732}
   m_ConnectedBody: {fileID: 0}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0, z: 0}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
-  serializedVersion: 2
-  m_Spring: 1000
-  m_Damper: 3
-  m_MinDistance: 0
-  m_MaxDistance: 0
-  m_Tolerance: 1.00000005e-20
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
-  m_EnableCollision: 1
+  m_EnableCollision: 0
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 3
