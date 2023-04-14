@@ -12,7 +12,8 @@ namespace Utilities
         {
             None,
             CanCarry,
-            CanMove
+            CanMove,
+            MoveWithHandle
         }
         
         public enum VisibilityType
@@ -30,6 +31,7 @@ namespace Utilities
         internal MeshRenderer mesh;
         [ShowIf("visibilityType",VisibilityType.DelayedReappear)][SerializeField][Tooltip("Valeur entre 0 et 1, détermine la vitesse à laquelle l'ombre réapparait")] internal float reappearanceSpeed;
         private float pushTimer;
+        [ShowIf("mobilityType",MobilityType.MoveWithHandle)][SerializeField][Tooltip("La ou l'avatar du joueur se positionne pour manipuler objet")] internal Transform handlePos;
         [Tooltip("Est'ce que l'objet a essayé de se renverser?")]public bool hasToppled;
         private Rigidbody rb;
         [Tooltip("La force utilisée pour renverser l'objet(les plus gros objets nécessiteront plus de force)")]public float toppleForce;

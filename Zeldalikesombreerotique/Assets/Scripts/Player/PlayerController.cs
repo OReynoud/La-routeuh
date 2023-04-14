@@ -1,8 +1,11 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
 using NaughtyAttributes;
 using UnityEngine;
 using DG.Tweening;
+using Unity.VisualScripting;
 using Utilities;
 using Vector3 = UnityEngine.Vector3;
 
@@ -52,7 +55,11 @@ namespace Player
             RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX;
         
         public CinemachineStateDrivenCamera cinemachineCamera;
-        
+
+        public void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawLine(transform.position, transform.position + Vector3.forward);
+        }
 
         private void Awake()
         {
@@ -74,9 +81,7 @@ namespace Player
             controls.Player.SecondaryInput.performed += _ => SecondaryInteract();
             cinemachineCamera.Follow = transform;
         }
-
-
-
+        
         // Update is called once per frame
         private void FixedUpdate()
         {
@@ -161,15 +166,40 @@ namespace Player
                         dir.y = 0;
                         canMove = false;
                         rb.velocity = Vector3.zero;
-                        RotateModel();
                         objectToGrab.transform.DOMove(objectToGrab.transform.position + dir.normalized * 0.2f,0.2f).OnComplete(
                             () =>
                             {
+                                RotateModel();
                                 canMove = true;
                                 joint.gameObject.SetActive(true);
                                 joint.connectedBody = objectToGrab;
                                 objectToGrab.isKinematic = false;
                             });
+                        break;
+                    case DynamicObject.MobilityType.MoveWithHandle:
+                        var checkForProximity = Physics.OverlapCapsule(objectType.handlePos.position + Vector3.down,
+                            objectType.handlePos.position + Vector3.up, 1);
+                        bool isPlayerNear = false;
+                        foreach (var coll in checkForProximity)
+                        {
+                            if(coll != playerColl)continue;
+                            isPlayerNear = true;
+                            transform.DOMove(new Vector3(objectType.handlePos.position.x,transform.position.y,objectType.handlePos.position.z), 0.5f).OnComplete((() =>
+                            {
+                                RotateModel();
+                                canMove = true;
+                                joint.gameObject.SetActive(true);
+                                joint.connectedBody = objectToGrab;
+                                objectToGrab.isKinematic = false;
+                            }));
+                            break;
+                        }
+
+                        if (!isPlayerNear)
+                        {
+                            Debug.Log("Player is too far from handle");
+                            return;
+                        }
                         break;
                 }
                 isGrabbing = true;
@@ -182,6 +212,11 @@ namespace Player
                         PickupObject();
                         break;
                     case DynamicObject.MobilityType.CanMove:
+                        joint.connectedBody = null;
+                        joint.gameObject.SetActive(false);
+                        objectToGrab.isKinematic = true;
+                        break;
+                    case DynamicObject.MobilityType.MoveWithHandle:
                         joint.connectedBody = null;
                         joint.gameObject.SetActive(false);
                         objectToGrab.isKinematic = true;
