@@ -12,7 +12,7 @@ namespace Player
     {
         public static PlayerController instance;
         [Foldout("Références")]public Rigidbody rb;
-        [Foldout("Références")]public SpringJoint joint;
+        [Foldout("Références")]public FixedJoint joint;
         [Foldout("Références")] public Animator rig;
         [Foldout("Références")] public Collider playerColl;
         [HorizontalLine(color: EColor.Black)]
@@ -140,49 +140,39 @@ namespace Player
             }
             if (!isGrabbing)
             {
-                controls.Disable();
                 objectToGrab = GetClosestObject();
                 if (!objectToGrab)
                 {
                     return;
                 }
-
-                var pos = new Vector3(objectToGrab.transform.position.x - objectToGrab.transform.forward.x,
-                    transform.position.y,
-                    objectToGrab.transform.position.z - objectToGrab.transform.forward.z);
-                transform.DOMove(pos, 0.5f).OnComplete((
-                    () =>
-                    {
-                        
-                        objectType = objectToGrab.GetComponent<DynamicObject>();
-                        if (objectToGrab.GetComponent<ObjectReseter>())
-                        {
-                            objectToGrab.GetComponent<ObjectReseter>().ResetObjects();
-                            return;
-                        }
-                        switch (objectType.mobilityType)
-                        {
-                            case DynamicObject.MobilityType.CanCarry:
-                                PickupObject();
-                                break;
-                            case DynamicObject.MobilityType.CanMove:
-                                var dir = objectToGrab.position - transform.position;
-                                dir.y = 0;
-                                canMove = false;
-                                rb.velocity = Vector3.zero;
-                                RotateModel();
-                                objectToGrab.transform.DOMove(objectToGrab.transform.position + dir.normalized * 0.2f,0.2f).OnComplete(
-                                    () =>
-                                    {
-                                        canMove = true;
-                                        joint.gameObject.SetActive(true);
-                                        joint.connectedBody = objectToGrab;
-                                    });
-                                break;
-                        }
-                        controls.Enable();
-                        isGrabbing = true;
-                    }));
+                objectType = objectToGrab.GetComponent<DynamicObject>();
+                if (objectToGrab.GetComponent<ObjectReseter>())
+                {
+                    objectToGrab.GetComponent<ObjectReseter>().ResetObjects();
+                    return;
+                }
+                switch (objectType.mobilityType)
+                {
+                    case DynamicObject.MobilityType.CanCarry:
+                        PickupObject();
+                        break;
+                    case DynamicObject.MobilityType.CanMove:
+                        var dir = objectToGrab.position - transform.position;
+                        dir.y = 0;
+                        canMove = false;
+                        rb.velocity = Vector3.zero;
+                        RotateModel();
+                        objectToGrab.transform.DOMove(objectToGrab.transform.position + dir.normalized * 0.2f,0.2f).OnComplete(
+                            () =>
+                            {
+                                canMove = true;
+                                joint.gameObject.SetActive(true);
+                                joint.connectedBody = objectToGrab;
+                                objectToGrab.isKinematic = false;
+                            });
+                        break;
+                }
+                isGrabbing = true;
             }
             else
             {
@@ -194,6 +184,7 @@ namespace Player
                     case DynamicObject.MobilityType.CanMove:
                         joint.connectedBody = null;
                         joint.gameObject.SetActive(false);
+                        objectToGrab.isKinematic = true;
                         break;
                 }
 
@@ -254,9 +245,9 @@ namespace Player
                 // Pousser/tirrer
             if (isGrabbing && !pushingPulling_Rotate)
             {
-                var differential = playerDir - transform.forward;
+                var fwrd = transform.forward;
+                var differential = playerDir - fwrd;
                 var absDiff = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
-                var fwrd = objectToGrab.transform.forward;
                 var ctxMax = maxSpeed / objectToGrab.mass;
                 if (absDiff < 2f)
                 {

@@ -108,13 +108,13 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8515450841429629009}
   serializedVersion: 2
-  m_Mass: 5
+  m_Mass: 3.5
   m_Drag: 0.2
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &5639272719686186826
 MonoBehaviour:
@@ -141,6 +141,7 @@ MonoBehaviour:
   isBlinking: 0
   blinkInterval: 0
   light: {fileID: 0}
+  lightMeshRenderer: {fileID: 0}
   meshFilter: {fileID: 0}
 --- !u!114 &4900388474602553782
 MonoBehaviour:
@@ -157,8 +158,7 @@ MonoBehaviour:
   mobilityType: 2
   visibilityType: 0
   meshObjectForVisibility: {fileID: 0}
-  _collider: {fileID: 0}
+  _childCollider: {fileID: 0}
   reappearanceSpeed: 0
-  pushTimer: 0
   hasToppled: 0
   toppleForce: 400
