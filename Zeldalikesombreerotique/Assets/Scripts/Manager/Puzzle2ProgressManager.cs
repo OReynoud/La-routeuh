@@ -27,7 +27,7 @@ public class Puzzle2ProgressManager : MonoBehaviour
     }
     void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(pairDetector.position,Vector3.one *detectionRadius);
+        Gizmos.DrawWireSphere(pairDetector.position, detectionRadius);
     }
 
     // Update is called once per frame
