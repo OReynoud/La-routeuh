@@ -43,12 +43,7 @@ namespace Utilities
         {
             // Light component initialization
             _lightComponent = GetComponent<UnityEngine.Light>();
-            _lightComponent.color = lightColorType.color;
-            lightMeshRenderer.material.color = new Color(lightColorType.color.r, lightColorType.color.g, lightColorType.color.b, 0.5f);
-            lightMeshRenderer.material.SetColor(EmissionColor, lightColorType.color);
-            _lightComponent.range = distance;
-            _lightComponent.spotAngle = angle;
-            _lightComponent.innerSpotAngle = angle;
+
 
             // Global values
             _physicAngle = angle - angleTolerance; // Angle without the tolerance
@@ -73,7 +68,18 @@ namespace Utilities
 
         private void Start()
         {
-            StartCoroutine(Blink1());
+            // Light component initialization
+            _lightComponent.color = lightColorType.color;
+            lightMeshRenderer.material.color = new Color(lightColorType.color.r, lightColorType.color.g, lightColorType.color.b, 0.5f);
+            lightMeshRenderer.material.SetColor(EmissionColor, lightColorType.color);
+            _lightComponent.range = distance;
+            _lightComponent.spotAngle = angle;
+            _lightComponent.innerSpotAngle = angle;
+            if (isBlinking)
+            {
+                StartCoroutine(Blink1());
+            }
+
         }
 
         private void OnDisable()
@@ -83,19 +89,12 @@ namespace Utilities
 
         private IEnumerator Blink1()
         {
-            if(!isBlinking)
-            {
-                yield return new WaitForSeconds(blinkInterval);
-                StartCoroutine(Blink1());
-            }
-            else
-            {
-                yield return new WaitForSeconds(blinkInterval);
-                StartCoroutine(Blink1());
-                light.enabled = !light.enabled;
-                enabled = !enabled;
-                lightMeshRenderer.enabled = !lightMeshRenderer.enabled;
-            }
+            yield return new WaitForSeconds(blinkInterval);
+            StartCoroutine(Blink1());
+            light.enabled = !light.enabled;
+            enabled = !enabled;
+            lightMeshRenderer.enabled = !lightMeshRenderer.enabled;
+            
         }
         private void FixedUpdate()
         {
