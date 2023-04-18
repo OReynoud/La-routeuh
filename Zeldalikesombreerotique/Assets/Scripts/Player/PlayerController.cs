@@ -50,6 +50,7 @@ namespace Player
         public InputManager controls;
         [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
         [Foldout("Autre")] [SerializeField] private float yOffset = 2f;
+        private float inputLag = 0.2f;
 
         private RigidbodyConstraints _baseConstraints =
             RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX;
@@ -85,6 +86,10 @@ namespace Player
         // Update is called once per frame
         private void FixedUpdate()
         {
+            if (inputLag > 0)
+            {
+                inputLag -= Time.deltaTime;
+            }
             var speedFactor = rb.velocity.magnitude / maxSpeed;
             if (!proofOfConcept) rig.SetFloat("Speed",speedFactor);
             if (!canMove)
@@ -123,6 +128,8 @@ namespace Player
 
         private void Interact()
         {
+            if (inputLag > 0) return;
+            inputLag = 0.1f;
             if (willTriggerCinematic)
             {
                 controls.Disable();
@@ -156,6 +163,7 @@ namespace Player
                     objectToGrab.GetComponent<ObjectReseter>().ResetObjects();
                     return;
                 }
+                controls.Disable();
                 switch (objectType.mobilityType)
                 {
                     case DynamicObject.MobilityType.CanCarry:
@@ -164,13 +172,11 @@ namespace Player
                     case DynamicObject.MobilityType.CanMove:
                         var dir = objectToGrab.position - transform.position;
                         dir.y = 0;
-                        canMove = false;
                         rb.velocity = Vector3.zero;
                         objectToGrab.transform.DOMove(objectToGrab.transform.position + dir.normalized * 0.2f,0.2f).OnComplete(
                             () =>
                             {
                                 RotateModel();
-                                canMove = true;
                                 joint.gameObject.SetActive(true);
                                 joint.connectedBody = objectToGrab;
                                 objectToGrab.isKinematic = false;
@@ -187,7 +193,6 @@ namespace Player
                             transform.DOMove(new Vector3(objectType.handlePos.position.x,transform.position.y,objectType.handlePos.position.z), 0.5f).OnComplete((() =>
                             {
                                 RotateModel();
-                                canMove = true;
                                 joint.gameObject.SetActive(true);
                                 joint.connectedBody = objectToGrab;
                                 objectToGrab.isKinematic = false;
@@ -202,6 +207,7 @@ namespace Player
                         }
                         break;
                 }
+                controls.Enable();
                 isGrabbing = true;
             }
             else
@@ -391,6 +397,7 @@ namespace Player
         {
             // ReSharper disable once Unity.PreferNonAllocApi
             var nearbyObjects = Physics.OverlapSphere(transform.position,2).ToList().Select(x => x.gameObject).ToList();
+            
             
             nearbyObjects.Sort((x, y) =>
             {
