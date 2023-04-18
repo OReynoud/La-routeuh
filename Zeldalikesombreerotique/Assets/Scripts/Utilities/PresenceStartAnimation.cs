@@ -21,6 +21,7 @@ namespace Utilities
         [SerializeField] private float timeBetweenFootprints;
         [ValidateInput("IsNotNull", "Don't forget to uncomment the line in code to play the sound.")] 
         [SerializeField] private AudioClip soundToAppearFootprints;
+        private bool _isOn;
 
         private void Awake()
         {
@@ -34,8 +35,9 @@ namespace Utilities
         
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Player"))
+            if (other.gameObject.CompareTag("Player") && !_isOn)
             {
+                _isOn = true;
                 StartCoroutine(PresenceStartAnimationCoroutine());
             }
         }
@@ -43,6 +45,7 @@ namespace Utilities
         private IEnumerator PresenceStartAnimationCoroutine()
         {
             yield return new WaitForSeconds(timeBeforeStart);
+            
             // _audioSource.PlayOneShot(soundToRotateSpot);
             spotToRotate.transform
                 .DOLocalRotate(spotToRotate.transform.localEulerAngles + new Vector3(0, angleToRotateSpot, 0),
@@ -53,12 +56,16 @@ namespace Utilities
         private IEnumerator FootprintsCoroutine()
         {
             yield return new WaitForSeconds(timeBetweenSpotAndFootprints);
+            
             foreach (var footprint in footprintsToAppear)
             {
                 footprint.SetActive(true);
                 // _audioSource.PlayOneShot(soundToAppearFootprints);
+                
                 yield return new WaitForSeconds(timeBetweenFootprints);
             }
+            
+            gameObject.SetActive(false);
         }
 
         private bool IsNotNull(Object ac) { return ac != null; }
