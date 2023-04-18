@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class RippleBehavior : MonoBehaviour
@@ -12,10 +13,14 @@ public class RippleBehavior : MonoBehaviour
     [SerializeField] [Range(0f, 10f)] private float rippleDensity;
     [SerializeField] [Range(0.1f, 20f)] private float effectRadius;
     [SerializeField] [Range(0.01f, 0.9f)] private float edgeBlend;
-    [SerializeField] private float activation;
-    
+    private readonly float[] _activations = new float[10];
+
     // Mesh renderer
     [SerializeField] private MeshRenderer meshRenderer;
+    
+    // Time values
+    [SerializeField] private float rippleDuration;
+    private readonly Coroutine[] _rippleCoroutines = new Coroutine[10];
     
     // Shader property IDs
     private static readonly int MainTex = Shader.PropertyToID("_MainTex");
@@ -31,17 +36,61 @@ public class RippleBehavior : MonoBehaviour
 
     private void Awake()
     {
-        meshRenderer.material.SetTexture(MainTex, mainTex);
-        meshRenderer.material.SetColor(GradientColor, gradientColor);
-        meshRenderer.material.SetFloat(GradientEdge, gradientEdge);
-        meshRenderer.material.SetVector(RippleOrigin, rippleOrigin);
-        meshRenderer.material.SetFloat(Amplitude, amplitude);
-        meshRenderer.material.SetFloat(Frequency, frequency);
-        meshRenderer.material.SetFloat(RippleDensity, rippleDensity);
-        meshRenderer.material.SetFloat(EffectRadius, effectRadius);
-        meshRenderer.material.SetFloat(EdgeBlend, edgeBlend);
-        meshRenderer.material.SetFloat(Activation, activation);
+        foreach (var material in meshRenderer.materials)
+        {
+            material.SetTexture(MainTex, mainTex);
+            material.SetColor(GradientColor, gradientColor);
+            material.SetFloat(GradientEdge, gradientEdge);
+            material.SetVector(RippleOrigin, rippleOrigin);
+            material.SetFloat(Amplitude, amplitude);
+            material.SetFloat(Frequency, frequency);
+            material.SetFloat(RippleDensity, rippleDensity);
+            material.SetFloat(EffectRadius, effectRadius);
+            material.SetFloat(EdgeBlend, edgeBlend);
+            material.SetFloat(Activation, 0f);
+        }
+    }
+
+    private void Update()
+    {
+        for (var i = 0; i < _activations.Length; i++)
+        {
+            if (_activations[i] > 0f)
+            {
+                meshRenderer.materials[i].SetFloat(Activation, _activations[i]);
+                meshRenderer.materials[i].SetFloat(Amplitude, amplitude);
+                meshRenderer.materials[i].SetFloat(GradientEdge, gradientEdge);
+            }
+            else
+            {
+                meshRenderer.materials[i].SetFloat(Activation, 0f);
+                meshRenderer.materials[i].SetFloat(Amplitude, 0f);
+                meshRenderer.materials[i].SetFloat(GradientEdge, 0f);
+            }
+        }
     }
     
+    private void OnTriggerEnter(Collider other)
+    {
+        var position = transform.position;
+        for (var i = 0; i < _rippleCoroutines.Length; i++)
+        {
+            if (_rippleCoroutines[i] != null) continue;
+            _rippleCoroutines[i] =
+                StartCoroutine(RippleCoroutine(new Vector2(other.ClosestPointOnBounds(position).x,
+                    other.ClosestPointOnBounds(position).z), i));
+            break;
+        }
+    }
+    
+    private IEnumerator RippleCoroutine(Vector2 collisionPoint, int arrayIndex)
+    {
+        _activations[arrayIndex] = 1f;
+        meshRenderer.materials[arrayIndex].SetVector(RippleOrigin, new Vector3(collisionPoint.x, 0f, collisionPoint.y) - transform.position);
+        yield return new WaitForSeconds(rippleDuration);
+        _activations[arrayIndex] = 0f;
+        _rippleCoroutines[arrayIndex] = null;
+    }
+
     // Amplitude and gradient edge to 0 when activation 0
 }

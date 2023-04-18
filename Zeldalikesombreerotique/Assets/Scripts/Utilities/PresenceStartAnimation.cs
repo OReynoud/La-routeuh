@@ -61,6 +61,6 @@ namespace Utilities
             }
         }
 
-        private bool IsNotNull(AudioClip ac) { return ac != null; }
+        private bool IsNotNull(Object ac) { return ac != null; }
     }
 }
