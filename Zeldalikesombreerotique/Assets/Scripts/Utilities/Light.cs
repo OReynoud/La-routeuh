@@ -17,7 +17,7 @@ namespace Utilities
         private float _halfAngle;
         private float _angleInterval;
         [Tooltip("Color (type) of the light")] [SerializeField] internal LightColorType lightColorType;
-        private UnityEngine.Light _lightComponent;
+        [SerializeField]private UnityEngine.Light _lightComponent;
         private readonly Dictionary<GameObject, bool> _hiddenObjects = new();
         private readonly Dictionary<GameObject, bool> _revealedObjects = new();
         [Tooltip("Point where the player will respawn if they are killed by the light")] [SerializeField] internal Transform respawnPoint;
@@ -373,6 +373,8 @@ namespace Utilities
 
         private void CreateMesh()
         {
+            meshFilter.mesh.Clear();
+            meshFilter.mesh.vertices = null;
             var verts = new Vector3[_rayOutPosition.Length * 3];
             var tris  = new int[_rayOutPosition.Length * 3];
 
@@ -389,10 +391,15 @@ namespace Utilities
                 
                 index +=3;
             }
-            
-            var mesh = new Mesh { vertices = verts, triangles = tris };
 
-            meshFilter.mesh = mesh;
+            if (meshFilter.mesh == null)
+            {
+                var mesh = new Mesh { vertices = verts, triangles = tris };
+                meshFilter.mesh = mesh;
+                return;
+            }
+            meshFilter.mesh.vertices = verts;
+            meshFilter.mesh.triangles = tris;
         }
     }
 }

@@ -166,6 +166,9 @@ namespace Player
                 controls.Disable();
                 switch (objectType.mobilityType)
                 {
+                    case DynamicObject.MobilityType.None:
+                        controls.Enable();
+                        return;
                     case DynamicObject.MobilityType.CanCarry:
                         PickupObject();
                         break;

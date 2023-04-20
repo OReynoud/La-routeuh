@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 8515450841429629009}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.55, y: 1.5956495, z: -6.946}
-  m_LocalScale: {x: 1, y: 3.1913, z: 1}
+  m_LocalScale: {x: 5.531, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -108,7 +108,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8515450841429629009}
   serializedVersion: 2
-  m_Mass: 3.5
+  m_Mass: 2
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 1
@@ -133,6 +133,7 @@ MonoBehaviour:
   angle: 0
   angleTolerance: 0
   lightColorType: {fileID: 0}
+  _lightComponent: {fileID: 0}
   respawnPoint: {fileID: 0}
   doesNeedABattery: 0
   batteryDetectionObject: {fileID: 0}
@@ -161,5 +162,5 @@ MonoBehaviour:
   _childCollider: {fileID: 0}
   reappearanceSpeed: 0
   handlePos: {fileID: 0}
-  hasToppled: 0
+  hasToppled: 1
   toppleForce: 400
