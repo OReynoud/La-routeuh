@@ -6,6 +6,7 @@ namespace Utilities
     public class BushTrigger : MonoBehaviour
     {
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip audioClip;
         [SerializeField] private GameObject bush;
         [SerializeField] private float shakeDuration;
 
@@ -13,8 +14,7 @@ namespace Utilities
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                audioSource.enabled = false;
-                audioSource.enabled = true;
+                audioSource.PlayOneShot(audioClip);
                 bush.transform.DOShakePosition(shakeDuration);
                 gameObject.SetActive(false);
             }

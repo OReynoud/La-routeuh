@@ -60,7 +60,7 @@ namespace Utilities
             foreach (var footprint in footprintsToAppear)
             {
                 footprint.SetActive(true);
-                // _audioSource.PlayOneShot(soundToAppearFootprints);
+                // _audioSource.PlayOneShot(soundToAppearFootprints, footprint.transform.GetComponentInChildren<SpriteRenderer>().color.a);
                 
                 yield return new WaitForSeconds(timeBetweenFootprints);
             }
@@ -68,6 +68,8 @@ namespace Utilities
             gameObject.SetActive(false);
         }
 
-        private bool IsNotNull(Object ac) { return ac != null; }
+        // ReSharper disable once UnusedMember.Local
+        // ReSharper disable once SuggestBaseTypeForParameter
+        private bool IsNotNull(AudioClip ac) { return ac != null; }
     }
 }

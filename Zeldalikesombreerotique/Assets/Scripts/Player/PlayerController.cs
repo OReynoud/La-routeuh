@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
 using NaughtyAttributes;
 using UnityEngine;
 using DG.Tweening;
-using Unity.VisualScripting;
 using Utilities;
 using Vector3 = UnityEngine.Vector3;
 
@@ -90,7 +87,7 @@ namespace Player
             {
                 inputLag -= Time.deltaTime;
             }
-            var speedFactor = rb.velocity.magnitude / maxSpeed;
+            var speedFactor = rb.velocity.magnitude / maxSpeed / 1.3f;
             if (!proofOfConcept) rig.SetFloat("Speed",speedFactor);
             if (!canMove)
             {
@@ -409,7 +406,11 @@ namespace Player
                         .CompareTo(Vector3.Distance(y.transform.position, position));
             });
 
-            return nearbyObjects.Where(obj => obj.GetComponent<DynamicObject>())
+            return nearbyObjects.Where(obj =>
+                    {
+                        if (!obj.TryGetComponent<DynamicObject>(out var dynObj)) return false;
+                        return dynObj.mobilityType != DynamicObject.MobilityType.None;
+                    })
                 .Select(obj => obj.GetComponent<Rigidbody>()).FirstOrDefault();
         }
     }
