@@ -7,14 +7,15 @@ using UnityEngine;
 
 public class Puzzle2ProgressManager : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> lights = new List<GameObject>();
-
+    [SerializeField] private List<UnityEngine.Light> lights = new List<UnityEngine.Light>();
+    [SerializeField] private UnityEngine.Light spotLight; 
     [SerializeField] private Transform pairDetector;
 
     [SerializeField] private float detectionRadius;
     [SerializeField] private List<Rigidbody> pairs1 = new List<Rigidbody>();
     [SerializeField] private List<Rigidbody> pairs2 = new List<Rigidbody>();
     [SerializeField] private List<bool> completedPairs = new List<bool>();
+    
 
     [SerializeField] private List<GameObject> wallsToDisable= new List<GameObject>();
     // Start is called before the first frame update
@@ -24,6 +25,8 @@ public class Puzzle2ProgressManager : MonoBehaviour
         {
             completedPairs.Add(false);
         }
+        spotLight.color = lights[0].color;
+        spotLight.transform.SetParent(lights[0].transform);
     }
     void OnDrawGizmos()
     {
@@ -66,8 +69,10 @@ public class Puzzle2ProgressManager : MonoBehaviour
                         oui++;
                     }
                 }
-                lights[oui - 1].SetActive(false);
-                lights[oui].SetActive(true);
+                lights[oui - 1].transform.parent.gameObject.SetActive(false);
+                lights[oui].transform.parent.gameObject.SetActive(true);
+                spotLight.color = lights[oui].color;
+                spotLight.transform.SetParent(lights[oui].transform);
                 if (wallsToDisable[oui - 1])
                 {
                     wallsToDisable[oui - 1].SetActive(false);

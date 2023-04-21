@@ -339,8 +339,8 @@ namespace Player
                 canMove = false;
                 var rot = Quaternion.AngleAxis(transform.localRotation.eulerAngles.y, Vector3.up);
                 var currentDir = rot * Vector3.forward;
-                carrySpot = transform.position + xOffset * 1.2f * currentDir.normalized + Vector3.up;
-                objectToGrab.transform.DOJump(carrySpot, 1f, 1, pickUpTime).AppendCallback(() =>
+                carrySpot = transform.position + xOffset * 1.2f * currentDir.normalized;
+                objectToGrab.transform.DOJump(carrySpot, 0.5f, 1, pickUpTime).AppendCallback(() =>
                 {
                     canMove = true;
                     objectToGrab.isKinematic = true;
@@ -359,7 +359,7 @@ namespace Player
                 canMove = false;
                 objectToGrab.transform.SetParent(transform1);
                 objectToGrab.useGravity = false;
-                objectToGrab.transform.DOJump(carrySpot, 2.5f, 1, pickUpTime).AppendCallback(() =>
+                objectToGrab.transform.DOJump(carrySpot, 1f, 1, pickUpTime).AppendCallback(() =>
                 {
                     canMove = true;
                     objectToGrab.isKinematic = true;

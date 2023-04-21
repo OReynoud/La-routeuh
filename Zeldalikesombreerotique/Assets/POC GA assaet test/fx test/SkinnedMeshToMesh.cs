@@ -31,9 +31,6 @@ public class SkinnedMeshToMesh : MonoBehaviour
         {
             
             Beta_Surface.BakeMesh(m);
-            /*vertices.Clear();
-            vertices.AddRange(m.vertices);
-            m2.vertices.AddRange(vertices);*/
             Vector3[] vertices = m.vertices;
             m2.vertices = vertices;
             
