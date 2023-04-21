@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Player;
 using Unity.VisualScripting;
 using UnityEngine;
+using Utilities;
 
 public class Puzzle2ProgressManager : MonoBehaviour
 {
@@ -58,7 +60,7 @@ public class Puzzle2ProgressManager : MonoBehaviour
                 }
             }
 
-            if (currentPair1 && currentPair2)
+            if (currentPair1 && currentPair2 && !PlayerController.instance.isGrabbing)
             {
                 completedPairs[i] = true;
                 int oui = 0;
@@ -78,6 +80,7 @@ public class Puzzle2ProgressManager : MonoBehaviour
                     wallsToDisable[oui - 1].SetActive(false);
                 }
 
+                PlayerController.instance.objectType.mobilityType = DynamicObject.MobilityType.None;
             }
         }
     }
