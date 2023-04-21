@@ -331,10 +331,11 @@ namespace Player
 
         }
 
-        private void PickupObject()
+        public void PickupObject()
         {
             if (isGrabbing)
             {
+                controls.Disable();
                 rb.velocity = Vector3.zero;
                 canMove = false;
                 var rot = Quaternion.AngleAxis(transform.localRotation.eulerAngles.y, Vector3.up);
@@ -346,11 +347,12 @@ namespace Player
                     objectToGrab.isKinematic = true;
                     objectToGrab.transform.SetParent(null);
                     objectToGrab.useGravity = true;
-                    objectToGrab.isKinematic = false;
+                    controls.Enable();
                 });
             }
             else
             {
+                controls.Disable();
                 var rot = Quaternion.AngleAxis(transform.localRotation.eulerAngles.y, Vector3.up);
                 var currentDir = rot * Vector3.forward;
                 var transform1 = transform;
@@ -363,6 +365,7 @@ namespace Player
                 {
                     canMove = true;
                     objectToGrab.isKinematic = true;
+                    controls.Enable();
                 });
             }
         }
