@@ -161,6 +161,7 @@ namespace Player
                     return;
                 }
                 controls.Disable();
+                canMove = false;
                 switch (objectType.mobilityType)
                 {
                     case DynamicObject.MobilityType.None:
@@ -170,10 +171,10 @@ namespace Player
                         PickupObject();
                         break;
                     case DynamicObject.MobilityType.CanMove:
+                        rb.velocity = Vector3.zero;
                         var dir = objectToGrab.position - transform.position;
                         dir.y = 0;
-                        rb.velocity = Vector3.zero;
-                        objectToGrab.transform.DOMove(objectToGrab.transform.position + dir.normalized * 0.2f,0.2f).OnComplete(
+                        objectToGrab.transform.DOMove(objectToGrab.transform.position + dir.normalized * 0.3f,0.1f).OnComplete(
                             () =>
                             {
                                 RotateModel();
@@ -207,6 +208,8 @@ namespace Player
                         }
                         break;
                 }
+
+                canMove = true;
                 controls.Enable();
                 isGrabbing = true;
             }
