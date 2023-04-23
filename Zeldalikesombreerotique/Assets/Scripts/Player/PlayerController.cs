@@ -51,8 +51,6 @@ namespace Player
 
         private RigidbodyConstraints _baseConstraints =
             RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX;
-        
-        public CinemachineStateDrivenCamera cinemachineCamera;
 
         public void OnDrawGizmosSelected()
         {
@@ -77,7 +75,6 @@ namespace Player
             controls.Player.Interact.performed += _ => Interact();
             controls.Player.Sprint.performed += _ => TogleSprint();
             controls.Player.SecondaryInput.performed += _ => SecondaryInteract();
-            cinemachineCamera.Follow = transform;
         }
         
         // Update is called once per frame
@@ -134,13 +131,11 @@ namespace Player
                 var dir = tpLocation.position - objectToGrab.position;
                 var angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
                 var rotationValue = Quaternion.AngleAxis(angle, Vector3.up);
-                cinemachineCamera.Follow = objectToGrab.transform;
                 objectToGrab.transform.DOLocalRotate(rotationValue.eulerAngles, 1).OnComplete(()=>
                 {
                     objectToGrab.transform.DOJump(tpLocation.position, 2, 1, 3).AppendCallback((() =>
                     {
                         controls.Enable();
-                        cinemachineCamera.Follow = transform;
                         willTriggerCinematic = false;
                         objectToGrab.GetComponent<RollbackCar>().flyToHub = false;
                     }));
