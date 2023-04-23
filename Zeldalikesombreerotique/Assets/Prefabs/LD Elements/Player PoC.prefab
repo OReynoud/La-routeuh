@@ -306,21 +306,30 @@ MonoBehaviour:
   rb: {fileID: 5120759815100935262}
   joint: {fileID: 5120759814074760077}
   rig: {fileID: 0}
+  playerColl: {fileID: 0}
   groundSpeed: 25
+  sprintSpeed: 0
   grabbedSpeed: 5
   minSpeed: 3
   maxSpeed: 5
+  grabbedMinFactor: 0
   allowedDrift: 0
   pickUpTime: 0
   playerDir: {x: 0, y: 0, z: 0}
   isGrounded: 1
   proofOfConcept: 1
   isGrabbing: 0
+  pushingPulling_Rotate: 0
   objectToGrab: {fileID: 0}
   objectType: {fileID: 0}
   canMove: 0
+  isSprinting: 0
+  willTriggerCinematic: 0
+  tpLocation: {fileID: 0}
+  isProtected: 0
   xOffset: 1
   yOffset: 2
+  cinemachineCamera: {fileID: 0}
 --- !u!54 &5120759815100935262
 Rigidbody:
   m_ObjectHideFlags: 0

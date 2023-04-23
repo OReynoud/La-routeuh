@@ -5,14 +5,18 @@ namespace Utilities
     public class SoundTrigger : MonoBehaviour
     {
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip audioClip;
+        [SerializeField] private bool isPlayingOnce;
         
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                audioSource.enabled = false;
-                audioSource.enabled = true;
-                gameObject.SetActive(false);
+                audioSource.PlayOneShot(audioClip);
+                if (isPlayingOnce)
+                {
+                    gameObject.SetActive(false);
+                }
             }
         }
     }

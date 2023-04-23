@@ -20,7 +20,7 @@ public class RollbackCar : MonoBehaviour
     
     
     
-    // Start is called before the first frame update
+    // Start is called before the first frame update : en gros c'est bien
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -30,58 +30,58 @@ public class RollbackCar : MonoBehaviour
     void FixedUpdate()
     {
 
-     /*   if (flyToHub)
-        {
-            var nearbyObjects= Physics.OverlapSphere(transform.position, 2);
-            foreach (var item in nearbyObjects)
-            {
-                if (item == PlayerController.instance.playerColl)
-                {
-                    PlayerController.instance.willTriggerCinematic = true;
-                }
-            } 
-        } */
+     if (flyToHub)
+     {
+         var nearbyObjects= Physics.OverlapSphere(transform.position, 2);
+         foreach (var item in nearbyObjects)
+         {
+             if (item == PlayerController.instance.playerColl)
+             {
+                 PlayerController.instance.willTriggerCinematic = true;
+             }
+         } 
+     }
         
-        if (PlayerController.instance.isGrabbing && PlayerController.instance.objectToGrab == rb && rb.velocity.magnitude > .1f)
-        {
-            var differential = rb.velocity.normalized - transform.forward;
-            var difValue  = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
-            if (difValue > 1)
-            {
-                storedForce += (difValue - 1) * forceIncrements;
-            }
-            else
-            {
-                storedForce -= (difValue +0.5f)* forceIncrements;
-            }
+     if (PlayerController.instance.isGrabbing && PlayerController.instance.objectToGrab == rb && rb.velocity.magnitude > .1f)
+     {
+         var differential = rb.velocity.normalized - transform.forward;
+         var difValue  = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
+         if (difValue > 1)
+         {
+             storedForce += (difValue - 1) * forceIncrements;
+         }
+         else
+         {
+             storedForce -= (difValue +0.5f)* forceIncrements;
+         }
 
-            if (storedForce < 0)
-            {
-                storedForce = 0;
-            }
+         if (storedForce < 0)
+         {
+             storedForce = 0;
+         }
 
-            if (storedForce > maxStoredForce)
-            {
-                storedForce = maxStoredForce;
-            }
+         if (storedForce > maxStoredForce)
+         {
+             storedForce = maxStoredForce;
+         }
 
-            if (!PlayerController.instance.controls.Player.Interact.IsPressed())
-            {
-                timeApplied = MaxTimeOfAppliedForce * (storedForce / maxStoredForce);
-            }
-            return;
-        }
+         if (!PlayerController.instance.controls.Player.Interact.IsPressed())
+         {
+             timeApplied = MaxTimeOfAppliedForce * (storedForce / maxStoredForce);
+         }
+         return;
+     }
 
-        if (timeApplied > 0)
-        {
-            timeApplied -= Time.deltaTime;
-            rb.AddForce(transform.forward * storedForce);
-            storedForce -= forceIncrements;
-        }
-        else if (timeApplied<0 && !PlayerController.instance.isGrabbing)
-        {
-            storedForce = 0;
-        }
+     if (timeApplied > 0)
+     {
+         timeApplied -= Time.deltaTime;
+         rb.AddForce(transform.forward * storedForce);
+         storedForce -= forceIncrements;
+     }
+     else if (timeApplied<0 && !PlayerController.instance.isGrabbing)
+     {
+         storedForce = 0;
+     }
     }
 
     private void OnCollisionStay(Collision collisionInfo)
