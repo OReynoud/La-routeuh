@@ -24,9 +24,9 @@ namespace Utilities
             for (var i = 0; i < numberOfBlinks; i++)
             {
                 lightObject.SetActive(false);
-                yield return new WaitForSeconds(timeBetweenBlinks);
+                yield return new WaitForSeconds(timeBetweenBlinks * Random.value);
                 lightObject.SetActive(true);
-                yield return new WaitForSeconds(timeBetweenBlinks);
+                yield return new WaitForSeconds(timeBetweenBlinks * Random.value);
             }
             lightObject.SetActive(false);
             gameObject.SetActive(false);
