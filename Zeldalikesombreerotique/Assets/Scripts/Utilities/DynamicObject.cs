@@ -57,7 +57,7 @@ namespace Utilities
                 }
             }
 
-            if (pushTimer > 0.1f && !hasToppled)
+            /*if (pushTimer > 0.1f && !hasToppled)
             {
                 hasToppled = true;
                 rb.constraints = RigidbodyConstraints.None;
@@ -83,7 +83,7 @@ namespace Utilities
                     }));
 
                 }));
-            }
+            }*/
         }
 
         private void OnCollisionStay(Collision other)
