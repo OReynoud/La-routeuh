@@ -14,7 +14,7 @@ public class MainMenu : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+  /*  void Update()
     {
         if(Input.GetKeyDown(KeyCode.Return))
         {
@@ -26,10 +26,10 @@ public class MainMenu : MonoBehaviour
             PlayerPrefs.SetInt("TheValue", SceneValue);
             SceneManager.LoadScene(SceneName[SceneValue]);
         }
-    }
+    } */
 
     public void Play()
     {
-        SceneManager.LoadScene("PuzzleGD");
+        SceneManager.LoadScene("Loop - Puzzle 1");
     }
 }
