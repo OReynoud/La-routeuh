@@ -53,15 +53,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""SecondaryInput"",
-                    ""type"": ""Button"",
-                    ""id"": ""e402e382-1e21-427a-87f6-8a40ef13665f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -273,28 +264,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""04598657-7868-4d2b-a9ee-e72fc7dd84ce"",
-                    ""path"": ""<XInputController>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SecondaryInput"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""71adaef3-e9e8-44fc-9868-bfbbc9f2576c"",
-                    ""path"": ""<Keyboard>/c"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SecondaryInput"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -334,7 +303,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_SecondaryInput = m_Player.FindAction("SecondaryInput", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -399,7 +367,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_SecondaryInput;
     public struct PlayerActions
     {
         private @InputManager m_Wrapper;
@@ -407,7 +374,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
-        public InputAction @SecondaryInput => m_Wrapper.m_Player_SecondaryInput;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -426,9 +392,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
-            @SecondaryInput.started += instance.OnSecondaryInput;
-            @SecondaryInput.performed += instance.OnSecondaryInput;
-            @SecondaryInput.canceled += instance.OnSecondaryInput;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -442,9 +405,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
-            @SecondaryInput.started -= instance.OnSecondaryInput;
-            @SecondaryInput.performed -= instance.OnSecondaryInput;
-            @SecondaryInput.canceled -= instance.OnSecondaryInput;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -485,6 +445,5 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
-        void OnSecondaryInput(InputAction.CallbackContext context);
     }
 }
