@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using NaughtyAttributes;
 using Player;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Utilities
@@ -47,22 +48,26 @@ namespace Utilities
         private IEnumerator PresenceStartAnimationCoroutine()
         {
             yield return new WaitForSeconds(timeBeforeStart);
+
+            StartCoroutine(WaitToFallCoroutine());
+            
             _audioSource.PlayOneShot(soundToRotateSpot);
+            
             spotToRotate.transform
                 .DOLocalRotate(spotToRotate.transform.localEulerAngles + new Vector3(0, angleToRotateSpot, 0),
                     timeToRotateSpot).SetEase(easeToRotateSpot)
                 .OnComplete(() =>
                 {
                     StartCoroutine(FootprintsCoroutine());
-                    PlayerController.instance.controls.Disable();
-                    PlayerController.instance.canMove = false;
-                    PlayerController.instance.rb.velocity = Vector3.zero;
-                    PlayerController.instance.rig.SetBool("isTripping",true);
                 });
         }
         
         private IEnumerator FootprintsCoroutine()
         {
+            yield return new WaitForNextFrameUnit();
+            
+            PlayerController.instance.rig.SetBool("isTripping",false);
+            
             yield return new WaitForSeconds(timeBetweenSpotAndFootprints);
 
             var i = 0;
@@ -84,8 +89,17 @@ namespace Utilities
             PlayerController.instance.controls.Enable();
             PlayerController.instance.canMove = true;
             PlayerController.instance.rb.velocity = Vector3.zero;
-            PlayerController.instance.rig.SetBool("isTripping",false);
             gameObject.SetActive(false);
+        }
+
+        private IEnumerator WaitToFallCoroutine()
+        {
+            yield return new WaitForSeconds(timeToRotateSpot * 0.5f);
+            
+            PlayerController.instance.controls.Disable();
+            PlayerController.instance.canMove = false;
+            PlayerController.instance.rb.velocity = Vector3.zero;
+            PlayerController.instance.rig.SetBool("isTripping",true);
         }
 
         // ReSharper disable once UnusedMember.Local
