@@ -77,6 +77,7 @@ namespace Player
             controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
             controls.Player.Interact.performed += _ => Interact();
             controls.Player.Sprint.performed += _ => TogleSprint();
+            controls.Player.SecondaryInput.performed += _ => SecondaryInteract();
         }
         
         // Update is called once per frame
@@ -245,7 +246,15 @@ namespace Player
             }
         }
 
-        
+        void SecondaryInteract()
+        {
+            if (isGrabbing)
+            {
+                pushingPulling_Rotate = !pushingPulling_Rotate;
+            }
+
+            objectToGrab.constraints = _baseConstraints | RigidbodyConstraints.FreezePosition;
+        }
 
         private void ApplyForce(float appliedModifier)
         {
