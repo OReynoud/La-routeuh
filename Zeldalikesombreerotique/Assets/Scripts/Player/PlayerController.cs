@@ -214,9 +214,12 @@ namespace Player
                 }
 
                 rig.SetBool("IsGrabbing",true);
-                canMove = true;
-                controls.Enable();
-                isGrabbing = true;
+                transform.DOMove(transform.position, 0.3f).OnComplete((() =>
+                {
+                    canMove = true;
+                    controls.Enable();
+                    isGrabbing = true;
+                }));
             }
             else
             {
@@ -269,30 +272,7 @@ namespace Player
                 var velocity = rb.velocity;
                 rb.velocity = new Vector3(velocity.x, velocity.y, velocity.z * 0.9f);
             }
-                        
-            if (rb.velocity.magnitude < minSpeed && !isGrabbing)
-            {
-                rb.velocity = minSpeed * playerDir;
-            }
-
-            if (!isSprinting)
-            {
-                if (rb.velocity.magnitude > maxSpeed)
-                {
-                    rb.velocity = maxSpeed * playerDir;
-                    return;
-                }
-            }
-            else
-            {
-                if (rb.velocity.magnitude > maxSpeed * 2)
-                {
-                    rb.velocity = playerDir * (maxSpeed * 2);
-                    return;
-                }
-            }
-            
-                // Pousser/tirrer
+            // Pousser/tirrer
             if (isGrabbing && !pushingPulling_Rotate)
             {
                 var fwrd = transform.forward;
@@ -331,6 +311,30 @@ namespace Player
                 }
                 return;
             }
+                        
+            if (rb.velocity.magnitude < minSpeed && !isGrabbing)
+            {
+                rb.velocity = minSpeed * playerDir;
+            }
+
+            if (!isSprinting)
+            {
+                if (rb.velocity.magnitude > maxSpeed)
+                {
+                    rb.velocity = maxSpeed * playerDir;
+                    return;
+                }
+            }
+            else
+            {
+                if (rb.velocity.magnitude > maxSpeed * 2)
+                {
+                    rb.velocity = playerDir * (maxSpeed * 2);
+                    return;
+                }
+            }
+            
+                
             if (!isSprinting)
             {
                 rb.AddForce(playerDir * (appliedModifier),ForceMode.Force);
