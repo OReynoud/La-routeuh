@@ -15847,6 +15847,7 @@ MonoBehaviour:
   - {fileID: 1213195508}
   timeBetweenFootprints: 0.08
   soundToAppearFootprints: {fileID: 0}
+  randomValuePitchFootprints: 0
 --- !u!82 &397755663
 AudioSource:
   m_ObjectHideFlags: 0
@@ -81402,6 +81403,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3622392655333942062, guid: 68662041aa1133946aa6b6033245802a,
         type: 3}
+      propertyPath: CollisionModule.m_Bounce.scalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3622392655333942062, guid: 68662041aa1133946aa6b6033245802a,
+        type: 3}
+      propertyPath: CollisionModule.m_Dampen.scalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3622392655333942062, guid: 68662041aa1133946aa6b6033245802a,
+        type: 3}
+      propertyPath: CollisionModule.collisionMessages
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3622392655333942062, guid: 68662041aa1133946aa6b6033245802a,
+        type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 0.3962264
       objectReference: {fileID: 0}
@@ -81414,6 +81430,16 @@ PrefabInstance:
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
       value: 0.29343182
+      objectReference: {fileID: 0}
+    - target: {fileID: 3622392655333942062, guid: 68662041aa1133946aa6b6033245802a,
+        type: 3}
+      propertyPath: CollisionModule.m_Planes.Array.data[0]
+      value: 
+      objectReference: {fileID: 1708420437}
+    - target: {fileID: 3622392655333942062, guid: 68662041aa1133946aa6b6033245802a,
+        type: 3}
+      propertyPath: CollisionModule.m_EnergyLossOnCollision.scalar
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68662041aa1133946aa6b6033245802a, type: 3}
