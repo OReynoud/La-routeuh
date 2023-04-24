@@ -52,6 +52,9 @@ namespace Player
         private RigidbodyConstraints _baseConstraints =
             RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX;
 
+        private static readonly int IsGrabbing = Animator.StringToHash("isGrabbing");
+        private static readonly int IsPushing = Animator.StringToHash("isPushing");
+
         public void OnDrawGizmosSelected()
         {
             Gizmos.DrawLine(transform.position, transform.position + Vector3.forward);
@@ -95,6 +98,7 @@ namespace Player
             {
                 
                 if (!proofOfConcept)rig.SetBool("isWalking", false);
+                rig.SetBool("IsPushing",false);
                 playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
                 rb.velocity *= 0.9f;
                 rb.angularVelocity = Vector3.zero;
@@ -169,6 +173,11 @@ namespace Player
                         rb.velocity = Vector3.zero;
                         var dir = objectToGrab.position - transform.position;
                         dir.y = 0;
+                        if (Vector3.Distance(objectToGrab.GetComponent<BoxCollider>().ClosestPoint(transform.position), transform.position) > 1f)
+                        {
+                            dir *= -1;
+                        }
+                        
                         objectToGrab.transform.DOMove(objectToGrab.transform.position + dir.normalized * 0.3f,0.1f).OnComplete(
                             () =>
                             {
@@ -204,6 +213,7 @@ namespace Player
                         break;
                 }
 
+                rig.SetBool("IsGrabbing",true);
                 canMove = true;
                 controls.Enable();
                 isGrabbing = true;
@@ -227,6 +237,7 @@ namespace Player
                         break;
                 }
 
+                rig.SetBool("IsGrabbing",false);
                 pushingPulling_Rotate = false;
                 isGrabbing = false;
             }
@@ -300,6 +311,7 @@ namespace Player
                         rb.velocity = ctxMax * playerDir;
                         return;
                     }
+                    rig.SetBool("IsPushing",true);
                     rb.AddForce(playerDir * appliedModifier);
                 }
                 else if(absDiff > 2f)
@@ -314,6 +326,7 @@ namespace Player
                         rb.velocity = (ctxMax) * playerDir;
                         return;
                     }
+                    rig.SetBool("IsPushing",false);
                     rb.AddForce(playerDir * appliedModifier);
                 }
                 return;
