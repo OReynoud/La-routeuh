@@ -52,8 +52,7 @@ namespace Player
         [Foldout("Autre")] [SerializeField] private float yOffset = 2f;
         private float inputLag = 0.2f;
 
-        private RigidbodyConstraints _baseConstraints =
-            RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX;
+        private RigidbodyConstraints _baseConstraints = RigidbodyConstraints.FreezeRotation;
 
         private static readonly int IsGrabbing = Animator.StringToHash("isGrabbing");
         private static readonly int IsPushing = Animator.StringToHash("isPushing");
@@ -97,7 +96,7 @@ namespace Player
                 if (!proofOfConcept)rig.SetBool("isWalking", false);
                 return;
             }
-            if (!controls.Player.Move.IsPressed() && isGrounded && !pushingPulling_Rotate)
+            if (!controls.Player.Move.IsPressed() && isGrounded)
             {
                 
                 if (!proofOfConcept)rig.SetBool("isWalking", false);
@@ -256,7 +255,14 @@ namespace Player
                 pushingPulling_Rotate = !pushingPulling_Rotate;
             }
 
-            objectToGrab.constraints = _baseConstraints | RigidbodyConstraints.FreezePosition;
+            if (pushingPulling_Rotate)
+            {
+                objectToGrab.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePosition;
+            }
+            else
+            {
+                objectToGrab.constraints = _baseConstraints;
+            }
         }
 
         private void ApplyForce(float appliedModifier)
@@ -314,6 +320,29 @@ namespace Player
                 }
                 return;
             }
+                            //Rotate____________________________________________________________________________________________________________
+            if (isGrabbing && pushingPulling_Rotate && playerDir.magnitude > 0.1f)
+            {
+                rb.velocity = Vector3.zero;
+                var avatarOrientation = -transform.forward;
+                var diff = playerDir - avatarOrientation;
+                var absDiff = Mathf.Abs(diff.x) + Mathf.Abs(diff.z);
+                var dirModifier = 1f;
+                if (Vector3.Distance(transform.right,playerDir) < Vector3.Distance(-transform.right,playerDir))
+                {
+                    dirModifier = -dirModifier;
+                }
+                if (absDiff > 1f)
+                {
+                    
+                    transform.RotateAround(objectToGrab.position,transform.up, rotationSpeed * dirModifier);
+                    return;
+                }
+                transform.RotateAround(objectToGrab.position,transform.up, rotationSpeed * absDiff * dirModifier);
+                return;
+                
+            }
+            
                         
             if (rb.velocity.magnitude < minSpeed && !isGrabbing)
             {
@@ -336,64 +365,6 @@ namespace Player
                     return;
                 }
             }
-            
-<<<<<<< HEAD
-                
-=======
-                // Pousser/tirrer
-            if (isGrabbing && !pushingPulling_Rotate)
-            {
-                var differential = playerDir - transform.forward;
-                var absDiff = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
-                var fwrd = objectToGrab.transform.forward;
-                var ctxMax = maxSpeed / objectToGrab.mass;
-                if (absDiff < 2f)
-                {
-                    playerDir = new Vector3(fwrd.x, playerDir.y, fwrd.z);
-                    if (rb.velocity.magnitude < minSpeed * grabbedMinFactor)
-                    {
-                        rb.velocity = minSpeed * playerDir;
-                    }
-                    if (rb.velocity.magnitude > ctxMax)
-                    {
-                        rb.velocity = ctxMax * playerDir;
-                        return;
-                    }
-                    rb.AddForce(playerDir * appliedModifier);
-                }
-                else if(absDiff > 2f)
-                { 
-                    playerDir = new Vector3(-fwrd.x, playerDir.y, -fwrd.z);
-                    if (rb.velocity.magnitude < minSpeed * grabbedMinFactor)
-                    {
-                        rb.velocity = minSpeed * playerDir;
-                    }
-                    if (rb.velocity.magnitude > ctxMax)
-                    {
-                        rb.velocity = (ctxMax) * playerDir;
-                        return;
-                    }
-                    rb.AddForce(playerDir * appliedModifier);
-                }
-                return;
-            }
-
-            if (isGrabbing && pushingPulling_Rotate && playerDir.magnitude > 0)
-            {
-                var avatarOrientation = -transform.forward;
-                var diff = playerDir - avatarOrientation;
-                var absDiff = Mathf.Abs(diff.x) + Mathf.Abs(diff.z);
-                if (absDiff > 1f)
-                {
-                    transform.RotateAround(objectToGrab.position,transform.forward, rotationSpeed);
-                }
-                else
-                {
-                    transform.RotateAround(objectToGrab.position,transform.forward, rotationSpeed * absDiff);
-                }
-                return;
-            }
->>>>>>> parent of c463477 (Enlevé le rotate)
             if (!isSprinting)
             {
                 rb.AddForce(playerDir * (appliedModifier),ForceMode.Force);
@@ -401,7 +372,6 @@ namespace Player
             }
             
             rb.AddForce(playerDir * ((appliedModifier) * sprintSpeed),ForceMode.Force);
-
 
         }
 
