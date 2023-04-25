@@ -22,6 +22,9 @@ namespace Player
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur quand il manipule un objet")]public float grabbedSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur")] public float minSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse maximale du joueur")] public float maxSpeed;
+        
+        [BoxGroup("Mouvements")] [Tooltip("Vitesse de rotation")] public float rotationSpeed;
+
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur quand il a grab un objet")]
         public float grabbedMinFactor;
         [Range(0,1)][BoxGroup("Mouvements")] [Tooltip("Maniabilitée du perso: ( 0 c'est un robot et a 1 il a des briques de savon a la place des pieds)")] public float allowedDrift;
@@ -334,7 +337,63 @@ namespace Player
                 }
             }
             
+<<<<<<< HEAD
                 
+=======
+                // Pousser/tirrer
+            if (isGrabbing && !pushingPulling_Rotate)
+            {
+                var differential = playerDir - transform.forward;
+                var absDiff = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
+                var fwrd = objectToGrab.transform.forward;
+                var ctxMax = maxSpeed / objectToGrab.mass;
+                if (absDiff < 2f)
+                {
+                    playerDir = new Vector3(fwrd.x, playerDir.y, fwrd.z);
+                    if (rb.velocity.magnitude < minSpeed * grabbedMinFactor)
+                    {
+                        rb.velocity = minSpeed * playerDir;
+                    }
+                    if (rb.velocity.magnitude > ctxMax)
+                    {
+                        rb.velocity = ctxMax * playerDir;
+                        return;
+                    }
+                    rb.AddForce(playerDir * appliedModifier);
+                }
+                else if(absDiff > 2f)
+                { 
+                    playerDir = new Vector3(-fwrd.x, playerDir.y, -fwrd.z);
+                    if (rb.velocity.magnitude < minSpeed * grabbedMinFactor)
+                    {
+                        rb.velocity = minSpeed * playerDir;
+                    }
+                    if (rb.velocity.magnitude > ctxMax)
+                    {
+                        rb.velocity = (ctxMax) * playerDir;
+                        return;
+                    }
+                    rb.AddForce(playerDir * appliedModifier);
+                }
+                return;
+            }
+
+            if (isGrabbing && pushingPulling_Rotate && playerDir.magnitude > 0)
+            {
+                var avatarOrientation = -transform.forward;
+                var diff = playerDir - avatarOrientation;
+                var absDiff = Mathf.Abs(diff.x) + Mathf.Abs(diff.z);
+                if (absDiff > 1f)
+                {
+                    transform.RotateAround(objectToGrab.position,transform.forward, rotationSpeed);
+                }
+                else
+                {
+                    transform.RotateAround(objectToGrab.position,transform.forward, rotationSpeed * absDiff);
+                }
+                return;
+            }
+>>>>>>> parent of c463477 (Enlevé le rotate)
             if (!isSprinting)
             {
                 rb.AddForce(playerDir * (appliedModifier),ForceMode.Force);
