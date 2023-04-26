@@ -11,6 +11,7 @@ namespace Utilities
         
         internal readonly Dictionary<GameObject, bool> HiddenObjects = new();
         internal readonly Dictionary<GameObject, bool> RevealedObjects = new();
+        internal readonly Dictionary<Shadow, Dictionary<Light, bool>> AffectedShadows = new();
         
         internal Coroutine CurrentCheckCoroutine;
 
@@ -26,13 +27,6 @@ namespace Utilities
             }
         }
 
-        /*private void FixedUpdate()
-        {
-            var numberOfLights = Physics.OverlapSphere(PlayerController.instance.transform.position, 2)
-                .Select(x => x.gameObject).Where(obj => !obj.TryGetComponent<Light>(out _))
-                .Select(obj => obj.GetComponent<Light>()).Count();
-        }*/
-
         internal IEnumerator CheckDictionariesCoroutine()
         {
             yield return new WaitForEndOfFrame();
@@ -42,29 +36,69 @@ namespace Utilities
 
         private void CheckDictionaries()
         {
-            foreach (var revealedObject in RevealedObjects.Keys.ToList())
+            CheckVisibilityDictionary(RevealedObjects, false);
+            CheckVisibilityDictionary(HiddenObjects, true);
+
+            foreach (var affectedShadow in AffectedShadows.Keys.ToList())
             {
-                if (!RevealedObjects[revealedObject])
+                foreach (var affectingLight in AffectedShadows[affectedShadow].Keys.ToList())
                 {
-                    revealedObject.GetComponent<DynamicObject>().meshObjectForVisibility.SetActive(false);
-                    RevealedObjects.Remove(revealedObject);
+                    if (!AffectedShadows[affectedShadow][affectingLight])
+                    {
+                        // affectedShadow.GetComponent<Shadow>().ResetShadow(affectedShadow, affectingLight);
+                        AffectedShadows[affectedShadow].Remove(affectingLight);
+                    }
+                    else
+                    {
+                        AffectedShadows[affectedShadow][affectingLight] = false;
+                    }
                 }
-                else
+
+                switch (AffectedShadows[affectedShadow].Count)
                 {
-                    RevealedObjects[revealedObject] = false;
+                    case 0:
+                        AffectedShadows.Remove(affectedShadow);
+                        break;
+                    
+                    case 1:
+                        var affectingLight = AffectedShadows[affectedShadow].Keys.ToList()[0];
+                        
+                        // Raycast values
+                        var currentAngle = affectingLight.transform.rotation.eulerAngles.y; // Current angle
+                        var rot = Quaternion.AngleAxis(currentAngle, Vector3.up); // Quaternion for direction calculation
+                        var dir = rot * Vector3.forward; // Direction of the raycast
+                        dir.Normalize();
+
+                        var lightPosition = affectingLight.transform.position;
+                        Physics.Raycast(lightPosition, dir, out var raycastHit, affectingLight.distance); // Raycast
+                        
+                        affectedShadow.MoveShadow(affectingLight.PhysicAngle, raycastHit.point, lightPosition);
+                        break;
+                    
+                    default:
+                        // affectedShadow.ResetShadow();
+                        break;
+                }
+                
+                if (AffectedShadows[affectedShadow].Count == 0)
+                {
+                    AffectedShadows.Remove(affectedShadow);
                 }
             }
+        }
 
-            foreach (var hiddenObject in HiddenObjects.Keys.ToList())
+        private static void CheckVisibilityDictionary(Dictionary<GameObject,bool> visibilityDictionary, bool defaultVisibility)
+        {
+            foreach (var visibilityObject in visibilityDictionary.Keys.ToList())
             {
-                if (!HiddenObjects[hiddenObject])
+                if (!visibilityDictionary[visibilityObject])
                 {
-                    hiddenObject.GetComponent<DynamicObject>().meshObjectForVisibility.SetActive(true);
-                    HiddenObjects.Remove(hiddenObject);
+                    visibilityObject.GetComponent<DynamicObject>().meshObjectForVisibility.SetActive(defaultVisibility);
+                    visibilityDictionary.Remove(visibilityObject);
                 }
                 else
                 {
-                    HiddenObjects[hiddenObject] = false;
+                    visibilityDictionary[visibilityObject] = false;
                 }
             }
         }

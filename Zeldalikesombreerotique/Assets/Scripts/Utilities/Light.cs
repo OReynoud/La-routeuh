@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using NaughtyAttributes;
 using Player;
 using UnityEngine;
@@ -8,10 +9,10 @@ namespace Utilities
     public class Light : MonoBehaviour
     {
         [Tooltip("Raycast number (more raycasts = more precision = less FPS)")] [SerializeField] private int rayAmount;
-        [Tooltip("Distance")] [SerializeField] private float distance;
+        [Tooltip("Distance")] [SerializeField] internal float distance;
         [Range(1f, 177f)] [Tooltip("Angle")] [SerializeField] private float angle;
         [Tooltip("Angle (margin) not detected by raycasts")] [SerializeField] private float angleTolerance;
-        private float _physicAngle;
+        internal float PhysicAngle;
         private float _halfAngle;
         private float _angleInterval;
         [Tooltip("Color (type) of the light")] [SerializeField] internal LightColorType lightColorType;
@@ -44,9 +45,9 @@ namespace Utilities
 
 
             // Global values
-            _physicAngle = angle - angleTolerance; // Angle without the tolerance
-            _halfAngle = _physicAngle * 0.5f; // Half angle calculation
-            _angleInterval = _physicAngle / rayAmount; // Angle difference between each raycast
+            PhysicAngle = angle - angleTolerance; // Angle without the tolerance
+            _halfAngle = PhysicAngle * 0.5f; // Half angle calculation
+            _angleInterval = PhysicAngle / rayAmount; // Angle difference between each raycast
             
             // Battery detection
             if (doesNeedABattery)
@@ -79,7 +80,6 @@ namespace Utilities
             {
                 StartCoroutine(Blink1());
             }
-
         }
 
         private IEnumerator Blink1()
@@ -89,8 +89,8 @@ namespace Utilities
             light.enabled = !light.enabled;
             enabled = !enabled;
             lightMeshRenderer.enabled = !lightMeshRenderer.enabled;
-            
         }
+        
         private void FixedUpdate()
         {
             ThrowRaycasts();
@@ -153,7 +153,23 @@ namespace Utilities
                     case "Shadows": // If the raycast hits a shadow
                         if (lightColorType.canKillShadows) // If the light can kill shadows
                         {
-                            hitObject.SetActive(false); // Kill the shadow
+                            var shadow = hitObject.GetComponent<Shadow>();
+                            
+                            if (_lightedElementsManager.AffectedShadows.ContainsKey(shadow))
+                            {
+                                if (_lightedElementsManager.AffectedShadows[shadow].ContainsKey(this))
+                                {
+                                    _lightedElementsManager.AffectedShadows[shadow][this] = true;
+                                }
+                                else
+                                {
+                                    _lightedElementsManager.AffectedShadows[shadow].Add(this, true);
+                                }
+                            }
+                            else
+                            {
+                                _lightedElementsManager.AffectedShadows.Add(shadow, new Dictionary<Light, bool> {{this, true}});
+                            }
                         }
                         break;
 
