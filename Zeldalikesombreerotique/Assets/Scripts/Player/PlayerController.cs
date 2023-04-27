@@ -85,18 +85,19 @@ namespace Player
         // Update is called once per frame
         private void FixedUpdate()
         {
+            //incrémentation du inputBuffer pour éviter le spam de bouttons
             if (inputLag > 0)
             {
                 inputLag -= Time.deltaTime;
             }
-            var speedFactor = rb.velocity.magnitude / maxSpeed / 1.3f;
+            var speedFactor = rb.velocity.magnitude / maxSpeed;
             if (!proofOfConcept) rig.SetFloat("Speed",speedFactor);
             if (!canMove)
             {
                 if (!proofOfConcept)rig.SetBool("isWalking", false);
                 return;
             }
-            if (!controls.Player.Move.IsPressed() && isGrounded)
+            if (!controls.Player.Move.IsPressed() && isGrounded)    //Si ya aucune input du joueur
             {
                 
                 if (!proofOfConcept)rig.SetBool("isWalking", false);
@@ -106,13 +107,13 @@ namespace Player
                 rb.angularVelocity = Vector3.zero;
                 return;
             }
-            if (isGrabbing && objectType.mobilityType == DynamicObject.MobilityType.CanMove)
+            if (isGrabbing && objectType.mobilityType == DynamicObject.MobilityType.CanMove)    //Si le joueur bouge en grabbant un truc
             {
                 ApplyForce(grabbedSpeed);
             }
             else
             {
-                ApplyForce(groundSpeed);
+                ApplyForce(groundSpeed);    //Si le joueur bouge
             }
         }
 
@@ -125,29 +126,12 @@ namespace Player
         {
             playerDir = new Vector3(dir.x,playerDir.y, dir.y);
         }
-
+        
         private void Interact()
         {
             if (inputLag > 0) return;
             inputLag = 0.1f;
-            if (willTriggerCinematic)
-            {
-                controls.Disable();
-                objectToGrab = GetClosestObject();
-                var dir = tpLocation.position - objectToGrab.position;
-                var angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-                var rotationValue = Quaternion.AngleAxis(angle, Vector3.up);
-                objectToGrab.transform.DOLocalRotate(rotationValue.eulerAngles, 1).OnComplete(()=>
-                {
-                    objectToGrab.transform.DOJump(tpLocation.position, 2, 1, 3).AppendCallback((() =>
-                    {
-                        controls.Enable();
-                        willTriggerCinematic = false;
-                        objectToGrab.GetComponent<RollbackCar>().flyToHub = false;
-                    }));
-                }); 
-                return;
-            }
+            
             if (!isGrabbing)
             {
                 objectToGrab = GetClosestObject();
@@ -175,42 +159,33 @@ namespace Player
                         rb.velocity = Vector3.zero;
                         var dir = objectToGrab.position - transform.position;
                         dir.y = 0;
-                        if (Vector3.Distance(objectToGrab.GetComponent<BoxCollider>().ClosestPoint(transform.position), transform.position) > 1f)
-                        {
-                            dir *= -1;
-                        }
+                        if (Vector3.Distance(
+                                objectToGrab.GetComponent<BoxCollider>().ClosestPoint(transform.position), 
+                                transform.position) > 1f)       dir *= -1;
                         
-                        objectToGrab.transform.DOMove(objectToGrab.transform.position + dir.normalized * 0.3f,0.1f).OnComplete(
-                            () =>
-                            {
-                                joint.gameObject.SetActive(true);
-                                joint.connectedBody = objectToGrab;
-                                joint.connectedAnchor = objectToGrab.transform.position;
-                                objectToGrab.isKinematic = false;
-                            });
+                            objectToGrab.transform.DOMove(objectToGrab.transform.position + dir.normalized * 0.3f,0.1f).
+                                OnComplete(() => SetJoint(true));
                         break;
                     case DynamicObject.MobilityType.MoveWithHandle:
-                        var checkForProximity = Physics.OverlapCapsule(objectType.handlePos.position + Vector3.down,
-                            objectType.handlePos.position + Vector3.up, 1);
+                        var checkForProximity = Physics.OverlapCapsule(
+                            objectType.handlePos.position + Vector3.down,
+                            objectType.handlePos.position + Vector3.up, 
+                            1);
+                        
                         bool isPlayerNear = false;
                         foreach (var coll in checkForProximity)
                         {
                             if(coll != playerColl)continue;
                             isPlayerNear = true;
-                            transform.DOMove(new Vector3(objectType.handlePos.position.x,transform.position.y,objectType.handlePos.position.z), 0.5f).OnComplete((() =>
-                            {
-                                joint.gameObject.SetActive(true);
-                                joint.connectedBody = objectToGrab;
-                                joint.connectedAnchor = objectToGrab.transform.position;
-                                objectToGrab.isKinematic = false;
-                                
-                            }));
-                            break;
+                            transform.DOMove(new Vector3(objectType.handlePos.position.x,transform.position.y,objectType.handlePos.position.z), 0.5f).
+                                OnComplete(() => SetJoint(true));
                         }
 
                         if (!isPlayerNear)
                         {
                             Debug.Log("Player is too far from handle");
+                            controls.Enable();
+                            canMove = true;
                             return;
                         }
                         break;
@@ -233,16 +208,10 @@ namespace Player
                         PickupObject();
                         break;
                     case DynamicObject.MobilityType.CanMove:
-                        objectToGrab.constraints = _baseConstraints;
-                        joint.connectedBody = null;
-                        joint.gameObject.SetActive(false);
-                        objectToGrab.isKinematic = true;
+                        SetJoint(false);
                         break;
                     case DynamicObject.MobilityType.MoveWithHandle:
-                        objectToGrab.constraints = _baseConstraints;
-                        joint.connectedBody = null;
-                        joint.gameObject.SetActive(false);
-                        objectToGrab.isKinematic = true;
+                        SetJoint(false);
                         break;
                 }
 
@@ -251,7 +220,10 @@ namespace Player
                 isGrabbing = false;
             }
         }
-
+        
+        /// <summary>
+        /// Switch entre le rotate et le pousser tirer
+        /// </summary>
         void SecondaryInteract()
         {
             if (isGrabbing)
@@ -270,7 +242,9 @@ namespace Player
                 objectToGrab.constraints = _baseConstraints;
             }
         }
-
+        /// <summary>
+        /// </summary>
+        /// <param name="appliedModifier"> modifcateur de force</param>
         private void ApplyForce(float appliedModifier)
         {
             RotateModel();
@@ -287,7 +261,9 @@ namespace Player
                 var velocity = rb.velocity;
                 rb.velocity = new Vector3(velocity.x, velocity.y, velocity.z * 0.9f);
             }
-            // Pousser/tirrer
+            
+                //Pousser/tirrer_______________________________________________________________________________________________________________________________________
+            
             if (isGrabbing && !pushingPulling_Rotate)
             {
                 var fwrd = transform.forward;
@@ -326,7 +302,9 @@ namespace Player
                 }
                 return;
             }
-                            //Rotate____________________________________________________________________________________________________________
+            
+                //Rotate______________________________________________________________________________________________________________________________________
+            
             if (isGrabbing && pushingPulling_Rotate && playerDir.magnitude > 0.1f)
             {
                 rb.velocity = Vector3.zero;
@@ -445,7 +423,10 @@ namespace Player
         {
             controls.Disable();
         }
-
+        /// <summary>
+        /// Méthode pour trouver le Dynamic Object le plus proche du joueur
+        /// </summary>
+        /// <returns></returns>
         private Rigidbody GetClosestObject()
         {
             // ReSharper disable once Unity.PreferNonAllocApi
@@ -466,5 +447,41 @@ namespace Player
                     })
                 .Select(obj => obj.GetComponent<Rigidbody>()).FirstOrDefault();
         }
+        private void SetJoint(bool grabbing)
+        {
+            if (grabbing)
+            {
+                joint.gameObject.SetActive(true);
+                joint.connectedBody = objectToGrab;
+                joint.connectedAnchor = objectToGrab.transform.position;
+                objectToGrab.isKinematic = false;
+            }
+            else
+            {
+                objectToGrab.constraints = _baseConstraints;
+                joint.connectedBody = null;
+                joint.gameObject.SetActive(false);
+                objectToGrab.isKinematic = true;
+            }
+        }
     }
 }
+
+/*if (willTriggerCinematic)   //Cinématique pour la voiture
+            {
+                controls.Disable();
+                objectToGrab = GetClosestObject();
+                var dir = tpLocation.position - objectToGrab.position;
+                var angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+                var rotationValue = Quaternion.AngleAxis(angle, Vector3.up);
+                objectToGrab.transform.DOLocalRotate(rotationValue.eulerAngles, 1).OnComplete(()=>
+                {
+                    objectToGrab.transform.DOJump(tpLocation.position, 2, 1, 3).AppendCallback((() =>
+                    {
+                        controls.Enable();
+                        willTriggerCinematic = false;
+                        objectToGrab.GetComponent<RollbackCar>().flyToHub = false;
+                    }));
+                }); 
+                return;
+            }*/
