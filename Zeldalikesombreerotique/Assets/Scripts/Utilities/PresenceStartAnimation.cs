@@ -30,10 +30,10 @@ namespace Utilities
         {
             _audioSource = GetComponent<AudioSource>();
             
-            foreach (var footprint in footprintsToAppear)
+            /*foreach (var footprint in footprintsToAppear)
             {
                 footprint.SetActive(false);
-            }
+            }*/
         }
         
         private void OnTriggerEnter(Collider other)

@@ -10,18 +10,21 @@ namespace Utilities
         [Tooltip("Point where the player will respawn if they are killed by the shadow")] [SerializeField] internal Transform respawnPoint;
         
         [Tooltip("Mesh game object of the shadow")] [SerializeField] internal GameObject meshGameObject;
-        private readonly List<(Transform transform, Vector3 position)> _meshTransforms = new();
+        private readonly List<(Transform transform, Vector3 position, Vector3 localPosition)> _meshTransforms = new();
         
         private Sequence _movingSequence;
         [Tooltip("Duration of the animation of the moving shadow")] [SerializeField] internal float movingDuration;
         [Tooltip("Distance traveled by the moving shadow")] [SerializeField] internal float movingDistance;
         [Tooltip("Scale reached by the moving shadow")] [SerializeField] internal float movingScale;
+        
+        private Vector3 _lastHitPoint;
+        private Vector3 _lastLightPosition;
 
         private void Start()
         {
             foreach (Transform child in meshGameObject.transform)
             {
-                _meshTransforms.Add((child, child.position));
+                _meshTransforms.Add((child, child.position, child.localPosition));
             }
         }
 
@@ -35,27 +38,64 @@ namespace Utilities
         
         internal void MoveShadow(float angle, Vector3 hitPoint, Vector3 lightPosition)
         {
+            if (_lastHitPoint != hitPoint || _lastLightPosition != lightPosition)
+            {
+                _lastHitPoint = hitPoint;
+                _lastLightPosition = lightPosition;
+                _movingSequence.Kill();
+                _movingSequence = DOTween.Sequence();
+                foreach (var meshTransform in _meshTransforms)
+                {
+                    var whereToMove = WhereToMove(angle, hitPoint, lightPosition, meshTransform.position);
+                
+                    if (whereToMove.hasToMove)
+                    {
+                        _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x + movingDistance * whereToMove.direction, movingDuration))
+                            .Join(meshTransform.transform.DOScaleX(movingScale, movingDuration * 0.5f))
+                            .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(1f, movingDuration * 0.5f));
+                    }
+                    else
+                    {
+                        _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x, movingDuration))
+                            .Join(meshTransform.transform.DOScaleX(movingScale, movingDuration * 0.5f))
+                            .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(1f, movingDuration * 0.5f));
+                    }
+                }
+                _movingSequence.AppendCallback(() => _movingSequence.Kill());
+            }
+        }
+        
+        internal void ResetShadow()
+        {
             _movingSequence = DOTween.Sequence();
             foreach (var meshTransform in _meshTransforms)
             {
-                /*if (expr)
-                {
-                    _movingSequence.Insert(0f, meshTransform.transform.DOMoveX(meshTransform.position.x + movingDistance, movingDuration))
-                        .Join(meshTransform.transform.DOScaleX(movingScale, movingDuration * 0.5f))
-                        .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(0f, movingDuration * 0.5f));
-                }*/
+                _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x, movingDuration))
+                    .Join(meshTransform.transform.DOScaleX(movingScale, movingDuration * 0.5f))
+                    .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(1f, movingDuration * 0.5f));
             }
             _movingSequence.AppendCallback(() => _movingSequence.Kill());
         }
         
-        /*private (bool hasToMove, bool isRight) WhereToMove(float angle, Vector3 hitPoint, Vector3 lightPosition, Vector3 meshPosition)
+        private static (bool hasToMove, int direction) WhereToMove(float angle, Vector3 hitPoint, Vector3 lightPosition, Vector3 meshPosition)
         {
             var baseVector3 = hitPoint - lightPosition;
-            
-            if (hitPoint - lightPosition)
+            var meshVector3 = meshPosition - lightPosition;
+            var angleBetweenVectors = Vector3.Angle(baseVector3, meshVector3);
+
+            if (angleBetweenVectors < angle * 0.5f)
             {
-                return (true, false);
+                Debug.Log(Quaternion.LookRotation(baseVector3).eulerAngles.y);
+                Debug.Log(Quaternion.LookRotation(meshVector3).eulerAngles.y);
+                if (Quaternion.LookRotation(baseVector3).eulerAngles.y - Quaternion.LookRotation(meshVector3).eulerAngles.y > 0)
+                {
+                    return (true, -1);
+                }
+
+                return (true, 1);
             }
-        }*/
+
+            return (false, 0);
+        }
     }
 }

@@ -57,6 +57,7 @@ namespace Utilities
                 switch (AffectedShadows[affectedShadow].Count)
                 {
                     case 0:
+                        affectedShadow.ResetShadow();
                         AffectedShadows.Remove(affectedShadow);
                         break;
                     
@@ -76,13 +77,8 @@ namespace Utilities
                         break;
                     
                     default:
-                        // affectedShadow.ResetShadow();
+                        affectedShadow.ResetShadow();
                         break;
-                }
-                
-                if (AffectedShadows[affectedShadow].Count == 0)
-                {
-                    AffectedShadows.Remove(affectedShadow);
                 }
             }
         }
