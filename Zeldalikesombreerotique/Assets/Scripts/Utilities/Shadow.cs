@@ -48,11 +48,13 @@ namespace Utilities
             _movingSequence.AppendCallback(() => _movingSequence.Kill());
         }
         
-        /*private bool HasToMove(float angle)
+        /*private (bool hasToMove, bool isRight) WhereToMove(float angle, Vector3 hitPoint, Vector3 lightPosition, Vector3 meshPosition)
         {
-            if ()
+            var baseVector3 = hitPoint - lightPosition;
+            
+            if (hitPoint - lightPosition)
             {
-                return true;
+                return (true, false);
             }
         }*/
     }
