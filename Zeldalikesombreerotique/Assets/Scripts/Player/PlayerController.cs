@@ -2,6 +2,7 @@ using System.Linq;
 using Cinemachine;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using DG.Tweening;
 using Utilities;
 using Vector3 = UnityEngine.Vector3;
@@ -50,12 +51,16 @@ namespace Player
         public InputManager controls;
         [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
         [Foldout("Autre")] [SerializeField] private float yOffset = 2f;
+        [Foldout("Autre")] [SerializeField] private float rumbleIntensity;
         private float inputLag = 0.2f;
 
         private RigidbodyConstraints _baseConstraints = RigidbodyConstraints.FreezeRotation;
 
         private static readonly int IsGrabbing = Animator.StringToHash("isGrabbing");
         private static readonly int IsPushing = Animator.StringToHash("isPushing");
+        private Gamepad _gamepad;
+        public bool allowedToRotate = true;
+
 
         public void OnDrawGizmosSelected()
         {
@@ -80,6 +85,7 @@ namespace Player
             controls.Player.Interact.performed += _ => Interact();
             controls.Player.Sprint.performed += _ => TogleSprint();
             controls.Player.SecondaryInput.performed += _ => SecondaryInteract();
+            _gamepad = Gamepad.current;
         }
         
         // Update is called once per frame
@@ -99,16 +105,17 @@ namespace Player
             }
             if (!controls.Player.Move.IsPressed() && isGrounded)    //Si ya aucune input du joueur
             {
-                
                 if (!proofOfConcept)rig.SetBool("isWalking", false);
                 rig.SetBool("IsPushing",false);
                 playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
                 rb.velocity *= 0.9f;
                 rb.angularVelocity = Vector3.zero;
+                _gamepad?.SetMotorSpeeds(0f,0f);
                 return;
             }
-            if (isGrabbing && objectType.mobilityType == DynamicObject.MobilityType.CanMove)    //Si le joueur bouge en grabbant un truc
+            if (isGrabbing && (objectType.mobilityType == DynamicObject.MobilityType.CanMove || objectType.mobilityType == DynamicObject.MobilityType.MoveWithHandle))    //Si le joueur bouge en grabbant un truc
             {
+                _gamepad?.SetMotorSpeeds(rumbleIntensity,rumbleIntensity);
                 ApplyForce(grabbedSpeed);
             }
             else
@@ -233,6 +240,10 @@ namespace Player
 
             if (pushingPulling_Rotate)
             {
+                transform.position = new Vector3(
+                    objectType.handlePos.position.x, 
+                    transform.position.y,
+                    objectType.handlePos.position.z);
                 joint.autoConfigureConnectedAnchor = false;
                 objectToGrab.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePosition;
                 rb.constraints = RigidbodyConstraints.FreezeAll;
@@ -307,7 +318,7 @@ namespace Player
             
                 //Rotate______________________________________________________________________________________________________________________________________
             
-            if (isGrabbing && pushingPulling_Rotate && playerDir.magnitude > 0.1f)
+            if (isGrabbing && allowedToRotate &&pushingPulling_Rotate && playerDir.magnitude > 0.1f)
             {
                 rb.velocity = Vector3.zero;
                 var avatarOrientation = -transform.forward;
@@ -318,6 +329,8 @@ namespace Player
                 {
                     dirModifier = -dirModifier;
                 }
+
+                
                 if (absDiff > 1f)
                 {
                     
