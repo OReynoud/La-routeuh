@@ -235,11 +235,13 @@ namespace Player
             {
                 joint.autoConfigureConnectedAnchor = false;
                 objectToGrab.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePosition;
+                rb.constraints = RigidbodyConstraints.FreezeAll;
             }
             else
             {
                 joint.autoConfigureConnectedAnchor = true;
                 objectToGrab.constraints = _baseConstraints;
+                rb.constraints = RigidbodyConstraints.FreezeRotation;
             }
         }
         /// <summary>
@@ -458,10 +460,12 @@ namespace Player
             }
             else
             {
+                rb.constraints = RigidbodyConstraints.FreezeRotation;
                 objectToGrab.constraints = _baseConstraints;
                 joint.connectedBody = null;
                 joint.gameObject.SetActive(false);
                 objectToGrab.isKinematic = true;
+                joint.autoConfigureConnectedAnchor = true;
             }
         }
     }
