@@ -94,6 +94,10 @@ namespace Utilities
             {
                 PlayerController.instance.isProtected = true;
             }
+            if (!other.gameObject.CompareTag("Untagged") && !other.gameObject.CompareTag("Player"))
+            {
+                PlayerController.instance.allowedToRotate = false;
+            }
         }
 
         private void OnTriggerStay(Collider other)
@@ -118,6 +122,10 @@ namespace Utilities
             if (other.gameObject.CompareTag("Player"))
             {
                 PlayerController.instance.isProtected = false;
+            }
+            if (!other.gameObject.CompareTag("Untagged") && !other.gameObject.CompareTag("Player"))
+            {
+                PlayerController.instance.allowedToRotate = true;
             }
         }
     }
