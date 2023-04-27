@@ -12,7 +12,7 @@ namespace Player
     {
         public static PlayerController instance;
         [Foldout("Références")]public Rigidbody rb;
-        [Foldout("Références")]public FixedJoint joint;
+        [Foldout("Références")]public ConfigurableJoint joint;
         [Foldout("Références")] public Animator rig;
         [Foldout("Références")] public Collider playerColl;
         [HorizontalLine(color: EColor.Black)]
@@ -183,9 +183,9 @@ namespace Player
                         objectToGrab.transform.DOMove(objectToGrab.transform.position + dir.normalized * 0.3f,0.1f).OnComplete(
                             () =>
                             {
-                                RotateModel();
                                 joint.gameObject.SetActive(true);
                                 joint.connectedBody = objectToGrab;
+                                joint.connectedAnchor = objectToGrab.transform.position;
                                 objectToGrab.isKinematic = false;
                             });
                         break;
@@ -199,10 +199,11 @@ namespace Player
                             isPlayerNear = true;
                             transform.DOMove(new Vector3(objectType.handlePos.position.x,transform.position.y,objectType.handlePos.position.z), 0.5f).OnComplete((() =>
                             {
-                                RotateModel();
                                 joint.gameObject.SetActive(true);
                                 joint.connectedBody = objectToGrab;
+                                joint.connectedAnchor = objectToGrab.transform.position;
                                 objectToGrab.isKinematic = false;
+                                
                             }));
                             break;
                         }
@@ -221,6 +222,7 @@ namespace Player
                     canMove = true;
                     controls.Enable();
                     isGrabbing = true;
+                    RotateModel();
                 }));
             }
             else
@@ -231,11 +233,13 @@ namespace Player
                         PickupObject();
                         break;
                     case DynamicObject.MobilityType.CanMove:
+                        objectToGrab.constraints = _baseConstraints;
                         joint.connectedBody = null;
                         joint.gameObject.SetActive(false);
                         objectToGrab.isKinematic = true;
                         break;
                     case DynamicObject.MobilityType.MoveWithHandle:
+                        objectToGrab.constraints = _baseConstraints;
                         joint.connectedBody = null;
                         joint.gameObject.SetActive(false);
                         objectToGrab.isKinematic = true;
@@ -257,10 +261,12 @@ namespace Player
 
             if (pushingPulling_Rotate)
             {
+                joint.autoConfigureConnectedAnchor = false;
                 objectToGrab.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePosition;
             }
             else
             {
+                joint.autoConfigureConnectedAnchor = true;
                 objectToGrab.constraints = _baseConstraints;
             }
         }
