@@ -45,13 +45,16 @@ namespace Utilities
                 _lastLightPosition = lightPosition;
                 _movingSequence.Kill();
                 _movingSequence = DOTween.Sequence();
+                
                 foreach (var meshTransform in _meshTransforms)
                 {
                     var whereToMove = WhereToMove(angle, hitPoint, lightPosition, meshTransform.position, lightDistance);
+                    
+                    var zPositionFactor = hitPoint.z - meshTransform.position.z > 0 ? -1 : 1;
                 
                     if (whereToMove.hasToMove)
                     {
-                        _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x + movingDistance * whereToMove.direction, movingDuration))
+                        _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x + movingDistance * whereToMove.direction * zPositionFactor, movingDuration))
                             .Join(meshTransform.transform.DOScaleX(movingScale, movingDuration * 0.5f))
                             .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(1f, movingDuration * 0.5f));
                     }
@@ -62,6 +65,7 @@ namespace Utilities
                             .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(1f, movingDuration * 0.5f));
                     }
                 }
+                
                 _movingSequence.AppendCallback(() => _movingSequence.Kill());
             }
         }
