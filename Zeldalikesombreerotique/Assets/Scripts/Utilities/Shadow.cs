@@ -37,7 +37,7 @@ namespace Utilities
             }
         }
         
-        internal void MoveShadow(float angle, Vector3 hitPoint, Vector3 lightPosition)
+        internal void MoveShadow(float angle, Vector3 hitPoint, Vector3 lightPosition, float lightDistance)
         {
             if (_lastHitPoint != hitPoint || _lastLightPosition != lightPosition)
             {
@@ -47,7 +47,7 @@ namespace Utilities
                 _movingSequence = DOTween.Sequence();
                 foreach (var meshTransform in _meshTransforms)
                 {
-                    var whereToMove = WhereToMove(angle, hitPoint, lightPosition, meshTransform.position);
+                    var whereToMove = WhereToMove(angle, hitPoint, lightPosition, meshTransform.position, lightDistance);
                 
                     if (whereToMove.hasToMove)
                     {
@@ -79,13 +79,13 @@ namespace Utilities
             _movingSequence.AppendCallback(() => _movingSequence.Kill());
         }
         
-        private static (bool hasToMove, int direction) WhereToMove(float angle, Vector3 hitPoint, Vector3 lightPosition, Vector3 meshPosition)
+        private static (bool hasToMove, int direction) WhereToMove(float angle, Vector3 hitPoint, Vector3 lightPosition, Vector3 meshPosition, float lightDistance)
         {
             var baseVector3 = hitPoint - lightPosition;
             var meshVector3 = meshPosition - lightPosition;
             var angleBetweenVectors = Vector3.Angle(baseVector3, meshVector3);
 
-            if (angleBetweenVectors < angle * 0.5f)
+            if (angleBetweenVectors < angle * 0.5f && meshVector3.magnitude <= lightDistance)
             {
                 if (Quaternion.LookRotation(baseVector3).eulerAngles.y - Quaternion.LookRotation(meshVector3).eulerAngles.y > 0)
                 {

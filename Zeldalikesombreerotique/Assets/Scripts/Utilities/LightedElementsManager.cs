@@ -73,7 +73,7 @@ namespace Utilities
                         var lightPosition = affectingLight.transform.position;
                         Physics.Raycast(lightPosition, dir, out var raycastHit, affectingLight.distance); // Raycast
                         
-                        affectedShadow.MoveShadow(affectingLight.PhysicAngle, raycastHit.point, lightPosition);
+                        affectedShadow.MoveShadow(affectingLight.PhysicAngle, raycastHit.point, lightPosition, affectingLight.distance);
                         break;
                     
                     default:
