@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using DG.Tweening;
-using Player;
 using UnityEngine;
 
 namespace Utilities
 {
     public class Shadow : MonoBehaviour
     {
-        [Tooltip("Point where the player will respawn if they are killed by the shadow")] [SerializeField] internal Transform respawnPoint;
+        [Tooltip("Point where the player will respawn if they are killed by the shadow")] [SerializeField] private Transform respawnPoint;
         
         [Tooltip("Mesh game object of the shadow")] [SerializeField] internal GameObject meshGameObject;
         private readonly List<(Transform transform, Vector3 position, Vector3 localPosition)> _meshTransforms = new();
@@ -25,14 +24,8 @@ namespace Utilities
             foreach (Transform child in meshGameObject.transform)
             {
                 _meshTransforms.Add((child, child.position, child.localPosition));
-            }
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("Player") && !PlayerController.instance.isProtected)
-            {
-                other.gameObject.transform.position = respawnPoint.position;
+                
+                child.GetChild(0).GetComponent<ShadowKill>().RespawnPoint = respawnPoint;
             }
         }
         
@@ -67,6 +60,7 @@ namespace Utilities
         
         internal void ResetShadow()
         {
+            _movingSequence.Kill();
             _movingSequence = DOTween.Sequence();
             foreach (var meshTransform in _meshTransforms)
             {
@@ -85,8 +79,6 @@ namespace Utilities
 
             if (angleBetweenVectors < angle * 0.5f)
             {
-                Debug.Log(Quaternion.LookRotation(baseVector3).eulerAngles.y);
-                Debug.Log(Quaternion.LookRotation(meshVector3).eulerAngles.y);
                 if (Quaternion.LookRotation(baseVector3).eulerAngles.y - Quaternion.LookRotation(meshVector3).eulerAngles.y > 0)
                 {
                     return (true, -1);
