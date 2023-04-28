@@ -66,6 +66,21 @@ namespace Utilities
             }
         }
         
+        /*internal void MoveWholeShadow()
+        {
+            _movingSequence.Kill();
+            _movingSequence = DOTween.Sequence();
+            foreach (var meshTransform in _meshTransforms)
+            {
+                var whereToMove = WhereToMove(hitPoint, lightPosition, meshTransform.position);
+            
+                _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x + movingDistance * whereToMove, movingDuration))
+                    .Join(meshTransform.transform.DOScaleX(movingScale, movingDuration * 0.5f))
+                    .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(1f, movingDuration * 0.5f));
+            }
+            _movingSequence.AppendCallback(() => _movingSequence.Kill());
+        }*/
+        
         internal void ResetShadow()
         {
             _movingSequence.Kill();
@@ -83,11 +98,22 @@ namespace Utilities
         {
             var baseVector3 = hitPoint - lightPosition;
             var meshVector3 = meshPosition - lightPosition;
-            var angleBetweenVectors = Vector3.Angle(baseVector3, meshVector3);
+            var angleBetweenVectors = Vector3.Angle(new Vector3(baseVector3.x, 0f, baseVector3.z), new Vector3(meshVector3.x, 0f, meshVector3.z));
 
             if (angleBetweenVectors < angle * 0.5f && meshVector3.magnitude <= lightDistance)
             {
-                if (Quaternion.LookRotation(baseVector3).eulerAngles.y - Quaternion.LookRotation(meshVector3).eulerAngles.y > 0)
+                var angleDifference = Quaternion.LookRotation(baseVector3).eulerAngles.y - Quaternion.LookRotation(meshVector3).eulerAngles.y;
+
+                if (angleDifference > 180f)
+                {
+                    angleDifference -= 360f;
+                }
+                else if (angleDifference < -180f)
+                {
+                    angleDifference += 360f;
+                }
+                
+                if (angleDifference > 0)
                 {
                     return (true, -1);
                 }
@@ -96,6 +122,19 @@ namespace Utilities
             }
 
             return (false, 0);
+        }
+        
+        private static int WhereToMove(Vector3 hitPoint, Vector3 lightPosition, Vector3 meshPosition)
+        {
+            var baseVector3 = hitPoint - lightPosition;
+            var meshVector3 = meshPosition - lightPosition;
+
+            if (Quaternion.LookRotation(baseVector3).eulerAngles.y - Quaternion.LookRotation(meshVector3).eulerAngles.y > 0)
+            {
+                return -1;
+            }
+
+            return 1;
         }
     }
 }
