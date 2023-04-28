@@ -10,10 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9168186204219104839}
   - component: {fileID: 3190655180287225846}
-  - component: {fileID: 8033142341612274364}
-  - component: {fileID: 8827630201398057251}
-  - component: {fileID: 5191065493381350006}
-  - component: {fileID: 8434050010315678738}
   m_Layer: 0
   m_Name: Shadow
   m_TagString: Shadows
@@ -54,59 +50,7 @@ MonoBehaviour:
   meshGameObject: {fileID: 4540923950437541272}
   movingDuration: 5
   movingDistance: 5
-  movingScale: 2
---- !u!65 &8033142341612274364
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 996725544966671343}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.36, y: 6, z: 1.9000002}
-  m_Center: {x: -0.25, y: 3, z: -0.05}
---- !u!65 &8827630201398057251
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 996725544966671343}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.95, y: 6, z: 1.3}
-  m_Center: {x: -0.115, y: 3, z: -0.215}
---- !u!65 &5191065493381350006
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 996725544966671343}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.82, y: 6, z: 0.55}
-  m_Center: {x: -0.156, y: 3, z: -0.188}
---- !u!65 &8434050010315678738
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 996725544966671343}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.54, y: 6, z: 0.87}
-  m_Center: {x: -0.115, y: 3, z: -0.203}
+  movingScale: 3
 --- !u!1001 &1872917348939452722
 PrefabInstance:
   m_ObjectHideFlags: 0

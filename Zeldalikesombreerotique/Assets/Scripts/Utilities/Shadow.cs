@@ -23,9 +23,17 @@ namespace Utilities
         {
             foreach (Transform child in meshGameObject.transform)
             {
-                _meshTransforms.Add((child, child.position, child.localPosition));
+                var localPosition = child.localPosition;
+                
+                _meshTransforms.Add((child, child.position, localPosition));
                 
                 child.GetChild(0).GetComponent<ShadowKill>().RespawnPoint = respawnPoint;
+                
+                var newCapsuleCollider = gameObject.AddComponent<CapsuleCollider>();
+                newCapsuleCollider.center = localPosition;
+                newCapsuleCollider.radius = 0.5f;
+                newCapsuleCollider.height = 4f;
+                newCapsuleCollider.isTrigger = true;
             }
         }
         

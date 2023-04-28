@@ -171,6 +171,10 @@ namespace Utilities
                                 _lightedElementsManager.AffectedShadows.Add(shadow, new Dictionary<Light, bool> {{this, true}});
                             }
                         }
+
+                        var newRayOrigin = raycastHit.point + dir * 0.01f;
+                        var newRayDistance = dist - raycastHit.distance - 0.01f;
+                        ThrowRaycast(newRayOrigin, dir, newRayDistance, i);
                         break;
 
                     case "Objects": // If the raycast hits an object
@@ -213,21 +217,22 @@ namespace Utilities
                         break;
 
                     case "Footprint": // If the raycast hits a footprint
-                        if (_lightedElementsManager.RevealedObjects.ContainsKey(hitObject))
+                        if (lightColorType.canRevealObjects)
                         {
-                            _lightedElementsManager.RevealedObjects[hitObject] = true;
-                        }
-                        else
-                        {
-                            hitObject.GetComponent<DynamicObject>().meshObjectForVisibility
-                                .SetActive(true); // Reveal the object
-                            _lightedElementsManager.RevealedObjects.Add(hitObject, true);
+                            if (_lightedElementsManager.RevealedObjects.ContainsKey(hitObject))
+                            {
+                                _lightedElementsManager.RevealedObjects[hitObject] = true;
+                            }
+                            else
+                            {
+                                hitObject.GetComponent<DynamicObject>().meshObjectForVisibility
+                                    .SetActive(true); // Reveal the object
+                                _lightedElementsManager.RevealedObjects.Add(hitObject, true);
+                            }
                         }
 
-                        var footprintCollider = hitObject.GetComponent<CapsuleCollider>();
-                        var radius = footprintCollider.radius;
-                        var newOrigin = raycastHit.point + dir * (radius * 2f);
-                        var newDistance = dist - raycastHit.distance - radius * 2f;
+                        var newOrigin = raycastHit.point + dir * 0.01f;
+                        var newDistance = dist - raycastHit.distance - 0.01f;
                         ThrowRaycast(newOrigin, dir, newDistance, i);
                         break;
                 }
