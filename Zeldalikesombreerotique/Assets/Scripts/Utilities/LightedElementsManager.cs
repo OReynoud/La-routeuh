@@ -77,7 +77,7 @@ namespace Utilities
                         break;
                     
                     default:
-                        affectedShadow.ResetShadow();
+                        affectedShadow.MoveWholeShadow();
                         break;
                 }
             }

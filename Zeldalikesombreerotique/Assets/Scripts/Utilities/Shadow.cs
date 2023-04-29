@@ -9,7 +9,7 @@ namespace Utilities
         [Tooltip("Point where the player will respawn if they are killed by the shadow")] [SerializeField] private Transform respawnPoint;
         
         [Tooltip("Mesh game object of the shadow")] [SerializeField] internal GameObject meshGameObject;
-        private readonly List<(Transform transform, Vector3 position, Vector3 localPosition)> _meshTransforms = new();
+        private readonly List<(Transform transform, Vector3 position, Vector3 localPosition, float localScaleX)> _meshTransforms = new();
         
         private Sequence _movingSequence;
         [Tooltip("Duration of the animation of the moving shadow")] [SerializeField] internal float movingDuration;
@@ -24,14 +24,15 @@ namespace Utilities
             foreach (Transform child in meshGameObject.transform)
             {
                 var localPosition = child.localPosition;
+                var localScaleX = child.localScale.x;
                 
-                _meshTransforms.Add((child, child.position, localPosition));
+                _meshTransforms.Add((child, child.position, localPosition, localScaleX));
                 
                 child.GetChild(0).GetComponent<ShadowKill>().RespawnPoint = respawnPoint;
                 
                 var newCapsuleCollider = gameObject.AddComponent<CapsuleCollider>();
                 newCapsuleCollider.center = localPosition;
-                newCapsuleCollider.radius = 0.5f;
+                newCapsuleCollider.radius = localScaleX * 0.5f;
                 newCapsuleCollider.height = 4f;
                 newCapsuleCollider.isTrigger = true;
             }
@@ -55,14 +56,14 @@ namespace Utilities
                     if (whereToMove.hasToMove)
                     {
                         _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x + movingDistance * whereToMove.direction * zPositionFactor, movingDuration))
-                            .Join(meshTransform.transform.DOScaleX(movingScale, movingDuration * 0.5f))
-                            .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(1f, movingDuration * 0.5f));
+                            .Join(meshTransform.transform.DOScaleX(movingScale + meshTransform.localScaleX - 1f, movingDuration * 0.5f))
+                            .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(meshTransform.localScaleX, movingDuration * 0.5f));
                     }
                     else
                     {
                         _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x, movingDuration))
-                            .Join(meshTransform.transform.DOScaleX(movingScale, movingDuration * 0.5f))
-                            .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(1f, movingDuration * 0.5f));
+                            .Join(meshTransform.transform.DOScaleX(movingScale + meshTransform.localScaleX - 1f, movingDuration * 0.5f))
+                            .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(meshTransform.localScaleX, movingDuration * 0.5f));
                     }
                 }
                 
@@ -70,20 +71,22 @@ namespace Utilities
             }
         }
         
-        /*internal void MoveWholeShadow()
+        internal void MoveWholeShadow()
         {
             _movingSequence.Kill();
             _movingSequence = DOTween.Sequence();
             foreach (var meshTransform in _meshTransforms)
             {
-                var whereToMove = WhereToMove(hitPoint, lightPosition, meshTransform.position);
+                var shadowTransform = transform;
+                var shadowPosition = shadowTransform.position;
+                var whereToMove = WhereToMove(shadowPosition + shadowTransform.forward, shadowPosition, meshTransform.position);
             
                 _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x + movingDistance * whereToMove, movingDuration))
-                    .Join(meshTransform.transform.DOScaleX(movingScale, movingDuration * 0.5f))
-                    .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(1f, movingDuration * 0.5f));
+                    .Join(meshTransform.transform.DOScaleX(movingScale + meshTransform.localScaleX - 1f, movingDuration * 0.5f))
+                    .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(meshTransform.localScaleX, movingDuration * 0.5f));
             }
             _movingSequence.AppendCallback(() => _movingSequence.Kill());
-        }*/
+        }
         
         internal void ResetShadow()
         {
@@ -132,8 +135,19 @@ namespace Utilities
         {
             var baseVector3 = hitPoint - lightPosition;
             var meshVector3 = meshPosition - lightPosition;
+            
+            var angleDifference = Quaternion.LookRotation(baseVector3).eulerAngles.y - Quaternion.LookRotation(meshVector3).eulerAngles.y;
 
-            if (Quaternion.LookRotation(baseVector3).eulerAngles.y - Quaternion.LookRotation(meshVector3).eulerAngles.y > 0)
+            if (angleDifference > 180f)
+            {
+                angleDifference -= 360f;
+            }
+            else if (angleDifference < -180f)
+            {
+                angleDifference += 360f;
+            }
+                
+            if (angleDifference > 0)
             {
                 return -1;
             }
