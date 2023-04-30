@@ -63,17 +63,22 @@ namespace Utilities
                     
                     case 1:
                         var affectingLight = AffectedShadows[affectedShadow].Keys.ToList()[0];
+                        var affectingLightTransform = affectingLight.transform;
+                        
+                        Vector3 hitPoint;
+                        var lightPosition = affectingLightTransform.position;
                         
                         // Raycast values
-                        var currentAngle = affectingLight.transform.rotation.eulerAngles.y; // Current angle
+                        var currentAngle = affectingLightTransform.rotation.eulerAngles.y; // Current angle
                         var rot = Quaternion.AngleAxis(currentAngle, Vector3.up); // Quaternion for direction calculation
                         var dir = rot * Vector3.forward; // Direction of the raycast
                         dir.Normalize();
-
-                        var lightPosition = affectingLight.transform.position;
-                        Physics.Raycast(lightPosition, dir, out var raycastHit, affectingLight.distance); // Raycast
                         
-                        affectedShadow.MoveShadow(affectingLight.PhysicAngle, raycastHit.point, lightPosition, affectingLight.distance);
+                        hitPoint = Physics.Raycast(lightPosition, dir, out var raycastHit, affectingLight.distance)
+                            ? raycastHit.point
+                            : lightPosition + dir * affectingLight.distance;
+                        
+                        affectedShadow.MoveShadow(affectingLight.PhysicAngle, hitPoint, lightPosition, affectingLight.distance);
                         break;
                     
                     default:
