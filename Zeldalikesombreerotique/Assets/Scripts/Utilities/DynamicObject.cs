@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using NaughtyAttributes;
 using Player;
@@ -35,11 +37,22 @@ namespace Utilities
         [Tooltip("Est'ce que l'objet a essayé de se renverser?")]public bool hasToppled;
         private Rigidbody rb;
         [Tooltip("La force utilisée pour renverser l'objet(les plus gros objets nécessiteront plus de force)")]public float toppleForce;
+        private BoxCollider col;
+        private bool clockwiseTimer;
+        private bool counterClockwiseTimer;
+        [ReadOnly]public bool isColliding;
 
         private void Awake()
         {
             mesh = GetComponentInChildren<MeshRenderer>();
             rb = GetComponent<Rigidbody>();
+            col = GetComponent<BoxCollider>();
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.matrix = transform.localToWorldMatrix;
+            Gizmos.DrawWireCube(col.center, col.size + Vector3.one * 0.1f);
         }
 
         private void FixedUpdate()
@@ -86,6 +99,84 @@ namespace Utilities
             }*/
         }
 
+        void CheckDeSesMorts(Collision other)
+        {
+            
+            if (!other.gameObject.CompareTag("Untagged") && !other.gameObject.CompareTag("Player") && PlayerController.instance.isGrabbing)
+            {
+                if (PlayerController.instance.pushingPulling_Rotate)
+                {
+                    rb.constraints = RigidbodyConstraints.FreezeAll;
+                    Collider[] oui;
+                    do
+                    {
+                        PlayerController.instance.transform.position +=  -PlayerController.instance.transform.forward * .03f;
+                        transform.position = PlayerController.instance.transform.position + 
+                                             PlayerController.instance.transform.forward * 
+                                             Vector3.Distance(transform.position,handlePos.position);
+                        oui = Physics.OverlapBox(col.center + transform.position, col.size / 2 + 0.1f * Vector3.one, transform.rotation,PlayerController.instance.mask);
+                        foreach (var VARIABLE in oui)
+                        {
+                            Debug.Log(VARIABLE, VARIABLE);
+                        }
+
+                    } while (oui.Length > 1);
+                }
+                isColliding = true;
+                return;
+                var leftSide = -transform.right;
+                var rightSide = transform.right;
+                var delta = Mathf.Abs(Vector3.Distance(leftSide, other.collider.ClosestPoint(leftSide))- Vector3.Distance(rightSide, other.collider.ClosestPoint(rightSide)));
+                Debug.Log(delta);
+                if (delta < 0.1f)
+                {
+                    //Debug.Log("Colliding full front");
+                    //PlayerController.instance.transform.Translate(-PlayerController.instance.transform.forward * .5f);
+                }
+
+                if (Vector3.Distance(leftSide,other.collider.ClosestPoint(leftSide)) > Vector3.Distance(rightSide,other.collider.ClosestPoint(rightSide)))
+                {
+                    var rightForwardCorner = transform.position + (rightSide + transform.forward).normalized;
+                    var rightBackCorner = transform.position + (rightSide + -transform.forward).normalized;
+                    if (Vector3.Distance(rightForwardCorner,other.collider.ClosestPoint(rightForwardCorner)) > Vector3.Distance(rightBackCorner,other.collider.ClosestPoint(rightBackCorner)))
+                    {
+                        //Right Back Quadrant
+                        Debug.Log("Colliding with right back quadrant");
+                        //PlayerController.instance.canRotateClockwise = false;
+                        
+                    }
+                    else
+                    {
+                        //Right Forward Quadrant
+                        Debug.Log("Colliding with right forward quadrant");
+                        //PlayerController.instance.canRotateCounterClockwise = false;
+                    }
+                }
+                else
+                {
+                    var leftForwardCorner = transform.position + (leftSide + transform.forward).normalized;
+                    var leftBackCorner = transform.position + (leftSide + -transform.forward).normalized;
+                    if (Vector3.Distance(leftForwardCorner,other.collider.ClosestPoint(leftForwardCorner)) > Vector3.Distance(leftBackCorner,other.collider.ClosestPoint(leftBackCorner)))
+                    {
+                        //Left Back Quadrant
+                        Debug.Log("Colliding with left back quadrant");
+                        //PlayerController.instance.canRotateCounterClockwise = false;
+                    }
+                    else
+                    {
+                        //Left Forward Quadrant
+                        Debug.Log("Colliding with left forward quadrant");
+                        //PlayerController.instance.canRotateClockwise = false;
+                    }
+                }
+            }
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            CheckDeSesMorts(other);
+        }
+
         private void OnCollisionStay(Collision other)
         {
 
@@ -94,11 +185,10 @@ namespace Utilities
             {
                 PlayerController.instance.isProtected = true;
             }
-            if (!other.gameObject.CompareTag("Untagged") && !other.gameObject.CompareTag("Player"))
-            {
-                PlayerController.instance.allowedToRotate = false;
-            }
+            CheckDeSesMorts(other);
         }
+        
+        
 
         private void OnTriggerStay(Collider other)
         {
@@ -125,7 +215,13 @@ namespace Utilities
             }
             if (!other.gameObject.CompareTag("Untagged") && !other.gameObject.CompareTag("Player"))
             {
-                PlayerController.instance.allowedToRotate = true;
+                if (PlayerController.instance.pushingPulling_Rotate)
+                {
+                    rb.constraints = RigidbodyConstraints.FreezePosition | 
+                                     RigidbodyConstraints.FreezeRotationX |
+                                     RigidbodyConstraints.FreezeRotationZ;
+                }
+                isColliding = false;
             }
         }
     }

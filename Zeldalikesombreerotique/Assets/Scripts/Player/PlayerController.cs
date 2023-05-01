@@ -59,7 +59,9 @@ namespace Player
         private static readonly int IsGrabbing = Animator.StringToHash("isGrabbing");
         private static readonly int IsPushing = Animator.StringToHash("isPushing");
         private Gamepad _gamepad;
-        public bool allowedToRotate = true;
+        [HideInInspector] public bool canRotateClockwise = true;
+        [HideInInspector] public bool canRotateCounterClockwise = true;
+        [Foldout("Autre")] public LayerMask mask;
 
 
         public void OnDrawGizmosSelected()
@@ -115,8 +117,8 @@ namespace Player
             }
             if (isGrabbing && (objectType.mobilityType == DynamicObject.MobilityType.CanMove || objectType.mobilityType == DynamicObject.MobilityType.MoveWithHandle))    //Si le joueur bouge en grabbant un truc
             {
-                _gamepad?.SetMotorSpeeds(rumbleIntensity,rumbleIntensity);
                 ApplyForce(grabbedSpeed);
+                _gamepad?.SetMotorSpeeds(rumbleIntensity,rumbleIntensity);
             }
             else
             {
@@ -245,7 +247,10 @@ namespace Player
                     transform.position.y,
                     objectType.handlePos.position.z);
                 joint.autoConfigureConnectedAnchor = false;
-                objectToGrab.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePosition;
+                if (!objectType.isColliding)
+                {
+                    objectToGrab.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePosition;
+                }
                 rb.constraints = RigidbodyConstraints.FreezeAll;
             }
             else
@@ -296,6 +301,7 @@ namespace Player
                         return;
                     }
                     rig.SetBool("IsPushing",true);
+                    
                     rb.AddForce(playerDir * appliedModifier);
                 }
                 else if(absDiff > 2f)
@@ -311,6 +317,11 @@ namespace Player
                         return;
                     }
                     rig.SetBool("IsPushing",false);
+                    if (Vector2.Distance(new Vector2(transform.position.x,transform.position.z),new Vector2(objectType.handlePos.position.x,objectType.handlePos.position.z)) > 0.3f)
+                    {
+                        
+                        return;
+                    }
                     rb.AddForce(playerDir * appliedModifier);
                 }
                 return;
@@ -318,7 +329,7 @@ namespace Player
             
                 //Rotate______________________________________________________________________________________________________________________________________
             
-            if (isGrabbing && allowedToRotate &&pushingPulling_Rotate && playerDir.magnitude > 0.1f)
+            if (isGrabbing && pushingPulling_Rotate && playerDir.magnitude > 0.1f)
             {
                 rb.velocity = Vector3.zero;
                 var avatarOrientation = -transform.forward;
@@ -331,14 +342,18 @@ namespace Player
                 }
 
                 
-                if (absDiff > 1f)
+                if (absDiff > 1f && canRotateClockwise)
                 {
-                    
+                    //Rotate clockwise
                     transform.RotateAround(objectToGrab.position,transform.up, rotationSpeed * dirModifier);
                     return;
                 }
-                transform.RotateAround(objectToGrab.position,transform.up, rotationSpeed * absDiff * dirModifier);
-                return;
+                if (canRotateCounterClockwise)
+                {
+                    //Rotate counter-clockwise
+                    transform.RotateAround(objectToGrab.position,transform.up, rotationSpeed * absDiff * dirModifier);
+                    return;
+                }
                 
             }
             
