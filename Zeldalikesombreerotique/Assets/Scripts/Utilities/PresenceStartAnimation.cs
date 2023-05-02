@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using NaughtyAttributes;
 using Player;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,12 +15,10 @@ namespace Utilities
         [SerializeField] private float angleToRotateSpot;
         [SerializeField] private float timeToRotateSpot;
         [SerializeField] private Ease easeToRotateSpot;
-        [ValidateInput("IsNotNull", "Don't forget to uncomment the line in code to play the sound.")]
         [SerializeField] private AudioClip soundToRotateSpot;
         [SerializeField] private float timeBetweenSpotAndFootprints;
         [SerializeField] private List<GameObject> footprintsToAppear;
         [SerializeField] private float timeBetweenFootprints;
-        [ValidateInput("IsNotNull", "Don't forget to uncomment the line in code to play the sound.")] 
         [SerializeField] private AudioClip soundToAppearFootprints;
         [SerializeField] private float randomValuePitchFootprints;
         private bool _isOn;
@@ -101,9 +98,5 @@ namespace Utilities
             PlayerController.instance.rb.velocity = Vector3.zero;
             PlayerController.instance.rig.SetBool("isTripping",true);
         }
-
-        // ReSharper disable once UnusedMember.Local
-        // ReSharper disable once SuggestBaseTypeForParameter
-        private bool IsNotNull(AudioClip ac) { return ac != null; }
     }
 }
