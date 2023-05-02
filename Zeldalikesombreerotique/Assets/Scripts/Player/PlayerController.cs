@@ -1,11 +1,14 @@
+using System;
 using System.Linq;
-using Cinemachine;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
 using Utilities;
 using Vector3 = UnityEngine.Vector3;
+// ReSharper disable Unity.InefficientPropertyAccess
+// ReSharper disable Unity.PreferAddressByIdToGraphicsParams
+// ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 
 namespace Player
 {
@@ -36,31 +39,26 @@ namespace Player
         [Foldout("Débug")][Tooltip("Est-ce que le joueur touche le sol?")] public bool isGrounded;
         [Foldout("Débug")][Tooltip("Est-ce que le jeu fait des trucs de gros shlag pour la PoC?")] public bool proofOfConcept;
         [Foldout("Débug")][Tooltip("Est-ce que je joueur manipule un objet?")] public bool isGrabbing;
-        [Foldout("Débug")] [Tooltip("Pousser tirer quand c'est faux et rotate quand c'est vrai")] public bool pushingPulling_Rotate;
+        [Foldout("Débug")] [Tooltip("Pousser tirer quand c'est faux et rotate quand c'est vrai")] public bool pushingPullingRotate;
         [Foldout("Débug")][Tooltip("Quel est l'objet à grab")] public Rigidbody objectToGrab;
         [Foldout("Débug")][Tooltip("Le script de l'objet à grab")] public DynamicObject objectType;
         [Foldout("Débug")][Tooltip("Le joueur a t-il le droit de bouger?")] public bool canMove;
         [Foldout("Débug")] [Tooltip("Ou est-ce que le joueur porte son objet?")] private Vector3 carrySpot;
         
         [Foldout("Débug")] [Tooltip("Double la vitesse max du joueur")]public bool isSprinting;
-        [Foldout("Débug")] [Tooltip("")]public bool willTriggerCinematic;
-        [Foldout("Débug")] [Tooltip("")]public Transform tpLocation;
         
         [Foldout("Débug")] [Tooltip("")]public bool isProtected;
         
         public InputManager controls;
         [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
         [Foldout("Autre")] [SerializeField] private float yOffset = 2f;
-        [Foldout("Autre")] [SerializeField] private float rumbleIntensity;
+        [Foldout("Autre")] public float rumbleIntensity;
         private float inputLag = 0.2f;
 
-        private RigidbodyConstraints _baseConstraints = RigidbodyConstraints.FreezeRotation;
-
-        private static readonly int IsGrabbing = Animator.StringToHash("isGrabbing");
-        private static readonly int IsPushing = Animator.StringToHash("isPushing");
-        private Gamepad _gamepad;
-        public bool canRotateClockwise = true;
-        public bool canRotateCounterClockwise = true;
+        private const RigidbodyConstraints BaseConstraints = RigidbodyConstraints.FreezeRotation;
+        public Gamepad gamepad;
+        [HideInInspector] public bool canRotateClockwise = true;
+        [HideInInspector] public bool canRotateCounterClockwise = true;
         [Foldout("Autre")] public LayerMask mask;
 
 
@@ -87,7 +85,7 @@ namespace Player
             controls.Player.Interact.performed += _ => Interact();
             controls.Player.Sprint.performed += _ => TogleSprint();
             controls.Player.SecondaryInput.performed += _ => SecondaryInteract();
-            _gamepad = Gamepad.current;
+            gamepad = Gamepad.current;
         }
         
         // Update is called once per frame
@@ -112,13 +110,14 @@ namespace Player
                 playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
                 rb.velocity *= 0.9f;
                 rb.angularVelocity = Vector3.zero;
-                _gamepad?.SetMotorSpeeds(0f,0f);
+                gamepad?.SetMotorSpeeds(0f,0f);
                 return;
             }
-            if (isGrabbing && (objectType.mobilityType == DynamicObject.MobilityType.CanMove || objectType.mobilityType == DynamicObject.MobilityType.MoveWithHandle))    //Si le joueur bouge en grabbant un truc
+            if (isGrabbing && objectType.mobilityType is DynamicObject.MobilityType.CanMove or DynamicObject.MobilityType.MoveWithHandle)    //Si le joueur bouge en grabbant un truc
             {
+                
+                gamepad?.SetMotorSpeeds(0f,0f);
                 ApplyForce(grabbedSpeed);
-                _gamepad?.SetMotorSpeeds(rumbleIntensity,rumbleIntensity);
             }
             else
             {
@@ -225,7 +224,7 @@ namespace Player
                 }
 
                 rig.SetBool("IsGrabbing",false);
-                pushingPulling_Rotate = false;
+                pushingPullingRotate = false;
                 isGrabbing = false;
             }
         }
@@ -237,10 +236,10 @@ namespace Player
         {
             if (isGrabbing)
             {
-                pushingPulling_Rotate = !pushingPulling_Rotate;
+                pushingPullingRotate = !pushingPullingRotate;
             }
 
-            if (pushingPulling_Rotate)
+            if (pushingPullingRotate)
             {
                 transform.position = new Vector3(
                     objectType.handlePos.position.x, 
@@ -251,13 +250,13 @@ namespace Player
                 {
                     objectToGrab.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePosition;
                 }
-                rb.constraints = RigidbodyConstraints.FreezeAll;
+                //rb.constraints = RigidbodyConstraints.FreezeAll;
             }
             else
             {
                 joint.autoConfigureConnectedAnchor = true;
-                objectToGrab.constraints = _baseConstraints;
-                rb.constraints = RigidbodyConstraints.FreezeRotation;
+                objectToGrab.constraints = BaseConstraints;
+                //rb.constraints = RigidbodyConstraints.FreezeRotation;
             }
         }
         /// <summary>
@@ -282,7 +281,7 @@ namespace Player
             
                 //Pousser/tirrer_______________________________________________________________________________________________________________________________________
             
-            if (isGrabbing && !pushingPulling_Rotate)
+            if (isGrabbing && !pushingPullingRotate)
             {
                 var fwrd = transform.forward;
                 var differential = playerDir - fwrd;
@@ -292,6 +291,12 @@ namespace Player
                 if (absDiff < 2f)
                 {
                     playerDir = new Vector3(fwrd.x, playerDir.y, fwrd.z);
+                    var delta = Vector2.Distance(new Vector2(transform.position.x, transform.position.z),
+                        new Vector2(objectType.handlePos.position.x, objectType.handlePos.position.z));
+                    if (delta > 0.1f)
+                    {
+                        gamepad?.SetMotorSpeeds(rumbleIntensity,rumbleIntensity);
+                    }
                     if (rb.velocity.magnitude < minSpeed * grabbedMinFactor)
                     {
                         rb.velocity = minSpeed * playerDir;
@@ -314,6 +319,7 @@ namespace Player
                     if (delta > 0.3f)
                     {
                         rb.velocity = Vector3.zero;
+                        gamepad?.SetMotorSpeeds(rumbleIntensity,rumbleIntensity);
                         //rb.AddForce(playerDir * (-2 * appliedModifier));
                         return;
                     }
@@ -334,7 +340,7 @@ namespace Player
             
                 //Rotate______________________________________________________________________________________________________________________________________
             
-            if (isGrabbing && pushingPulling_Rotate && playerDir.magnitude > 0.1f)
+            if (isGrabbing && pushingPullingRotate && playerDir.magnitude > 0.1f)
             {
                 rb.velocity = Vector3.zero;
                 var avatarOrientation = -transform.forward;
@@ -346,7 +352,6 @@ namespace Player
                     dirModifier = -dirModifier;
                 }
 
-                
                 if (absDiff > 1f && canRotateClockwise)
                 {
                     //Rotate clockwise
@@ -357,6 +362,14 @@ namespace Player
                 {
                     //Rotate counter-clockwise
                     transform.RotateAround(objectToGrab.position,transform.up, rotationSpeed * absDiff * dirModifier);
+                    return;
+                }
+                
+                var delta = Vector2.Distance(new Vector2(transform.position.x, transform.position.z),
+                    new Vector2(objectType.handlePos.position.x, objectType.handlePos.position.z));
+                if (delta > 0.1f)
+                {
+                    rb.velocity =  Vector3.zero;
                     return;
                 }
                 
@@ -394,7 +407,7 @@ namespace Player
 
         }
 
-        public void PickupObject()
+        private void PickupObject()
         {
             if (isGrabbing)
             {
@@ -494,12 +507,39 @@ namespace Player
             else
             {
                 rb.constraints = RigidbodyConstraints.FreezeRotation;
-                objectToGrab.constraints = _baseConstraints;
+                objectToGrab.constraints = BaseConstraints;
                 joint.connectedBody = null;
                 joint.gameObject.SetActive(false);
                 objectToGrab.isKinematic = true;
                 joint.autoConfigureConnectedAnchor = true;
+                objectToGrab = null;
             }
+        }
+
+        private void OnCollisionStay(Collision collisionInfo)
+        {
+            if (!objectToGrab)return;
+            if (collisionInfo.gameObject == objectToGrab.gameObject && !pushingPullingRotate ) return;
+            var leftSide = -transform.right;
+            var rightSide = transform.right;
+            var delta = Vector3.Distance(leftSide, collisionInfo.collider.ClosestPoint(leftSide))- Vector3.Distance(rightSide, collisionInfo.collider.ClosestPoint(rightSide));
+            if (delta > 0)
+            {
+                //left side
+                canRotateClockwise = false;
+            }
+            else
+            {
+                //right side
+                canRotateCounterClockwise = false;
+            }
+        }
+
+        private void OnCollisionExit(Collision other)
+        {
+            if (other.gameObject == objectToGrab.gameObject && !pushingPullingRotate) return;
+            canRotateClockwise = true;
+            canRotateCounterClockwise = true;
         }
     }
 }

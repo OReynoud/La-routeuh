@@ -36,8 +36,8 @@ public class RollbackCar : MonoBehaviour
          foreach (var item in nearbyObjects)
          {
              if (item == PlayerController.instance.playerColl)
-             {
-                 PlayerController.instance.willTriggerCinematic = true;
+             { 
+                 
              }
          } 
      }
