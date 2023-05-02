@@ -59,8 +59,8 @@ namespace Player
         private static readonly int IsGrabbing = Animator.StringToHash("isGrabbing");
         private static readonly int IsPushing = Animator.StringToHash("isPushing");
         private Gamepad _gamepad;
-        [HideInInspector] public bool canRotateClockwise = true;
-        [HideInInspector] public bool canRotateCounterClockwise = true;
+        public bool canRotateClockwise = true;
+        public bool canRotateCounterClockwise = true;
         [Foldout("Autre")] public LayerMask mask;
 
 
@@ -288,6 +288,7 @@ namespace Player
                 var differential = playerDir - fwrd;
                 var absDiff = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
                 var ctxMax = maxSpeed / objectToGrab.mass;
+                //Debug.Log(absDiff);
                 if (absDiff < 2f)
                 {
                     playerDir = new Vector3(fwrd.x, playerDir.y, fwrd.z);
@@ -304,9 +305,18 @@ namespace Player
                     
                     rb.AddForce(playerDir * appliedModifier);
                 }
-                else if(absDiff > 2f)
+                else if(absDiff >= 2f)
                 { 
+                    
                     playerDir = new Vector3(-fwrd.x, playerDir.y, -fwrd.z);
+                    var delta = Vector2.Distance(new Vector2(transform.position.x, transform.position.z),
+                        new Vector2(objectType.handlePos.position.x, objectType.handlePos.position.z));
+                    if (delta > 0.3f)
+                    {
+                        rb.velocity = Vector3.zero;
+                        //rb.AddForce(playerDir * (-2 * appliedModifier));
+                        return;
+                    }
                     if (rb.velocity.magnitude < minSpeed * grabbedMinFactor)
                     {
                         rb.velocity = minSpeed * playerDir;
@@ -317,11 +327,6 @@ namespace Player
                         return;
                     }
                     rig.SetBool("IsPushing",false);
-                    if (Vector2.Distance(new Vector2(transform.position.x,transform.position.z),new Vector2(objectType.handlePos.position.x,objectType.handlePos.position.z)) > 0.3f)
-                    {
-                        
-                        return;
-                    }
                     rb.AddForce(playerDir * appliedModifier);
                 }
                 return;
