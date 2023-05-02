@@ -63,11 +63,12 @@ MonoBehaviour:
   mobilityType: 0
   visibilityType: 1
   meshObjectForVisibility: {fileID: 8534443822373184498}
-  _childCollider: {fileID: 0}
+  childCollider: {fileID: 0}
   reappearanceSpeed: 0
   handlePos: {fileID: 0}
   hasToppled: 0
   toppleForce: 0
+  isColliding: 0
 --- !u!1 &8534443822373184498
 GameObject:
   m_ObjectHideFlags: 0
@@ -84,7 +85,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8495283320884685857
 Transform:
   m_ObjectHideFlags: 0

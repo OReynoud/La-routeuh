@@ -537,6 +537,7 @@ namespace Player
 
         private void OnCollisionExit(Collision other)
         {
+            if (!objectToGrab) return;
             if (other.gameObject == objectToGrab.gameObject && !pushingPullingRotate) return;
             canRotateClockwise = true;
             canRotateCounterClockwise = true;

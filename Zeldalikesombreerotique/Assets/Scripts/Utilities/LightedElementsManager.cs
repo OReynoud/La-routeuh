@@ -65,7 +65,6 @@ namespace Utilities
                         var affectingLight = AffectedShadows[affectedShadow].Keys.ToList()[0];
                         var affectingLightTransform = affectingLight.transform;
                         
-                        Vector3 hitPoint;
                         var lightPosition = affectingLightTransform.position;
                         
                         // Raycast values
@@ -74,9 +73,7 @@ namespace Utilities
                         var dir = rot * Vector3.forward; // Direction of the raycast
                         dir.Normalize();
                         
-                        hitPoint = Physics.Raycast(lightPosition, dir, out var raycastHit, affectingLight.distance)
-                            ? raycastHit.point
-                            : lightPosition + dir * affectingLight.distance;
+                        var hitPoint = lightPosition + dir * affectingLight.distance;
                         
                         affectedShadow.MoveShadow(affectingLight.PhysicAngle, hitPoint, lightPosition, affectingLight.distance);
                         break;
