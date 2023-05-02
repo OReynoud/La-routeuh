@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
@@ -6,16 +8,22 @@ namespace Utilities
 {
     public class Shadow : MonoBehaviour
     {
+        [Tooltip("Audio source")] [SerializeField] private AudioSource audioSource;
+        
         [Tooltip("Point where the player will respawn if they are killed by the shadow")] [SerializeField] private Transform respawnPoint;
         
         [Tooltip("Mesh game object of the shadow")] [SerializeField] internal GameObject meshGameObject;
         private readonly List<(Transform transform, Vector3 position, Vector3 localPosition, float localScaleX)> _meshTransforms = new();
         
+        [Tooltip("Whisper sounds of the shadow")] [SerializeField] private List<AudioClip> shadowWhisperSounds;
+        private AudioClip _lastWhisperSound;
+        [Tooltip("Time before the end of the previous sound to play the next sound")] [SerializeField] private float timeBeforeNextSound;
+        
         private Sequence _movingSequence;
         [Tooltip("Duration of the animation of the moving shadow")] [SerializeField] internal float movingDuration;
         [Tooltip("Distance traveled by the moving shadow")] [SerializeField] internal float movingDistance;
         [Tooltip("Scale reached by the moving shadow")] [SerializeField] internal float movingScale;
-        
+
         private Vector3 _lastHitPoint;
         private Vector3 _lastLightPosition;
 
@@ -36,6 +44,8 @@ namespace Utilities
                 newCapsuleCollider.height = 4f;
                 newCapsuleCollider.isTrigger = true;
             }
+
+            StartCoroutine(ShadowWhisperSoundCoroutine());
         }
         
         internal void MoveShadow(float angle, Vector3 hitPoint, Vector3 lightPosition, float lightDistance)
@@ -153,6 +163,25 @@ namespace Utilities
             }
 
             return 1;
+        }
+
+        private IEnumerator ShadowWhisperSoundCoroutine()
+        {
+            var tempShadowWhisperSounds = shadowWhisperSounds;
+            
+            if (_lastWhisperSound != null)
+            {
+                tempShadowWhisperSounds = tempShadowWhisperSounds.Where(x => x != _lastWhisperSound).ToList();
+            }
+            
+            var randomSound = tempShadowWhisperSounds[Random.Range(0, tempShadowWhisperSounds.Count)];
+            _lastWhisperSound = randomSound;
+            
+            audioSource.PlayOneShot(randomSound);
+            
+            yield return new WaitForSeconds(randomSound.length - timeBeforeNextSound);
+
+            StartCoroutine(ShadowWhisperSoundCoroutine());
         }
     }
 }
