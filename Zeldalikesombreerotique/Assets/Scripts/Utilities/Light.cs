@@ -38,6 +38,8 @@ namespace Utilities
         
         private LightedElementsManager _lightedElementsManager;
         
+        private bool _stopMesh;
+
         private void Awake()
         {
             // Light component initialization
@@ -113,6 +115,8 @@ namespace Utilities
             // Raycast loop
             for (var i = 0; i < rayAmount + 1; i++)
             {
+                _stopMesh = false;
+                
                 // Raycast values
                 var currentAngle = transform1.rotation.eulerAngles.y + _halfAngle - _angleInterval * i; // Current angle
                 var rot = Quaternion.AngleAxis(currentAngle, Vector3.up); // Quaternion for direction calculation
@@ -127,27 +131,40 @@ namespace Utilities
             _lightedElementsManager.CurrentCheckCoroutine ??= StartCoroutine(_lightedElementsManager.CheckDictionariesCoroutine());
         }
 
-        private void ThrowRaycast(Vector3 origin, Vector3 dir, float dist, int i)
+        private void ThrowRaycast(Vector3 origin, Vector3 dir, float dist, int i, bool onlyShadows = false)
         {
             // Raycast
             if (Physics.Raycast(origin, dir, out var raycastHit, dist)) // If the raycast hits something
             {
                 Debug.DrawRay(origin, dir * raycastHit.distance, Color.red);
 
-                _rayOutPosition[i] = raycastHit.point;
+                if (!_stopMesh)
+                {
+                    _rayOutPosition[i] = raycastHit.point;
+                }
 
                 var hitObject = raycastHit.collider.gameObject;
 
                 switch (hitObject.tag)
                 {
                     case "Player": // If the raycast hits the player
-                        if (lightColorType.canKillPlayer) // If the light can kill the player
+                        if (!onlyShadows)
                         {
-                            PlayerController.instance.transform.position = respawnPoint.position; // Respawn the player
-                            PlayerController.instance.joint.connectedBody = null;
-                            PlayerController.instance.joint.gameObject.SetActive(false);
-                            PlayerController.instance.isGrabbing = false;
+                            if (lightColorType.canKillPlayer) // If the light can kill the player
+                            {
+                                PlayerController.instance.transform.position = respawnPoint.position; // Respawn the player
+                                PlayerController.instance.joint.connectedBody = null;
+                                PlayerController.instance.joint.gameObject.SetActive(false);
+                                PlayerController.instance.isGrabbing = false;
+                            }
+                        
+                            _stopMesh = true;
+
+                            var newRayOriginPlayer = raycastHit.point + dir * 0.01f;
+                            var newRayDistancePlayer = dist - raycastHit.distance - 0.01f;
+                            ThrowRaycast(newRayOriginPlayer, dir, newRayDistancePlayer, i, true);
                         }
+                        
                         break;
                     
                     case "Shadows": // If the raycast hits a shadow
@@ -174,66 +191,72 @@ namespace Utilities
 
                         var newRayOrigin = raycastHit.point + dir * 0.01f;
                         var newRayDistance = dist - raycastHit.distance - 0.01f;
-                        ThrowRaycast(newRayOrigin, dir, newRayDistance, i);
+                        ThrowRaycast(newRayOrigin, dir, newRayDistance, i, onlyShadows);
                         break;
 
                     case "Objects": // If the raycast hits an object
-                        var dynamicObject = hitObject.GetComponent<DynamicObject>();
+                        if (!onlyShadows)
+                        {
+                            var dynamicObject = hitObject.GetComponent<DynamicObject>();
 
-                        if (lightColorType.canRevealObjects &&
-                            dynamicObject.visibilityType ==
-                            DynamicObject.VisibilityType
-                                .CanBeRevealed) // If the light can reveal objects and the object can be revealed
-                        {
-                            if (_lightedElementsManager.RevealedObjects.ContainsKey(hitObject))
+                            if (lightColorType.canRevealObjects &&
+                                dynamicObject.visibilityType ==
+                                DynamicObject.VisibilityType
+                                    .CanBeRevealed) // If the light can reveal objects and the object can be revealed
                             {
-                                _lightedElementsManager.RevealedObjects[hitObject] = true;
+                                if (_lightedElementsManager.RevealedObjects.ContainsKey(hitObject))
+                                {
+                                    _lightedElementsManager.RevealedObjects[hitObject] = true;
+                                }
+                                else
+                                {
+                                    dynamicObject.meshObjectForVisibility.SetActive(true); // Reveal the object
+                                    _lightedElementsManager.RevealedObjects.Add(hitObject, true);
+                                }
                             }
-                            else
+                            else if (lightColorType.canHideObjects &&
+                                     dynamicObject.visibilityType ==
+                                     DynamicObject.VisibilityType
+                                         .CanBeHidden) // If the light can hide objects and the object can be hidden
                             {
-                                dynamicObject.meshObjectForVisibility.SetActive(true); // Reveal the object
-                                _lightedElementsManager.RevealedObjects.Add(hitObject, true);
+                                if (_lightedElementsManager.HiddenObjects.ContainsKey(hitObject))
+                                {
+                                    _lightedElementsManager.HiddenObjects[hitObject] = true;
+                                }
+                                else
+                                {
+                                    dynamicObject.meshObjectForVisibility.SetActive(false); // Hide the object
+                                    _lightedElementsManager.HiddenObjects.Add(hitObject, true);
+                                }
                             }
-                        }
-                        else if (lightColorType.canHideObjects &&
-                                 dynamicObject.visibilityType ==
-                                 DynamicObject.VisibilityType
-                                     .CanBeHidden) // If the light can hide objects and the object can be hidden
-                        {
-                            if (_lightedElementsManager.HiddenObjects.ContainsKey(hitObject))
+                            else if (dynamicObject.visibilityType == DynamicObject.VisibilityType.DelayedReappear)
                             {
-                                _lightedElementsManager.HiddenObjects[hitObject] = true;
+                                dynamicObject.mesh.material.color = Color.clear;
                             }
-                            else
-                            {
-                                dynamicObject.meshObjectForVisibility.SetActive(false); // Hide the object
-                                _lightedElementsManager.HiddenObjects.Add(hitObject, true);
-                            }
-                        }
-                        else if (dynamicObject.visibilityType == DynamicObject.VisibilityType.DelayedReappear)
-                        {
-                            dynamicObject.mesh.material.color = Color.clear;
                         }
                         break;
 
                     case "Footprint": // If the raycast hits a footprint
-                        if (lightColorType.canRevealObjects)
+                        if (!onlyShadows)
                         {
-                            if (_lightedElementsManager.RevealedObjects.ContainsKey(hitObject))
+                            if (lightColorType.canRevealObjects)
                             {
-                                _lightedElementsManager.RevealedObjects[hitObject] = true;
+                                if (_lightedElementsManager.RevealedObjects.ContainsKey(hitObject))
+                                {
+                                    _lightedElementsManager.RevealedObjects[hitObject] = true;
+                                }
+                                else
+                                {
+                                    hitObject.GetComponent<DynamicObject>().meshObjectForVisibility
+                                        .SetActive(true); // Reveal the object
+                                    _lightedElementsManager.RevealedObjects.Add(hitObject, true);
+                                }
                             }
-                            else
-                            {
-                                hitObject.GetComponent<DynamicObject>().meshObjectForVisibility
-                                    .SetActive(true); // Reveal the object
-                                _lightedElementsManager.RevealedObjects.Add(hitObject, true);
-                            }
-                        }
 
-                        var newOrigin = raycastHit.point + dir * 0.01f;
-                        var newDistance = dist - raycastHit.distance - 0.01f;
-                        ThrowRaycast(newOrigin, dir, newDistance, i);
+                            var newOrigin = raycastHit.point + dir * 0.01f;
+                            var newDistance = dist - raycastHit.distance - 0.01f;
+                            ThrowRaycast(newOrigin, dir, newDistance, i);
+                        }
                         break;
                 }
             }
@@ -241,7 +264,10 @@ namespace Utilities
             else // If the raycast doesn't hit anything
             {
                 Debug.DrawRay(origin, dir * dist, Color.green);
-                _rayOutPosition[i] = transform.position + dir * distance;
+                if (!_stopMesh)
+                {
+                    _rayOutPosition[i] = transform.position + dir * distance;
+                }
             }
         }
 
