@@ -39,9 +39,11 @@ namespace Utilities
         private bool clockwiseTimer;
         private bool counterClockwiseTimer;
         [ReadOnly]public bool isColliding;
+        private bool _start;
 
         private void Awake()
         {
+            _start = true;
             mesh = GetComponentInChildren<MeshRenderer>();
             rb = GetComponent<Rigidbody>();
             col = GetComponent<BoxCollider>();
@@ -49,6 +51,7 @@ namespace Utilities
 
         private void OnDrawGizmosSelected()
         {
+            if (!_start)return;
             Gizmos.matrix = transform.localToWorldMatrix;
             Gizmos.DrawWireCube(col.center, col.size + Vector3.one * 0.1f);
         }
