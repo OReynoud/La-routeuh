@@ -57,8 +57,8 @@ namespace Player
 
         private const RigidbodyConstraints BaseConstraints = RigidbodyConstraints.FreezeRotation;
         public Gamepad gamepad;
-        [HideInInspector] public bool canRotateClockwise = true;
-        [HideInInspector] public bool canRotateCounterClockwise = true;
+        public bool canRotateClockwise = true;
+        public bool canRotateCounterClockwise = true;
         [Foldout("Autre")] public LayerMask mask;
 
 
@@ -346,23 +346,41 @@ namespace Player
                 var avatarOrientation = -transform.forward;
                 var diff = playerDir - avatarOrientation;
                 var absDiff = Mathf.Abs(diff.x) + Mathf.Abs(diff.z);
+
                 var dirModifier = 1f;
+                // 1 is clockwise
+                // -1 is counter-clockwise
+                
+                
                 if (Vector3.Distance(transform.right,playerDir) < Vector3.Distance(-transform.right,playerDir))
                 {
-                    dirModifier = -dirModifier;
+                    if (canRotateCounterClockwise)
+                    {
+                        dirModifier = -1;
+                    }
+                    else
+                    {
+                        dirModifier = 0;
+                    }
                 }
-
-                if (absDiff > 1f && canRotateClockwise)
+                else
                 {
-                    //Rotate clockwise
+                    if (canRotateClockwise)
+                    {
+                        dirModifier = 1;
+                    }
+                    else
+                    {
+                        dirModifier = 0;
+                    }
+                }
+                if (absDiff > 1f)
+                {
                     transform.RotateAround(objectToGrab.position,transform.up, rotationSpeed * dirModifier);
-                    return;
                 }
-                if (canRotateCounterClockwise)
+                else
                 {
-                    //Rotate counter-clockwise
                     transform.RotateAround(objectToGrab.position,transform.up, rotationSpeed * absDiff * dirModifier);
-                    return;
                 }
                 
                 var delta = Vector2.Distance(new Vector2(transform.position.x, transform.position.z),
@@ -370,9 +388,8 @@ namespace Player
                 if (delta > 0.1f)
                 {
                     rb.velocity =  Vector3.zero;
-                    return;
                 }
-                
+                return;
             }
             
                         
@@ -519,19 +536,20 @@ namespace Player
         private void OnCollisionStay(Collision collisionInfo)
         {
             if (!objectToGrab)return;
-            if (collisionInfo.gameObject == objectToGrab.gameObject && !pushingPullingRotate ) return;
+            if (collisionInfo.gameObject.CompareTag("Untagged")) return;
+            if (collisionInfo.gameObject == objectToGrab.gameObject && !pushingPullingRotate) return;
             var leftSide = -transform.right;
             var rightSide = transform.right;
             var delta = Vector3.Distance(leftSide, collisionInfo.collider.ClosestPoint(leftSide))- Vector3.Distance(rightSide, collisionInfo.collider.ClosestPoint(rightSide));
             if (delta > 0)
             {
-                //left side
-                canRotateClockwise = false;
+                //right side
+                canRotateCounterClockwise = false;
             }
             else
             {
-                //right side
-                canRotateCounterClockwise = false;
+                //left side
+                canRotateClockwise = false;
             }
         }
 
