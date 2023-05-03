@@ -74,7 +74,6 @@ namespace Player
                 DestroyImmediate(gameObject);
                 return;
             }
-
             Physics.reuseCollisionCallbacks = true;
             instance = this;
             canMove = true;
@@ -86,6 +85,7 @@ namespace Player
             controls.Player.Sprint.performed += _ => TogleSprint();
             controls.Player.SecondaryInput.performed += _ => SecondaryInteract();
             gamepad = Gamepad.current;
+            
         }
         
         // Update is called once per frame
