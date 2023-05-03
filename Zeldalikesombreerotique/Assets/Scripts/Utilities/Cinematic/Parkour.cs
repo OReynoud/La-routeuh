@@ -22,11 +22,13 @@ public class Parkour : MonoBehaviour
         {
             if (_timer < 1)
             {
-                _timer += speed * Time.fixedDeltaTime;
+                _timer += (speed/ Vector3.Distance(startPoint[0].position,endPoint[0].position)) * Time.fixedDeltaTime;
                 
                 var m1 = Vector3.Lerp( startPoint[0].position, controlPoint[0].position, _timer );
                 var m2 = Vector3.Lerp( controlPoint[0].position, endPoint[0].position, _timer );
-                var dir = m1 - m2;
+                m1 = new Vector3(m1.x, -0.1f, m1.z);
+                m2 = new Vector3(m2.x, -0.1f, m2.z);
+                var dir = m2 - m1;
                 var dirNormed = dir.normalized;
                 var angle = Mathf.Atan2(dirNormed.x, dirNormed.z) * Mathf.Rad2Deg;
                 objectToMove.transform.rotation = Quaternion.AngleAxis(angle,Vector3.up);
@@ -47,9 +49,8 @@ public class Parkour : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void TriggerGirl()
     {
-        if (!other.gameObject.CompareTag("Player")) return;
         _triggerCinematic = true;
         objectToMove.SetActive(true);
     }

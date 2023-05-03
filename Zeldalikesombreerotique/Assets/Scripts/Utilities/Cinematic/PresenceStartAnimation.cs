@@ -21,6 +21,7 @@ namespace Utilities
         [SerializeField] private float timeBetweenFootprints;
         [SerializeField] private AudioClip soundToAppearFootprints;
         [SerializeField] private float randomValuePitchFootprints;
+        [SerializeField] private Parkour scriptFille;
         private bool _isOn;
 
         private void Awake()
@@ -66,7 +67,7 @@ namespace Utilities
             PlayerController.instance.rig.SetBool("isTripping",false);
             
             yield return new WaitForSeconds(timeBetweenSpotAndFootprints);
-
+            scriptFille.TriggerGirl();
             var i = 0;
             
             foreach (var footprint in footprintsToAppear)

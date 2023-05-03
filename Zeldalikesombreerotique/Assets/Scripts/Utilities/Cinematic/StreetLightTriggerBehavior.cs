@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utilities
+namespace Utilities.Cinematic
 {
     public class StreetLightTriggerBehavior : MonoBehaviour
     {
@@ -9,7 +9,7 @@ namespace Utilities
         [SerializeField] private GameObject spotLight;
         [SerializeField] private GameObject coneMesh;
         [SerializeField] private AudioClip switchOnSound;
-        [SerializeField] private List<GameObject> footprintsToAppear;
+        [SerializeField] private List<GameObject> objectsToAppear;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -19,9 +19,9 @@ namespace Utilities
                 coneMesh.SetActive(true);
                 // audioSource.PlayOneShot(switchOnSound);
                 
-                foreach (var footprint in footprintsToAppear)
+                foreach (var objectToAppear in objectsToAppear)
                 {
-                    footprint.SetActive(true);
+                    objectToAppear.SetActive(true);
                 }
                 
                 gameObject.SetActive(false);
