@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 7824900732591331320}
   - component: {fileID: 7824900732591331323}
   - component: {fileID: 517686274289368769}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ActivationTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -276,6 +276,7 @@ MonoBehaviour:
   spotLight: {fileID: 2024067247114603715}
   coneMesh: {fileID: 3229064650883977465}
   switchOnSound: {fileID: 0}
+  objectsToAppear: []
 --- !u!1001 &3334681514349576738
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -285,33 +286,38 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1148574669002335242, guid: 90a00799699d63a4ab16ce5045f43337,
         type: 3}
+      propertyPath: m_Range
+      value: 6.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1148574669002335242, guid: 90a00799699d63a4ab16ce5045f43337,
+        type: 3}
       propertyPath: m_Color.b
-      value: 0.99215686
-      objectReference: {fileID: 0}
-    - target: {fileID: 1148574669002335242, guid: 90a00799699d63a4ab16ce5045f43337,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0.59084547
-      objectReference: {fileID: 0}
-    - target: {fileID: 1148574669002335242, guid: 90a00799699d63a4ab16ce5045f43337,
-        type: 3}
-      propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1148574669002335242, guid: 90a00799699d63a4ab16ce5045f43337,
         type: 3}
+      propertyPath: m_Color.g
+      value: 0.80867964
+      objectReference: {fileID: 0}
+    - target: {fileID: 1148574669002335242, guid: 90a00799699d63a4ab16ce5045f43337,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.99215686
+      objectReference: {fileID: 0}
+    - target: {fileID: 1148574669002335242, guid: 90a00799699d63a4ab16ce5045f43337,
+        type: 3}
       propertyPath: m_Intensity
-      value: 28
+      value: 131.84
       objectReference: {fileID: 0}
     - target: {fileID: 1148574669002335242, guid: 90a00799699d63a4ab16ce5045f43337,
         type: 3}
       propertyPath: m_SpotAngle
-      value: 39.822014
+      value: 37.964386
       objectReference: {fileID: 0}
     - target: {fileID: 1148574669002335242, guid: 90a00799699d63a4ab16ce5045f43337,
         type: 3}
       propertyPath: m_InnerSpotAngle
-      value: 25.884312
+      value: 0.13347626
       objectReference: {fileID: 0}
     - target: {fileID: 3625896073745829601, guid: 90a00799699d63a4ab16ce5045f43337,
         type: 3}
@@ -543,7 +549,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 3bb3f21c64f327f4dbd1a2a52826031f, type: 2}
+      objectReference: {fileID: 2100000, guid: dc8780e4c11113243af04ecae952e6a6, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5bb78ec3c3e48d44b1264372bc1f57f, type: 3}
 --- !u!4 &2847437824914197059 stripped
