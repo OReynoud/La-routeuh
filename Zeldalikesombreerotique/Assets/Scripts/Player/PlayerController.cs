@@ -81,7 +81,7 @@ namespace Player
             controls.Enable();
             controls.Player.Enable();
             controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
-            controls.Player.Interact.performed += _ => Interact();
+            controls.Player.Interact.performed += _ => PushPullEnter();
             controls.Player.Sprint.performed += _ => TogleSprint();
             controls.Player.SecondaryInput.performed += _ => SecondaryInteract();
             gamepad = Gamepad.current;
@@ -135,11 +135,10 @@ namespace Player
             playerDir = new Vector3(dir.x,playerDir.y, dir.y);
         }
         
-        private void Interact()
+        private void PushPullEnter()
         {
-            if (inputLag > 0) return;
-            inputLag = 0.1f;
             
+            Debug.Log("OuiOui vous avez échoué connard");
             if (!isGrabbing)
             {
                 objectToGrab = GetClosestObject();
@@ -186,7 +185,7 @@ namespace Player
                             if(coll != playerColl)continue;
                             isPlayerNear = true;
                             transform.DOMove(new Vector3(objectType.handlePos.position.x,transform.position.y,objectType.handlePos.position.z), 0.5f).
-                                OnComplete(() => SetJoint(true));
+                                OnComplete(() =>SetJoint(true));
                         }
 
                         if (!isPlayerNear)
@@ -227,6 +226,11 @@ namespace Player
                 pushingPullingRotate = false;
                 isGrabbing = false;
             }
+        }
+
+        void PushPullLeave()
+        {
+            
         }
         
         /// <summary>
@@ -514,6 +518,7 @@ namespace Player
         }
         private void SetJoint(bool grabbing)
         {
+            if (!objectToGrab)return;
             if (grabbing)
             {
                 joint.gameObject.SetActive(true);
@@ -530,6 +535,7 @@ namespace Player
                 objectToGrab.isKinematic = true;
                 joint.autoConfigureConnectedAnchor = true;
                 objectToGrab = null;
+                objectType = null;
             }
         }
 
