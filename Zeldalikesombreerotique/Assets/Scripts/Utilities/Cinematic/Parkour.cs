@@ -52,6 +52,7 @@ public class Parkour : MonoBehaviour
     public void TriggerGirl()
     {
         _triggerCinematic = true;
+        objectToMove.transform.position = startPoint[0].position;
         objectToMove.SetActive(true);
     }
 }
