@@ -10,28 +10,28 @@ namespace Utilities
     public class PresenceStartAnimation : MonoBehaviour
     {
         private AudioSource _audioSource;
-        [SerializeField] private float timeBeforeStart;
+        [SerializeField] private float timeBeforeSpot;
         [SerializeField] private GameObject spotToRotate;
         [SerializeField] private float angleToRotateSpot;
         [SerializeField] private float timeToRotateSpot;
         [SerializeField] private Ease easeToRotateSpot;
         [SerializeField] private AudioClip soundToRotateSpot;
-        [SerializeField] private float timeBetweenSpotAndFootprints;
         [SerializeField] private List<GameObject> footprintsToAppear;
         [SerializeField] private float timeBetweenFootprints;
         [SerializeField] private AudioClip soundToAppearFootprints;
         [SerializeField] private float randomValuePitchFootprints;
+        
         [SerializeField] private Parkour scriptFille;
+        [SerializeField] private float timeBeforeFall;
+        [SerializeField] private float timeToFall;
+
         private bool _isOn;
+        
+        private static readonly int IsTripping = Animator.StringToHash("isTripping");
 
         private void Awake()
         {
             _audioSource = GetComponent<AudioSource>();
-            
-            /*foreach (var footprint in footprintsToAppear)
-            {
-                footprint.SetActive(false);
-            }*/
         }
         
         private void OnTriggerEnter(Collider other)
@@ -39,15 +39,16 @@ namespace Utilities
             if (other.gameObject.CompareTag("Player") && !_isOn)
             {
                 _isOn = true;
-                StartCoroutine(PresenceStartAnimationCoroutine());
+                
+                StartCoroutine(FootprintsCoroutine());
+                StartCoroutine(SpotCoroutine());
+                StartCoroutine(WaitToFallCoroutine());
             }
         }
         
-        private IEnumerator PresenceStartAnimationCoroutine()
+        private IEnumerator SpotCoroutine()
         {
-            yield return new WaitForSeconds(timeBeforeStart);
-
-            StartCoroutine(WaitToFallCoroutine());
+            yield return new WaitForSeconds(timeBeforeSpot);
             
             _audioSource.PlayOneShot(soundToRotateSpot);
             
@@ -62,11 +63,6 @@ namespace Utilities
         
         private IEnumerator FootprintsCoroutine()
         {
-            yield return new WaitForNextFrameUnit();
-            
-            PlayerController.instance.rig.SetBool("isTripping",false);
-            
-            yield return new WaitForSeconds(timeBetweenSpotAndFootprints);
             scriptFille.TriggerGirl();
             var i = 0;
             
@@ -84,20 +80,28 @@ namespace Utilities
                 
                 yield return new WaitForSeconds(timeBetweenFootprints);
             }
-            PlayerController.instance.controls.Enable();
-            PlayerController.instance.canMove = true;
-            PlayerController.instance.rb.velocity = Vector3.zero;
+            
             gameObject.SetActive(false);
         }
 
         private IEnumerator WaitToFallCoroutine()
         {
-            yield return new WaitForSeconds(timeToRotateSpot * 0.5f);
+            yield return new WaitForSeconds(timeBeforeFall);
             
             PlayerController.instance.controls.Disable();
             PlayerController.instance.canMove = false;
             PlayerController.instance.rb.velocity = Vector3.zero;
-            PlayerController.instance.rig.SetBool("isTripping",true);
+            PlayerController.instance.rig.SetBool(IsTripping,true);
+            
+            yield return new WaitForNextFrameUnit();
+            
+            PlayerController.instance.rig.SetBool(IsTripping,false);
+            
+            yield return new WaitForSeconds(timeToFall);
+            
+            PlayerController.instance.controls.Enable();
+            PlayerController.instance.canMove = true;
+            PlayerController.instance.rb.velocity = Vector3.zero;
         }
     }
 }
