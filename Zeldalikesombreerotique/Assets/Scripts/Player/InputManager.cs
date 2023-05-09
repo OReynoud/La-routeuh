@@ -42,7 +42,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""id"": ""bd65ee18-55d4-4b39-95c6-32c03a6d1aae"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press(pressPoint=1.401298E-45,behavior=2)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -289,6 +289,17 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""71adaef3-e9e8-44fc-9868-bfbbc9f2576c"",
                     ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2f1b6172-2a4f-4950-bcaa-c5b61c4e3b73"",
+                    ""path"": ""<XInputController>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
