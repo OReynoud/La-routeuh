@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3751691105754585044
+--- !u!114 &-5913699780632427880
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 6
+  version: 5
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: effet ombres
+  m_Name: ombres Mat
   m_Shader: {fileID: -6465566751694194690, guid: 287cc44600cb9364d9e0387bc01562de,
     type: 3}
   m_ValidKeywords: []
@@ -56,19 +56,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BlackPowerDensity: 7.07
-    - _Float: 5.24
+    - _BlackPowerDensity: -1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _distortSpeed: 0.4
-    - _noiseScaleMouv: 0.12
-    - _noise_scale: 1.14
-    - _noise_scale_mouv: 1
-    - _speed: 0.02
-    - _speed_1: 0.02
-    - _surfaceMouvSpeed: 0.25
+    - _noiseScaleMouv: 0.5
+    - _noise_scale: 4
+    - _speed: 0.2
+    - _speed_1: 0.5
+    - _surfaceMouvSpeed: 1
     m_Colors:
-    - _Color: {r: 0.5367721, g: 0.48500353, b: 0.5943396, a: 0}
-    - _noise_remap: {r: 0, g: 1.93, b: 0, a: 0}
-    - _noise_tilling: {r: 0.48, g: 3.18, b: 0, a: 0}
+    - _Color: {r: 2.433572, g: 0.3057891, b: 0, a: 0}
+    - _noise_remap: {r: 1, g: -2.66, b: 0, a: 0}
+    - _noise_tilling: {r: 2, g: 7.76, b: 0, a: 0}
   m_BuildTextureStacks: []
