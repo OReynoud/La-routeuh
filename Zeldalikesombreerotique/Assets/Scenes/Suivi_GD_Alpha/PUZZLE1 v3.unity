@@ -15813,13 +15813,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec4dd41b93dfdb4ca61d9f7a1cfdf5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBeforeStart: 0
+  timeBeforeSpot: 0
   spotToRotate: {fileID: 654020376}
   angleToRotateSpot: 20
   timeToRotateSpot: 0.8
   easeToRotateSpot: 27
   soundToRotateSpot: {fileID: 0}
-  timeBetweenSpotAndFootprints: 0.1
   footprintsToAppear:
   - {fileID: 1907587771}
   - {fileID: 1112375314}
@@ -15855,6 +15854,8 @@ MonoBehaviour:
   soundToAppearFootprints: {fileID: 0}
   randomValuePitchFootprints: 0
   scriptFille: {fileID: 0}
+  timeBeforeFall: 0
+  timeToFall: 0
 --- !u!82 &397755663
 AudioSource:
   m_ObjectHideFlags: 0
