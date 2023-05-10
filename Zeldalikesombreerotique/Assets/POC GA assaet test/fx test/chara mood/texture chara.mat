@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: texture chara
-  m_Shader: {fileID: -6465566751694194690, guid: 287cc44600cb9364d9e0387bc01562de,
+  m_Shader: {fileID: -6465566751694194690, guid: 33aa5b2c5d546434abef542ef659669b,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -56,15 +56,18 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BlackPowerDensity: 0.81
+    - _BlackPowerDensity: 0.38
     - _Float: 5.24
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _noise_scale: 0
-    - _speed: 0.02
-    - _speed_1: 0.02
+    - _distortSpeed: -0.5
+    - _noiseScaleMouv: 1.82
+    - _noise_scale: 1
+    - _speed: 0.04
+    - _speed_1: 0.38
+    - _surfaceMouvSpeed: 2.33
     m_Colors:
-    - _Color: {r: 0.06350391, g: 0.035288353, b: 0.122641504, a: 0}
-    - _noise_remap: {r: 0, g: 2.16, b: 0, a: 0}
-    - _noise_tilling: {r: 0, g: 4.55, b: 0, a: 0}
+    - _Color: {r: 0.0046913703, g: 0.0043609794, b: 0.01886791, a: 0}
+    - _noise_remap: {r: -0.74, g: 2, b: 0, a: 0}
+    - _noise_tilling: {r: 0.5, g: 0.8, b: 0, a: 0}
   m_BuildTextureStacks: []
