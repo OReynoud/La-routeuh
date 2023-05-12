@@ -37,13 +37,22 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Interact"",
+                    ""name"": ""InteractEnter"",
                     ""type"": ""Button"",
                     ""id"": ""bd65ee18-55d4-4b39-95c6-32c03a6d1aae"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Press(pressPoint=1.401298E-45,behavior=2)"",
-                    ""initialStateCheck"": false
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""InteractLeave"",
+                    ""type"": ""Button"",
+                    ""id"": ""0f86f696-d031-4f41-9775-f7671741c8a4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Sprint"",
@@ -55,13 +64,31 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SecondaryInput"",
+                    ""name"": ""SecondaryEnter"",
                     ""type"": ""Button"",
                     ""id"": ""e402e382-1e21-427a-87f6-8a40ef13665f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SecondaryLeave"",
+                    ""type"": ""Button"",
+                    ""id"": ""330a55d4-9b9b-4cf2-b940-9184c0c4da27"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Oui"",
+                    ""type"": ""Button"",
+                    ""id"": ""fc24154e-dda8-422c-9c9a-ff4b357a1893"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(pressPoint=1.401298E-45,behavior=2)"",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -237,7 +264,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Interact"",
+                    ""action"": ""InteractEnter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -248,7 +275,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Interact"",
+                    ""action"": ""InteractEnter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -259,7 +286,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Interact"",
+                    ""action"": ""InteractEnter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -281,7 +308,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SecondaryInput"",
+                    ""action"": ""SecondaryEnter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -292,7 +319,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SecondaryInput"",
+                    ""action"": ""SecondaryEnter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -303,7 +330,84 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SecondaryInput"",
+                    ""action"": ""SecondaryEnter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""99c63483-0679-4c70-b922-c0067b020361"",
+                    ""path"": ""<Keyboard>/u"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard layout;Joystick"",
+                    ""action"": ""Oui"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7a9b9cef-1321-4b7c-8cb1-64589c0affb5"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InteractLeave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5eff87a9-10bb-439e-b6e2-d9afb55ba2a0"",
+                    ""path"": ""<XInputController>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InteractLeave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f505f1e3-d6e0-4717-97fc-56d426f6aff6"",
+                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InteractLeave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6aed1d53-9905-42dc-b9e0-1ed22c84085e"",
+                    ""path"": ""<XInputController>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryLeave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f25e6d43-5531-4e80-bf61-4f882098fdb5"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryLeave"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3f224eba-ad2e-4966-ba88-84980303258a"",
+                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryLeave"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -343,9 +447,12 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_InteractEnter = m_Player.FindAction("InteractEnter", throwIfNotFound: true);
+        m_Player_InteractLeave = m_Player.FindAction("InteractLeave", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_SecondaryInput = m_Player.FindAction("SecondaryInput", throwIfNotFound: true);
+        m_Player_SecondaryEnter = m_Player.FindAction("SecondaryEnter", throwIfNotFound: true);
+        m_Player_SecondaryLeave = m_Player.FindAction("SecondaryLeave", throwIfNotFound: true);
+        m_Player_Oui = m_Player.FindAction("Oui", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -408,17 +515,23 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_InteractEnter;
+    private readonly InputAction m_Player_InteractLeave;
     private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_SecondaryInput;
+    private readonly InputAction m_Player_SecondaryEnter;
+    private readonly InputAction m_Player_SecondaryLeave;
+    private readonly InputAction m_Player_Oui;
     public struct PlayerActions
     {
         private @InputManager m_Wrapper;
         public PlayerActions(@InputManager wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
-        public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @InteractEnter => m_Wrapper.m_Player_InteractEnter;
+        public InputAction @InteractLeave => m_Wrapper.m_Player_InteractLeave;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
-        public InputAction @SecondaryInput => m_Wrapper.m_Player_SecondaryInput;
+        public InputAction @SecondaryEnter => m_Wrapper.m_Player_SecondaryEnter;
+        public InputAction @SecondaryLeave => m_Wrapper.m_Player_SecondaryLeave;
+        public InputAction @Oui => m_Wrapper.m_Player_Oui;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -431,15 +544,24 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @Interact.started += instance.OnInteract;
-            @Interact.performed += instance.OnInteract;
-            @Interact.canceled += instance.OnInteract;
+            @InteractEnter.started += instance.OnInteractEnter;
+            @InteractEnter.performed += instance.OnInteractEnter;
+            @InteractEnter.canceled += instance.OnInteractEnter;
+            @InteractLeave.started += instance.OnInteractLeave;
+            @InteractLeave.performed += instance.OnInteractLeave;
+            @InteractLeave.canceled += instance.OnInteractLeave;
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
-            @SecondaryInput.started += instance.OnSecondaryInput;
-            @SecondaryInput.performed += instance.OnSecondaryInput;
-            @SecondaryInput.canceled += instance.OnSecondaryInput;
+            @SecondaryEnter.started += instance.OnSecondaryEnter;
+            @SecondaryEnter.performed += instance.OnSecondaryEnter;
+            @SecondaryEnter.canceled += instance.OnSecondaryEnter;
+            @SecondaryLeave.started += instance.OnSecondaryLeave;
+            @SecondaryLeave.performed += instance.OnSecondaryLeave;
+            @SecondaryLeave.canceled += instance.OnSecondaryLeave;
+            @Oui.started += instance.OnOui;
+            @Oui.performed += instance.OnOui;
+            @Oui.canceled += instance.OnOui;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -447,15 +569,24 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @Interact.started -= instance.OnInteract;
-            @Interact.performed -= instance.OnInteract;
-            @Interact.canceled -= instance.OnInteract;
+            @InteractEnter.started -= instance.OnInteractEnter;
+            @InteractEnter.performed -= instance.OnInteractEnter;
+            @InteractEnter.canceled -= instance.OnInteractEnter;
+            @InteractLeave.started -= instance.OnInteractLeave;
+            @InteractLeave.performed -= instance.OnInteractLeave;
+            @InteractLeave.canceled -= instance.OnInteractLeave;
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
-            @SecondaryInput.started -= instance.OnSecondaryInput;
-            @SecondaryInput.performed -= instance.OnSecondaryInput;
-            @SecondaryInput.canceled -= instance.OnSecondaryInput;
+            @SecondaryEnter.started -= instance.OnSecondaryEnter;
+            @SecondaryEnter.performed -= instance.OnSecondaryEnter;
+            @SecondaryEnter.canceled -= instance.OnSecondaryEnter;
+            @SecondaryLeave.started -= instance.OnSecondaryLeave;
+            @SecondaryLeave.performed -= instance.OnSecondaryLeave;
+            @SecondaryLeave.canceled -= instance.OnSecondaryLeave;
+            @Oui.started -= instance.OnOui;
+            @Oui.performed -= instance.OnOui;
+            @Oui.canceled -= instance.OnOui;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -494,8 +625,11 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnInteract(InputAction.CallbackContext context);
+        void OnInteractEnter(InputAction.CallbackContext context);
+        void OnInteractLeave(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
-        void OnSecondaryInput(InputAction.CallbackContext context);
+        void OnSecondaryEnter(InputAction.CallbackContext context);
+        void OnSecondaryLeave(InputAction.CallbackContext context);
+        void OnOui(InputAction.CallbackContext context);
     }
 }
