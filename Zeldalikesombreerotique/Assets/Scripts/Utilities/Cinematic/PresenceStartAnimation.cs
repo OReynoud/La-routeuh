@@ -1,32 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using NaughtyAttributes;
 using Player;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Utilities
+namespace Utilities.Cinematic
 {
     public class PresenceStartAnimation : MonoBehaviour
     {
+        // Cached components
         private AudioSource _audioSource;
-        [SerializeField] private float timeBeforeSpot;
-        [SerializeField] private GameObject spotToRotate;
-        [SerializeField] private float angleToRotateSpot;
-        [SerializeField] private float timeToRotateSpot;
-        [SerializeField] private Ease easeToRotateSpot;
-        [SerializeField] private AudioClip soundToRotateSpot;
-        [SerializeField] private List<GameObject> footprintsToAppear;
-        [SerializeField] private float timeBetweenFootprints;
-        [SerializeField] private AudioClip soundToAppearFootprints;
-        [SerializeField] private float randomValuePitchFootprints;
         
-        [SerializeField] private Parkour scriptFille;
-        [SerializeField] private float timeBeforeFall;
-        [SerializeField] private float timeToFall;
+        // Spot
+        [Foldout("Spot")] [SerializeField] private float timeBeforeSpot;
+        [Foldout("Spot")] [SerializeField] private GameObject spotToRotate;
+        [Foldout("Spot")] [SerializeField] private float angleToRotateSpot;
+        [Foldout("Spot")] [SerializeField] private float timeToRotateSpot;
+        [Foldout("Spot")] [SerializeField] private Ease easeToRotateSpot;
+        [Foldout("Spot")] [SerializeField] private AudioClip soundToRotateSpot;
+        
+        // Footprints
+        [Space]
+        [Foldout("Footprints")] [SerializeField] private List<GameObject> footprintsToAppear;
+        [Foldout("Footprints")] [SerializeField] private float timeBetweenFootprints;
+        [Foldout("Footprints")] [SerializeField] private AudioClip soundToAppearFootprints;
+        [Foldout("Footprints")] [SerializeField] private float randomValuePitchFootprints;
+        
+        // Little sister
+        [Space]
+        [Foldout("Little Sister")] [SerializeField] private Parkour scriptFille;
+        [Foldout("Little Sister")] [SerializeField] private float timeBeforeFall;
+        [Foldout("Little Sister")] [SerializeField] private float timeToFall;
 
+        // Private variables
         private bool _isOn;
         
+        // Hashed strings
         private static readonly int IsTripping = Animator.StringToHash("isTripping");
 
         private void Awake()
