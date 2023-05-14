@@ -14,25 +14,33 @@ namespace Utilities.Cinematic
         private AudioSource _audioSource;
         
         // Spot
-        [Foldout("Spot")] [SerializeField] private float timeBeforeSpot;
-        [Foldout("Spot")] [SerializeField] private GameObject spotToRotate;
-        [Foldout("Spot")] [SerializeField] private float angleToRotateSpot;
-        [Foldout("Spot")] [SerializeField] private float timeToRotateSpot;
-        [Foldout("Spot")] [SerializeField] private Ease easeToRotateSpot;
-        [Foldout("Spot")] [SerializeField] private AudioClip soundToRotateSpot;
+        [Header("Spot")]
+        [SerializeField] private bool hasSpotToRotate;
+        [ShowIf("hasSpotToRotate")] [SerializeField] private float timeBeforeSpot;
+        [ShowIf("hasSpotToRotate")] [SerializeField] private GameObject spotToRotate;
+        [ShowIf("hasSpotToRotate")] [SerializeField] private float angleToRotateSpot;
+        [ShowIf("hasSpotToRotate")] [SerializeField] private float timeToRotateSpot;
+        [ShowIf("hasSpotToRotate")] [SerializeField] private Ease easeToRotateSpot;
+        [ShowIf("hasSpotToRotate")] [SerializeField] private AudioClip  soundToRotateSpot;
         
         // Footprints
-        [Space]
-        [Foldout("Footprints")] [SerializeField] private List<GameObject> footprintsToAppear;
-        [Foldout("Footprints")] [SerializeField] private float timeBetweenFootprints;
-        [Foldout("Footprints")] [SerializeField] private AudioClip soundToAppearFootprints;
-        [Foldout("Footprints")] [SerializeField] private float randomValuePitchFootprints;
+        [Header("Footprints")]
+        [SerializeField] private List<GameObject> footprintsToAppear; 
+        [SerializeField] private float timeBetweenFootprints;
+        [SerializeField] private AudioClip soundToAppearFootprints;
+        [SerializeField] private float randomValuePitchFootprints;
         
         // Little sister
-        [Space]
-        [Foldout("Little Sister")] [SerializeField] private Parkour scriptFille;
-        [Foldout("Little Sister")] [SerializeField] private float timeBeforeFall;
-        [Foldout("Little Sister")] [SerializeField] private float timeToFall;
+        [Header("Little Sister")]
+        [SerializeField] private Parkour littleSisterScript;
+        [SerializeField] private bool isStandingAtStart;
+
+        // Fall
+        [Header("Fall")]
+        [SerializeField] private bool hasToFall;
+        [ShowIf("hasToFall")] [SerializeField] private float timeBeforeFall;
+        [ShowIf("hasToFall")] [SerializeField] private Ease easeToSlowDownBeforeFall;
+        [ShowIf("hasToFall")] [SerializeField] private float timeToFall;
 
         // Private variables
         private bool _isOn;
@@ -52,8 +60,8 @@ namespace Utilities.Cinematic
                 _isOn = true;
                 
                 StartCoroutine(FootprintsCoroutine());
-                StartCoroutine(SpotCoroutine());
-                StartCoroutine(WaitToFallCoroutine());
+                if (hasSpotToRotate) StartCoroutine(SpotCoroutine());
+                if (hasToFall) StartCoroutine(WaitToFallCoroutine());
             }
         }
         
@@ -74,7 +82,7 @@ namespace Utilities.Cinematic
         
         private IEnumerator FootprintsCoroutine()
         {
-            scriptFille.TriggerGirl();
+            littleSisterScript.TriggerGirl(isStandingAtStart);
             var i = 0;
             
             foreach (var footprint in footprintsToAppear)
@@ -97,6 +105,9 @@ namespace Utilities.Cinematic
 
         private IEnumerator WaitToFallCoroutine()
         {
+            var maxSpeedTemp = PlayerController.instance.maxSpeed;
+            DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, 0f, timeBeforeFall).SetEase(easeToSlowDownBeforeFall);
+            
             yield return new WaitForSeconds(timeBeforeFall);
             
             PlayerController.instance.controls.Disable();
@@ -113,6 +124,7 @@ namespace Utilities.Cinematic
             PlayerController.instance.controls.Enable();
             PlayerController.instance.canMove = true;
             PlayerController.instance.rb.velocity = Vector3.zero;
+            PlayerController.instance.maxSpeed = maxSpeedTemp;
         }
     }
 }
