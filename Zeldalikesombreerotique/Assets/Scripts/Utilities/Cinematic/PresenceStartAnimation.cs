@@ -5,6 +5,7 @@ using NaughtyAttributes;
 using Player;
 using Unity.VisualScripting;
 using UnityEngine;
+using Utilities.LD;
 
 namespace Utilities.Cinematic
 {
@@ -27,7 +28,6 @@ namespace Utilities.Cinematic
         [Header("Footprints")]
         [SerializeField] private List<GameObject> footprintsToAppear; 
         [SerializeField] private float timeBetweenFootprints;
-        [SerializeField] private AudioClip soundToAppearFootprints;
         [SerializeField] private float randomValuePitchFootprints;
         
         // Little sister
@@ -73,11 +73,7 @@ namespace Utilities.Cinematic
             
             spotToRotate.transform
                 .DOLocalRotate(spotToRotate.transform.localEulerAngles + new Vector3(0, angleToRotateSpot, 0),
-                    timeToRotateSpot).SetEase(easeToRotateSpot)
-                .OnComplete(() =>
-                {
-                    StartCoroutine(FootprintsCoroutine());
-                });
+                    timeToRotateSpot).SetEase(easeToRotateSpot);
         }
         
         private IEnumerator FootprintsCoroutine()
@@ -89,10 +85,9 @@ namespace Utilities.Cinematic
             {
                 footprint.SetActive(true);
                 
-                if (i % 2 == 0)
+                if (i % 3 == 0)
                 {
-                    _audioSource.PlayOneShot(soundToAppearFootprints);
-                    _audioSource.pitch = 1f + Random.Range(-randomValuePitchFootprints, randomValuePitchFootprints);
+                    footprint.GetComponent<Footprint>().PlayFootstepSound(1f + Random.Range(-randomValuePitchFootprints, randomValuePitchFootprints));
                 }
 
                 i++;
