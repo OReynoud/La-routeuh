@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utilities;
+using Utilities.LD;
+using Light = Utilities.Light;
 
-namespace Utilities
+namespace Managers
 {
     public class LightedElementsManager : MonoBehaviour
     {
@@ -91,6 +94,10 @@ namespace Utilities
             {
                 if (!visibilityDictionary[visibilityObject])
                 {
+                    if (visibilityObject.CompareTag("Draw"))
+                    {
+                        visibilityObject.GetComponent<Draw>().Disable();
+                    }
                     visibilityObject.GetComponent<DynamicObject>().meshObjectForVisibility.SetActive(defaultVisibility);
                     visibilityDictionary.Remove(visibilityObject);
                 }
