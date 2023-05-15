@@ -5,7 +5,7 @@ using NaughtyAttributes;
 using Player;
 using UnityEngine;
 
-namespace Utilities
+namespace Utilities.LD
 {
     public class Light : MonoBehaviour
     {
@@ -238,6 +238,28 @@ namespace Utilities
                         break;
 
                     case "Footprint": // If the raycast hits a footprint
+                        if (!onlyShadows)
+                        {
+                            if (lightColorType.canRevealObjects)
+                            {
+                                if (_lightedElementsManager.RevealedObjects.ContainsKey(hitObject))
+                                {
+                                    _lightedElementsManager.RevealedObjects[hitObject] = true;
+                                }
+                                else
+                                {
+                                    hitObject.GetComponent<DynamicObject>().meshObjectForVisibility
+                                        .SetActive(true); // Reveal the object
+                                    _lightedElementsManager.RevealedObjects.Add(hitObject, true);
+                                }
+                            }
+
+                            var newOrigin = raycastHit.point + dir * 0.01f;
+                            var newDistance = dist - raycastHit.distance - 0.01f;
+                            ThrowRaycast(newOrigin, dir, newDistance, i);
+                        }
+                        break;
+                    
                     case "Draw": // If the raycast hits a draw
                         if (!onlyShadows)
                         {
@@ -251,6 +273,7 @@ namespace Utilities
                                 {
                                     hitObject.GetComponent<DynamicObject>().meshObjectForVisibility
                                         .SetActive(true); // Reveal the object
+                                    hitObject.GetComponent<Draw>().Enable();
                                     _lightedElementsManager.RevealedObjects.Add(hitObject, true);
                                 }
                             }

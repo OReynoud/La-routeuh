@@ -9,17 +9,28 @@ namespace Utilities.LD
 
         internal void Disable()
         {
+            ChangeLinkValues(false);
+        }
+
+        internal void Enable()
+        {
+            ChangeLinkValues(true);
+        }
+
+        private void ChangeLinkValues(bool isEnabled)
+        {
             foreach (var link in Links)
             {
                 switch (link.index)
                 {
                     case 1:
-                        link.link.IsObject1Active = false;
-                        link.link.CheckIfBothObjectsAreActive(1);
+                        link.link.IsObject1Enabled = isEnabled;
+                        link.link.CheckIfBothObjectsAreEnabled(1);
                         break;
+
                     case 2:
-                        link.link.IsObject2Active = false;
-                        link.link.CheckIfBothObjectsAreActive(2);
+                        link.link.IsObject2Enabled = isEnabled;
+                        link.link.CheckIfBothObjectsAreEnabled(2);
                         break;
                 }
             }
