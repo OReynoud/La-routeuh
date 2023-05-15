@@ -237,6 +237,7 @@ namespace Utilities
                         break;
 
                     case "Footprint": // If the raycast hits a footprint
+                    case "Draw": // If the raycast hits a draw
                         if (!onlyShadows)
                         {
                             if (lightColorType.canRevealObjects)
