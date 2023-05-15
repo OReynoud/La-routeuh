@@ -61,6 +61,11 @@ namespace Utilities
             if (visibilityType != VisibilityType.DelayedReappear) return;
             mesh.material.color = Color.Lerp(mesh.material.color, Color.white, reappearanceSpeed);
             childCollider.enabled = mesh.material.color.a > 0.9f;
+            if (PlayerController.instance.objectType == this)
+            {
+                
+                LautreCheckDeSesMorts();
+            }
         }
 
         private void CheckDeSesMorts(Collision other)
@@ -90,9 +95,39 @@ namespace Utilities
                                          closer.forward * 
                                          Vector3.Distance(transform.position,handlePos.position);
                     oui = Physics.OverlapBox(col.center + transform.position, col.size / 2 + 0.1f * Vector3.one, transform.rotation,PlayerController.instance.mask);
+                    Debug.Log(oui.Length);
                 } while (oui.Length > 1);
             }
             isColliding = true;
+        }
+
+        private void LautreCheckDeSesMorts()
+        {
+            var oui = Physics.OverlapBox(col.center + transform.position, col.size / 2 + 0.1f * Vector3.one, transform.rotation,PlayerController.instance.mask);
+            Debug.Log(oui.Length);
+            var frontSide = transform.forward;
+            var backSide = -transform.forward;
+            if (oui.Length ==1)
+            {
+                
+                PlayerController.instance.canPull = true;
+                PlayerController.instance.canPush = true;
+            }
+            for (int i = 0; i < oui.Length; i++)
+            {
+                if (i == 0) continue;
+                var delta1 = Vector3.Distance(frontSide, oui[i].ClosestPoint(frontSide))- Vector3.Distance(backSide, oui[i].ClosestPoint(backSide));
+                if (delta1 > 0)
+                {
+                    PlayerController.instance.canPull = false;
+                    PlayerController.instance.canPush = true;
+                }
+                else
+                {
+                    PlayerController.instance.canPull = true;
+                    PlayerController.instance.canPush = false;
+                }
+            }
         }
         private void OnCollisionEnter(Collision other)
         {

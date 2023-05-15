@@ -60,6 +60,8 @@ namespace Player
         public Gamepad gamepad;
         public bool canRotateClockwise = true;
         public bool canRotateCounterClockwise = true;
+        public bool canPush = true;
+        public bool canPull = true;
         [Foldout("Autre")] public LayerMask mask;
 
 
@@ -394,7 +396,7 @@ namespace Player
                 var absDiff = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
                 var ctxMax = maxSpeed / objectToGrab.mass;
                 //Debug.Log(absDiff);
-                if (absDiff < 2f)
+                if (absDiff < 2f && canPush) // Pushing
                 {
                     playerDir = new Vector3(fwrd.x, playerDir.y, fwrd.z);
                     var delta = Vector2.Distance(new Vector2(transform.position.x, transform.position.z),
@@ -416,7 +418,7 @@ namespace Player
                     
                     rb.AddForce(playerDir * appliedModifier);
                 }
-                else if(absDiff >= 2f)
+                else if(absDiff >= 2f && canPull) // Pulling
                 { 
                     
                     playerDir = new Vector3(-fwrd.x, playerDir.y, -fwrd.z);
