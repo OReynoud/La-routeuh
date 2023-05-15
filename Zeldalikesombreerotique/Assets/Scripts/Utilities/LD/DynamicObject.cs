@@ -51,7 +51,7 @@ namespace Utilities
 
         private void OnDrawGizmosSelected()
         {
-            if (!_start)return;
+            if (!_start || gameObject.CompareTag("Footprint")) return;
             Gizmos.matrix = transform.localToWorldMatrix;
             Gizmos.DrawWireCube(col.center, col.size + Vector3.one * 0.1f);
         }

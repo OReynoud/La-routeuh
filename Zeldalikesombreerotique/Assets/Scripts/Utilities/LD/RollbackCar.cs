@@ -65,10 +65,10 @@ public class RollbackCar : MonoBehaviour
              storedForce = maxStoredForce;
          }
 
-         if (!PlayerController.instance.controls.Player.Interact.IsPressed())
+         /*if (!PlayerController.instance.controls.Player.Interact.IsPressed())
          {
              timeApplied = MaxTimeOfAppliedForce * (storedForce / maxStoredForce);
-         }
+         }*/
          return;
      }
 
