@@ -145,7 +145,7 @@ namespace Player
 
         private void PushPullEnter()
         {
-            if (!isGrabbing)
+            if (!isGrabbing && !objectToGrab)
             {
                 objectToGrab = GetClosestObject();
                 if (!objectToGrab)
@@ -233,6 +233,7 @@ namespace Player
 
         public void PushPullLeave()
         {
+            if (pushingPullingRotate)return;
             if (!objectToGrab || !objectType)return;
             switch (objectType.mobilityType)
             {
@@ -257,8 +258,7 @@ namespace Player
         /// </summary>
         void SecondaryInteract()
         {
-            
-            if (!isGrabbing)
+            if (!isGrabbing && !objectToGrab)
             {
                 objectToGrab = GetClosestObject();
                 if (!objectToGrab)
@@ -308,7 +308,7 @@ namespace Player
                             StartCoroutine(SetPlayerPos(0.3f,
                                 new Vector3(objectType.handlePos.position.x, transform.position.y,
                                     objectType.handlePos.position.z)));
-                            return;
+                            break;
                         }
 
                         if (!isPlayerNear)
@@ -328,8 +328,7 @@ namespace Player
                     canMove = true;
                     controls.Enable();
                     RotateModel();
-                }));
-                pushingPullingRotate = !pushingPullingRotate;
+                    pushingPullingRotate = !pushingPullingRotate;
                     transform.position = new Vector3(
                         objectType.handlePos.position.x, 
                         transform.position.y,
@@ -339,13 +338,13 @@ namespace Player
                     {
                         objectToGrab.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePosition;
                     }
-                    //rb.constraints = RigidbodyConstraints.FreezeAll;
+                }));
             }
         }
 
         void SecondaryExit()
         {
-            
+            if (!pushingPullingRotate)return;
             if (!objectToGrab || !objectType)return;
             joint.autoConfigureConnectedAnchor = true;
             objectToGrab.constraints = BaseConstraints;

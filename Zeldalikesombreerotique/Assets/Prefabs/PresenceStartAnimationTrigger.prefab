@@ -47,13 +47,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec4dd41b93dfdb4ca61d9f7a1cfdf5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBeforeStart: 0
+  hasSpotToRotate: 0
+  timeBeforeSpot: 0
   spotToRotate: {fileID: 0}
   angleToRotateSpot: 20
   timeToRotateSpot: 0.8
   easeToRotateSpot: 27
   soundToRotateSpot: {fileID: 8300000, guid: 357c6a53831226e4087fbee7f0baf3b7, type: 3}
-  timeBetweenSpotAndFootprints: 0.1
   footprintsToAppear:
   - {fileID: 0}
   - {fileID: 0}
@@ -171,8 +171,11 @@ MonoBehaviour:
   soundToAppearFootprints: {fileID: 8300000, guid: ed36107a548be9045ac98b68e96ad3fc,
     type: 3}
   randomValuePitchFootprints: 0.5
-  scriptFille: {fileID: 0}
+  littleSisterScript: {fileID: 6525705789794559412}
+  isStandingAtStart: 0
+  hasToFall: 0
   timeBeforeFall: 0
+  easeToSlowDownBeforeFall: 11
   timeToFall: 0
 --- !u!65 &6525705789794559414
 BoxCollider:
