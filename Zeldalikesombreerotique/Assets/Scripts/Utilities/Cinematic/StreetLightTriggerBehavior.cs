@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Utilities.Cinematic
@@ -9,12 +11,27 @@ namespace Utilities.Cinematic
         [SerializeField] private GameObject spotLight;
         [SerializeField] private GameObject coneMesh;
         [SerializeField] private AudioClip switchOnSound;
+        [SerializeField] private AudioClip switchOffSound;
         [SerializeField] private List<GameObject> objectsToAppear;
+        [SerializeField] private bool canSwitchOff;
+        [ShowIf("canSwitchOff")] [SerializeField] private float timeBeforeSwitchOff;
+        private Coroutine _switchOffCoroutine;
+        private WaitForSeconds _switchOffWaitForSeconds;
+        
+        private void Awake()
+        {
+            _switchOffWaitForSeconds = new WaitForSeconds(timeBeforeSwitchOff);
+        }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
             {
+                if (_switchOffCoroutine != null)
+                {
+                    StopCoroutine(_switchOffCoroutine);
+                }
+                
                 spotLight.SetActive(true);
                 coneMesh.SetActive(true);
                 // audioSource.PlayOneShot(switchOnSound);
@@ -23,9 +40,31 @@ namespace Utilities.Cinematic
                 {
                     objectToAppear.SetActive(true);
                 }
-                
-                gameObject.SetActive(false);
+
+                if (!canSwitchOff)
+                {
+                    gameObject.SetActive(false);
+                }
             }
+        }
+        
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player") && canSwitchOff)
+            {
+                _switchOffCoroutine = StartCoroutine(SwitchOff());
+            }
+        }
+        
+        private IEnumerator SwitchOff()
+        {
+            yield return _switchOffWaitForSeconds;
+            
+            spotLight.SetActive(false);
+            coneMesh.SetActive(false);
+            // audioSource.PlayOneShot(switchOffSound);
+            
+            _switchOffCoroutine = null;
         }
     }
 }
