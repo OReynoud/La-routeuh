@@ -39,7 +39,7 @@ namespace Utilities.Cinematic
                 
                 foreach (var objectToAppear in objectsToAppear)
                 {
-                    objectToAppear.SetActive(true);
+                    objectToAppear.transform.GetChild(0).gameObject.SetActive(true);
                     if (objectToAppear.CompareTag("Draw")) objectToAppear.GetComponent<Draw>().Enable();
                 }
 
