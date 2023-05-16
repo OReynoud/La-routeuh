@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Utilities;
 using Utilities.LD;
-using Light = Utilities.Light;
+using Light = Utilities.LD.Light;
 
 namespace Managers
 {

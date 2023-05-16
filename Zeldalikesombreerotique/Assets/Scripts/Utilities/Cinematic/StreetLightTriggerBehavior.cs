@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
+using Utilities.LD;
 
 namespace Utilities.Cinematic
 {
@@ -39,6 +40,7 @@ namespace Utilities.Cinematic
                 foreach (var objectToAppear in objectsToAppear)
                 {
                     objectToAppear.SetActive(true);
+                    if (objectToAppear.CompareTag("Draw")) objectToAppear.GetComponent<Draw>().Enable();
                 }
 
                 if (!canSwitchOff)
@@ -63,6 +65,12 @@ namespace Utilities.Cinematic
             spotLight.SetActive(false);
             coneMesh.SetActive(false);
             // audioSource.PlayOneShot(switchOffSound);
+                
+            foreach (var objectToAppear in objectsToAppear)
+            {
+                objectToAppear.SetActive(false);
+                if (objectToAppear.CompareTag("Draw")) objectToAppear.GetComponent<Draw>().Disable();
+            }
             
             _switchOffCoroutine = null;
         }
