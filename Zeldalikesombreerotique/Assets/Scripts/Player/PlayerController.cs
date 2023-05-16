@@ -465,45 +465,25 @@ namespace Player
             if (isGrabbing && pushingPullingRotate && playerDir.magnitude > 0.1f)
             {
                 rb.velocity = Vector3.zero;
-                var avatarOrientation = -transform.forward;
-                var diff = playerDir - avatarOrientation;
-                var absDiff = Mathf.Abs(diff.x) + Mathf.Abs(diff.z);
 
                 var dirModifier = 1f;
                 // 1 is clockwise
                 // -1 is counter-clockwise
                 
                 
-                if (Vector3.Distance(transform.right,playerDir) < Vector3.Distance(-transform.right,playerDir))
+                if (playerDir.x > 0)
                 {
                     if (canRotateCounterClockwise)
-                    {
                         dirModifier = -1;
-                    }
                     else
-                    {
                         dirModifier = 0;
-                    }
                 }
                 else
                 {
-                    if (canRotateClockwise)
-                    {
-                        dirModifier = 1;
-                    }
-                    else
-                    {
-                        dirModifier = 0;
-                    }
+                    dirModifier = canRotateClockwise ? 1 : 0;
                 }
-                if (absDiff > 1f)
-                {
-                    transform.RotateAround(objectToGrab.position,transform.up, rotationSpeed * dirModifier);
-                }
-                else
-                {
-                    transform.RotateAround(objectToGrab.position,transform.up, rotationSpeed * absDiff * dirModifier);
-                }
+                transform.RotateAround(objectToGrab.position,transform.up, rotationSpeed * dirModifier);
+                
                 
                 var delta = Vector2.Distance(new Vector2(transform.position.x, transform.position.z),
                     new Vector2(objectType.handlePos.position.x, objectType.handlePos.position.z));
