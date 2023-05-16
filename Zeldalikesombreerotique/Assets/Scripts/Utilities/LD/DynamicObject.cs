@@ -61,9 +61,12 @@ namespace Utilities
 
         private void FixedUpdate()
         {
-            if (!rb.isKinematic && !PlayerController.instance.pushingPullingRotate)
+            if (rb)
             {
-                LautreCheckDeSesMorts();
+                if (!rb.isKinematic && !PlayerController.instance.pushingPullingRotate)
+                {
+                    LautreCheckDeSesMorts();
+                }
             }
             if (visibilityType != VisibilityType.DelayedReappear) return;
             mesh.material.color = Color.Lerp(mesh.material.color, Color.white, reappearanceSpeed);
