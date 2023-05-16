@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4124409680439504968}
   - component: {fileID: 5339323191074124804}
   - component: {fileID: 3856106056664340602}
+  - component: {fileID: 7634378215294635706}
   m_Layer: 0
   m_Name: "l\xE9go 3 crans005"
   m_TagString: Untagged
@@ -83,6 +84,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7634378215294635706
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4293212744365338442}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2196254275598029377, guid: bb719414dba9a1644bdd44d78877a565, type: 3}
 --- !u!1 &5744899339336466744
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +107,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4968080817612299138}
+  - component: {fileID: 4815112160928670252}
   m_Layer: 0
   m_Name: "l\xE9go 3 crans"
   m_TagString: Untagged
@@ -115,3 +131,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &4815112160928670252
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5744899339336466744}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
