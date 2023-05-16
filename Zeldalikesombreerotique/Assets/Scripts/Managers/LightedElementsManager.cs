@@ -78,7 +78,7 @@ namespace Managers
                         
                         var hitPoint = lightPosition + dir * affectingLight.distance;
                         
-                        affectedShadow.MoveShadow(affectingLight, affectingLight.PhysicAngle, hitPoint, lightPosition, affectingLight.distance);
+                        affectedShadow.MoveShadow(affectingLight.PhysicAngle, hitPoint, lightPosition, affectingLight.distance);
                         break;
                     
                     default:
