@@ -113,11 +113,12 @@ MonoBehaviour:
   mobilityType: 3
   visibilityType: 0
   meshObjectForVisibility: {fileID: 8766165274960030922}
-  _childCollider: {fileID: 0}
+  childCollider: {fileID: 0}
   reappearanceSpeed: 0
   handlePos: {fileID: 2209674429059700070}
   hasToppled: 0
   toppleForce: 0
+  isColliding: 0
 --- !u!1 &8766165274463127469
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,7 +390,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 7590d89edc7bdf24db42eb3d645751d8, type: 2}
+      objectReference: {fileID: 2100000, guid: 1b04a16d00a355a429e907686fc06cc9, type: 2}
     - target: {fileID: 6159114063161415315, guid: 546ce6735dbbf7b4aa66bc28f4297181,
         type: 3}
       propertyPath: m_RootOrder
