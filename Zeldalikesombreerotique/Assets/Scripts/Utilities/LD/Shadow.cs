@@ -4,7 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
-namespace Utilities
+namespace Utilities.LD
 {
     public class Shadow : MonoBehaviour
     {
@@ -24,8 +24,7 @@ namespace Utilities
         [Tooltip("Distance traveled by the moving shadow")] [SerializeField] internal float movingDistance;
         [Tooltip("Scale reached by the moving shadow")] [SerializeField] internal float movingScale;
 
-        private Vector3 _lastHitPoint;
-        private Vector3 _lastLightPosition;
+        private readonly Dictionary<Light, (Vector3 hitPoint, Vector3 lightPosition)> _lastPoints = new();
 
         private void Start()
         {
@@ -48,21 +47,20 @@ namespace Utilities
             StartCoroutine(ShadowWhisperSoundCoroutine());
         }
         
-        internal void MoveShadow(float angle, Vector3 hitPoint, Vector3 lightPosition, float lightDistance)
+        internal void MoveShadow(Light lightHitBy, float angle, Vector3 hitPoint, Vector3 lightPosition, float lightDistance)
         {
-            if (_lastHitPoint != hitPoint || _lastLightPosition != lightPosition)
+            if (_lastPoints.TryAdd(lightHitBy, (hitPoint, lightPosition)) || _lastPoints[lightHitBy].hitPoint != hitPoint || _lastPoints[lightHitBy].lightPosition != lightPosition)
             {
-                _lastHitPoint = hitPoint;
-                _lastLightPosition = lightPosition;
+                _lastPoints[lightHitBy] = (hitPoint, lightPosition);
                 _movingSequence.Kill();
                 _movingSequence = DOTween.Sequence();
-                
+            
                 foreach (var meshTransform in _meshTransforms)
                 {
                     var whereToMove = WhereToMove(angle, hitPoint, lightPosition, meshTransform.position, lightDistance);
-                    
-                    var zPositionFactor = hitPoint.z - meshTransform.position.z > 0 ? -1 : 1;
                 
+                    var zPositionFactor = hitPoint.z - meshTransform.position.z > 0 ? -1 : 1;
+            
                     if (whereToMove.hasToMove)
                     {
                         _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x + movingDistance * whereToMove.direction * zPositionFactor, movingDuration))
@@ -76,7 +74,7 @@ namespace Utilities
                             .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(meshTransform.localScaleX, movingDuration * 0.5f));
                     }
                 }
-                
+            
                 _movingSequence.AppendCallback(() => _movingSequence.Kill());
             }
         }
@@ -169,7 +167,7 @@ namespace Utilities
         {
             var tempShadowWhisperSounds = shadowWhisperSounds;
             
-            if (_lastWhisperSound != null)
+            if (_lastWhisperSound)
             {
                 tempShadowWhisperSounds = tempShadowWhisperSounds.Where(x => x != _lastWhisperSound).ToList();
             }
