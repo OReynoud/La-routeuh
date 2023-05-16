@@ -20,15 +20,15 @@ namespace Player
         [Foldout("Références")]public ConfigurableJoint joint;
         [Foldout("Références")] public Animator rig;
         [Foldout("Références")] public Collider playerColl;
-        [HorizontalLine(color: EColor.Black)]
-        
+
+        [HorizontalLine(color: EColor.Black)] [BoxGroup("Mouvements")] [Range(0,1)] public float modelRotate;
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur")]public float groundSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Multiplie la groundSpeed")]public float sprintSpeed;
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur quand il manipule un objet")]public float grabbedSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur")] public float minSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse maximale du joueur")] public float maxSpeed;
         
-        [BoxGroup("Mouvements")] [Tooltip("Vitesse de rotation")] public float rotationSpeed;
+        [BoxGroup("Mouvements")] [Tooltip("Vitesse de rotation quand le joueur grab")] public float rotationSpeed;
 
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur quand il a grab un objet")]
         public float grabbedMinFactor;
@@ -591,7 +591,7 @@ namespace Player
             if (!isGrabbing || objectType.mobilityType == DynamicObject.MobilityType.CanCarry)
             {
                 var angle = Mathf.Atan2(playerDir.x, playerDir.z)* Mathf.Rad2Deg;
-                transform.rotation = Quaternion.AngleAxis(angle,Vector3.up);
+                transform.rotation = Quaternion.Lerp(transform.rotation,Quaternion.AngleAxis(angle,Vector3.up),modelRotate);
                 return;
             }
 
