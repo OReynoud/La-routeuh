@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using NaughtyAttributes;
 using UnityEngine;
 
-namespace Utilities
+namespace Utilities.LD
 {
     public class Shadow : MonoBehaviour
     {
@@ -21,8 +22,12 @@ namespace Utilities
         
         private Sequence _movingSequence;
         [Tooltip("Duration of the animation of the moving shadow")] [SerializeField] internal float movingDuration;
-        [Tooltip("Distance traveled by the moving shadow")] [SerializeField] internal float movingDistance;
+        [HideIf("hasAnchor")] [Tooltip("Distance traveled by the moving shadow")] [SerializeField] internal float movingDistance;
         [Tooltip("Scale reached by the moving shadow")] [SerializeField] internal float movingScale;
+        
+        [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] internal bool hasAnchor;
+        [ShowIf("hasAnchor")] [Tooltip("Anchor where to move")] [SerializeField] internal Transform anchor;
+        private float _anchorDirectionFactor;
 
         private Vector3 _lastHitPoint;
         private Vector3 _lastLightPosition;
@@ -43,6 +48,15 @@ namespace Utilities
                 newCapsuleCollider.radius = localScaleX * 0.5f;
                 newCapsuleCollider.height = 4f;
                 newCapsuleCollider.isTrigger = true;
+            }
+
+            if (hasAnchor)
+            {
+                var anchorPosition = anchor.position;
+                var position = meshGameObject.transform.position;
+                
+                movingDistance = Vector3.Distance(anchorPosition, position);
+                _anchorDirectionFactor = anchorPosition.x - position.x > 0 ? -1 : 1;
             }
 
             StartCoroutine(ShadowWhisperSoundCoroutine());
@@ -169,7 +183,7 @@ namespace Utilities
         {
             var tempShadowWhisperSounds = shadowWhisperSounds;
             
-            if (_lastWhisperSound != null)
+            if (_lastWhisperSound)
             {
                 tempShadowWhisperSounds = tempShadowWhisperSounds.Where(x => x != _lastWhisperSound).ToList();
             }
