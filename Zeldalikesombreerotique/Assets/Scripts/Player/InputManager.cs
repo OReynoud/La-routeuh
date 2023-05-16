@@ -51,7 +51,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""id"": ""0f86f696-d031-4f41-9775-f7671741c8a4"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
+                    ""interactions"": ""Press(behavior=1)"",
                     ""initialStateCheck"": true
                 },
                 {
@@ -65,7 +65,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""SecondaryEnter"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""e402e382-1e21-427a-87f6-8a40ef13665f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -74,11 +74,11 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""SecondaryLeave"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""330a55d4-9b9b-4cf2-b940-9184c0c4da27"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Press(pressPoint=0.1,behavior=1)"",
+                    ""interactions"": ""Press(pressPoint=1.401298E-45,behavior=1)"",
                     ""initialStateCheck"": true
                 },
                 {
