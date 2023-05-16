@@ -40,6 +40,8 @@ namespace Utilities
         private bool counterClockwiseTimer;
         [ReadOnly]public bool isColliding;
         private bool _start;
+        public float overlapBox = 1.6f;
+        
 
         private void Awake()
         {
@@ -51,21 +53,21 @@ namespace Utilities
 
         private void OnDrawGizmosSelected()
         {
-            if (!_start || gameObject.CompareTag("Footprint")) return;
-            Gizmos.matrix = transform.localToWorldMatrix;
-            Gizmos.DrawWireCube(col.center, col.size + Vector3.one * 0.1f);
+            //if (!_start || gameObject.CompareTag("Footprint")) return;
+            //Gizmos.matrix = transform.localToWorldMatrix;
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(transform.position + Vector3.up * 0.5f, overlapBox * Vector3.one);
         }
 
         private void FixedUpdate()
         {
+            if (!rb.isKinematic && !PlayerController.instance.pushingPullingRotate)
+            {
+                LautreCheckDeSesMorts();
+            }
             if (visibilityType != VisibilityType.DelayedReappear) return;
             mesh.material.color = Color.Lerp(mesh.material.color, Color.white, reappearanceSpeed);
             childCollider.enabled = mesh.material.color.a > 0.9f;
-            if (PlayerController.instance.objectType == this)
-            {
-                
-                LautreCheckDeSesMorts();
-            }
         }
 
         private void CheckDeSesMorts(Collision other)
@@ -103,8 +105,13 @@ namespace Utilities
 
         private void LautreCheckDeSesMorts()
         {
-            var oui = Physics.OverlapBox(col.center + transform.position, col.size / 2 + 0.1f * Vector3.one, transform.rotation,PlayerController.instance.mask);
-            Debug.Log(oui.Length);
+            var oui = Physics.OverlapBox(col.center + transform.position, col.size * PlayerController.instance.overlapBoxSize + Vector3.up, transform.rotation,PlayerController.instance.mask);
+
+            foreach (var non in oui)
+            {
+                Debug.Log(non, non);
+            }
+
             var frontSide = transform.forward;
             var backSide = -transform.forward;
             if (oui.Length ==1)

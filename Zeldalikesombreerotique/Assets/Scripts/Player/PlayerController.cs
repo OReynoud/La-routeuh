@@ -54,6 +54,7 @@ namespace Player
         [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
         [Foldout("Autre")] [SerializeField] private float yOffset = 2f;
         [Foldout("Autre")] public float rumbleIntensity;
+        [Foldout("Autre")]public float overlapBoxSize = 2;
         private float inputLag = 0.2f;
 
         private const RigidbodyConstraints BaseConstraints = RigidbodyConstraints.FreezeRotation;
@@ -117,9 +118,7 @@ namespace Player
             {
                 if (!proofOfConcept)rig.SetBool("isWalking", false);
                 rig.SetBool("IsPushing",false);
-                playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
-                rb.velocity *= 0.9f;
-                rb.angularVelocity = Vector3.zero;
+                Decelerate();
                 gamepad?.SetMotorSpeeds(0f,0f);
                 return;
             }
@@ -135,7 +134,15 @@ namespace Player
             }
         }
 
-        #region Actions
+        void Decelerate()
+        {
+            //if (isGrabbing) Debug.Log("Decelerating");
+            if (!isGrabbing)playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
+            rb.velocity *= 0.9f;
+            rb.angularVelocity = Vector3.zero;
+        }
+
+                                                                    #region Actions
         private void TogleSprint() 
         {
             isSprinting = !isSprinting;
@@ -144,7 +151,8 @@ namespace Player
         {
             playerDir = new Vector3(dir.x,playerDir.y, dir.y);
         }
-
+        
+                                                                            #region ManipulationDobjets
         private void PushPullEnter()
         {
             if (!isGrabbing && !objectToGrab)
@@ -370,6 +378,7 @@ namespace Player
         /// <summary>
         /// </summary>
         /// <param name="appliedModifier"> modifcateur de force</param>
+        #endregion
         private void ApplyForce(float appliedModifier)
         {
             RotateModel();
@@ -395,9 +404,10 @@ namespace Player
                 var differential = playerDir - fwrd;
                 var absDiff = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
                 var ctxMax = maxSpeed / objectToGrab.mass;
-                //Debug.Log(absDiff);
+                Debug.Log(absDiff);
                 if (absDiff < 2f && canPush) // Pushing
                 {
+                    //Debug.Log("pushing");
                     playerDir = new Vector3(fwrd.x, playerDir.y, fwrd.z);
                     var delta = Vector2.Distance(new Vector2(transform.position.x, transform.position.z),
                         new Vector2(objectType.handlePos.position.x, objectType.handlePos.position.z));
@@ -420,7 +430,7 @@ namespace Player
                 }
                 else if(absDiff >= 2f && canPull) // Pulling
                 { 
-                    
+                    //Debug.Log("pulling");
                     playerDir = new Vector3(-fwrd.x, playerDir.y, -fwrd.z);
                     var delta = Vector2.Distance(new Vector2(transform.position.x, transform.position.z),
                         new Vector2(objectType.handlePos.position.x, objectType.handlePos.position.z));
@@ -442,6 +452,10 @@ namespace Player
                     }
                     rig.SetBool("IsPushing",false);
                     rb.AddForce(playerDir * appliedModifier);
+                }
+                else
+                {
+                    Decelerate();
                 }
                 return;
             }

@@ -413,6 +413,7 @@ MonoBehaviour:
   hasToppled: 0
   toppleForce: 0
   isColliding: 0
+  overlapBox: 1.6
 --- !u!82 &2516332761904786950
 AudioSource:
   m_ObjectHideFlags: 0
@@ -547,6 +548,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 701333956219283487}
     m_Modifications:
+    - target: {fileID: 4846979742277765070, guid: 546ce6735dbbf7b4aa66bc28f4297181,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4986255850189794812, guid: 546ce6735dbbf7b4aa66bc28f4297181,
         type: 3}
       propertyPath: m_Materials.Array.data[0]

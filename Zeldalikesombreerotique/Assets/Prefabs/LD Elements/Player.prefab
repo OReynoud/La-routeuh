@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 6998835611510329064}
-  joint: {fileID: 6453763693969822258}
+  joint: {fileID: 880572121}
   rig: {fileID: 4203414672384100727}
   playerColl: {fileID: 6998835611510329059}
   groundSpeed: 15
@@ -167,19 +167,20 @@ MonoBehaviour:
   isGrounded: 1
   proofOfConcept: 0
   isGrabbing: 0
-  pushingPulling_Rotate: 0
+  pushingPullingRotate: 0
   objectToGrab: {fileID: 0}
   objectType: {fileID: 0}
   canMove: 0
   isSprinting: 0
-  willTriggerCinematic: 0
-  tpLocation: {fileID: 0}
   isProtected: 0
   xOffset: 1
   yOffset: 1
   rumbleIntensity: 0.1
+  overlapBoxSize: 1.6
   canRotateClockwise: 1
   canRotateCounterClockwise: 1
+  canPush: 1
+  canPull: 1
   mask:
     serializedVersion: 2
     m_Bits: 1
