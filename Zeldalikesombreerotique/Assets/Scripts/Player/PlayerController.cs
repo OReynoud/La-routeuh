@@ -63,6 +63,8 @@ namespace Player
         public bool canRotateCounterClockwise = true;
         public bool canPush = true;
         public bool canPull = true;
+        public float grabAdjustTimer;
+        private float grabTimer = 0;
         [Foldout("Autre")] public LayerMask mask;
 
 
@@ -84,7 +86,7 @@ namespace Player
             controls = new InputManager();
             controls.Enable();
             controls.Player.Enable();
-            controls.Player.Move.performed += ctx => Move(ctx.ReadValue<Vector2>());
+            controls.Player.Move.performed += Move;
             controls.Player.InteractEnter.performed += _ => PushPullEnter();
             controls.Player.InteractLeave.performed += _ => PushPullLeave();
             controls.Player.Sprint.performed += _ => TogleSprint();
@@ -106,6 +108,37 @@ namespace Player
             if (inputLag > 0)
             {
                 inputLag -= Time.deltaTime;
+            }
+
+            if (isGrabbing && grabTimer < grabAdjustTimer)
+            {
+                grabTimer += Time.fixedDeltaTime;
+                transform.position = Vector3.Lerp(transform.position, new Vector3(objectType.handlePos.position.x, transform.position.y, objectType.handlePos.position.z),grabTimer/grabAdjustTimer);
+                return;
+            }
+            else if(isGrabbing)
+            {
+                if (!pushingPullingRotate)
+                {
+                    
+                    SetJoint(true);
+                    rig.SetBool("IsGrabbing", true);
+                    canMove = true;
+                    controls.Enable();
+                    RotateModel();
+                }
+                else
+                {
+                    SetJoint(true);
+                    canMove = true;
+                    controls.Enable();
+                    RotateModel();
+                    joint.autoConfigureConnectedAnchor = false;
+                    if (!objectType.isColliding)
+                    {
+                        objectToGrab.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePosition;
+                    }
+                }
             }
             var speedFactor = rb.velocity.magnitude / maxSpeed;
             if (!proofOfConcept) rig.SetFloat("Speed",speedFactor);
@@ -147,13 +180,14 @@ namespace Player
         {
             isSprinting = !isSprinting;
         }
-        private void Move(Vector2 dir)
+        public void Move(InputAction.CallbackContext context)
         {
+            var dir = context.ReadValue<Vector2>();
             playerDir = new Vector3(dir.x,playerDir.y, dir.y);
         }
         
                                                                             #region ManipulationDobjets
-        private void PushPullEnter()
+        public void PushPullEnter()
         {
             if (!isGrabbing && !objectToGrab)
             {
@@ -170,6 +204,7 @@ namespace Player
                     return;
                 }
 
+                grabTimer = 0;
                 controls.Disable();
                 canMove = false;
                 switch (objectType.mobilityType)
@@ -202,10 +237,10 @@ namespace Player
                         {
                             if (coll != playerColl) continue;
                             isPlayerNear = true;
-                            StartCoroutine(SetPlayerPos(0.3f,
+                            /*StartCoroutine(SetPlayerPos(0.3f,
                                 new Vector3(objectType.handlePos.position.x, transform.position.y,
-                                    objectType.handlePos.position.z)));
-                            return;
+                                    objectType.handlePos.position.z)));*/
+                            break;
                         }
 
                         if (!isPlayerNear)
@@ -215,18 +250,10 @@ namespace Player
                             canMove = true;
                             return;
                         }
-
+                        isGrabbing = true;
                         break;
                 }
-
-                rig.SetBool("IsGrabbing", true);
-                isGrabbing = true;
-                transform.DOMove(transform.position, 0.3f).OnComplete((() =>
-                {
-                    canMove = true;
-                    controls.Enable();
-                    RotateModel();
-                }));
+                //transform.DOMove(transform.position, 0.3f).OnComplete((() => { }));
             }
         }
 
@@ -266,7 +293,7 @@ namespace Player
         /// <summary>
         /// Switch entre le rotate et le pousser tirer
         /// </summary>
-        void SecondaryInteract()
+        public void SecondaryInteract()
         {
             if (!isGrabbing && !objectToGrab)
             {
@@ -283,6 +310,7 @@ namespace Player
                     return;
                 }
 
+                grabTimer = 0;
                 controls.Disable();
                 canMove = false;
                 switch (objectType.mobilityType)
@@ -315,9 +343,9 @@ namespace Player
                         {
                             if (coll != playerColl) continue;
                             isPlayerNear = true;
-                            StartCoroutine(SetPlayerPos(0.3f,
+                            /*StartCoroutine(SetPlayerPos(0.3f,
                                 new Vector3(objectType.handlePos.position.x, transform.position.y,
-                                    objectType.handlePos.position.z)));
+                                    objectType.handlePos.position.z)));*/
                             break;
                         }
 
@@ -332,30 +360,21 @@ namespace Player
                         break;
                 }
                 isGrabbing = true;
+                pushingPullingRotate = true;
                 rig.SetBool("IsGrabbing", true);
-                transform.DOMove(transform.position, 0.3f).OnComplete((() =>
-                {
-                    canMove = true;
-                    controls.Enable();
-                    RotateModel();
-                    pushingPullingRotate = !pushingPullingRotate;
-                    transform.position = new Vector3(
-                        objectType.handlePos.position.x, 
-                        transform.position.y,
-                        objectType.handlePos.position.z);
-                    joint.autoConfigureConnectedAnchor = false;
-                    if (!objectType.isColliding)
-                    {
-                        objectToGrab.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePosition;
-                    }
-                }));
+                //transform.DOMove(transform.position, 0.3f).OnComplete((() => {}));
+                
+
             }
         }
 
-        void SecondaryExit()
+        public void SecondaryExit()
         {
+            Debug.Log("1");
             if (!pushingPullingRotate)return;
+            Debug.Log("2");
             if (!objectToGrab || !objectType)return;
+            Debug.Log("3 c'est good");
             joint.autoConfigureConnectedAnchor = true;
             objectToGrab.constraints = BaseConstraints;
             switch (objectType.mobilityType)
@@ -404,7 +423,6 @@ namespace Player
                 var differential = playerDir - fwrd;
                 var absDiff = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
                 var ctxMax = maxSpeed / objectToGrab.mass;
-                Debug.Log(absDiff);
                 if (absDiff < 2f && canPush) // Pushing
                 {
                     //Debug.Log("pushing");
@@ -518,11 +536,11 @@ namespace Player
             }
             if (!isSprinting)
             {
-                rb.AddForce(playerDir * (appliedModifier),ForceMode.Force);
+                rb.AddForce((playerDir + Vector3.down) * (appliedModifier),ForceMode.Force);
                 return;
             }
             
-            rb.AddForce(playerDir * ((appliedModifier) * sprintSpeed),ForceMode.Force);
+            rb.AddForce((playerDir + Vector3.down) * ((appliedModifier) * sprintSpeed),ForceMode.Force);
 
         }
 
