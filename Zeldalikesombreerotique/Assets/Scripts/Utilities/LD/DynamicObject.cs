@@ -112,8 +112,8 @@ namespace Utilities
 
             
 
-            var frontSide = PlayerController.instance.transform.forward;
-            var backSide = -PlayerController.instance.transform.forward;
+            var frontSide = transform.forward;
+            var backSide = -transform.forward;
             if (oui.Length ==1)
             {
                 
@@ -128,9 +128,8 @@ namespace Utilities
             {
                 if (oui[i] == col) continue;
                 var delta1 = Vector3.Distance(frontSide, oui[i].ClosestPoint(frontSide))- Vector3.Distance(backSide, oui[i].ClosestPoint(backSide));
-                Debug.Log(Vector3.Distance(frontSide, oui[i].ClosestPoint(frontSide))+ "frontside");
-                Debug.Log(Vector3.Distance(backSide, oui[i].ClosestPoint(backSide)) + "backside");
-                Debug.Log("",oui[i]);
+                Debug.DrawLine(transform.position + frontSide, oui[i].ClosestPoint(frontSide),Color.blue);
+                Debug.DrawLine(transform.position + backSide, oui[i].ClosestPoint(backSide),Color.red);
                 if (delta1 > 0)
                 {
                     PlayerController.instance.canPull = false;
