@@ -56,7 +56,7 @@ namespace Utilities.LD
                 var position = meshGameObject.transform.position;
                 
                 movingDistance = Vector3.Distance(anchorPosition, position);
-                _anchorDirectionFactor = anchorPosition.x - position.x > 0 ? -1 : 1;
+                _anchorDirectionFactor = anchorPosition.x - position.x > 0 ? 1 : -1;
             }
 
             StartCoroutine(ShadowWhisperSoundCoroutine());
@@ -79,7 +79,7 @@ namespace Utilities.LD
                 
                     if (whereToMove.hasToMove)
                     {
-                        _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x + movingDistance * whereToMove.direction * zPositionFactor, movingDuration))
+                        _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x + movingDistance * (hasAnchor ? _anchorDirectionFactor : whereToMove.direction * zPositionFactor), movingDuration))
                             .Join(meshTransform.transform.DOScaleX(movingScale + meshTransform.localScaleX - 1f, movingDuration * 0.5f))
                             .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(meshTransform.localScaleX, movingDuration * 0.5f));
                     }
@@ -105,7 +105,7 @@ namespace Utilities.LD
                 var shadowPosition = shadowTransform.position;
                 var whereToMove = WhereToMove(shadowPosition + shadowTransform.forward, shadowPosition, meshTransform.position);
             
-                _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x + movingDistance * whereToMove, movingDuration))
+                _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x + movingDistance * (hasAnchor ? _anchorDirectionFactor : whereToMove), movingDuration))
                     .Join(meshTransform.transform.DOScaleX(movingScale + meshTransform.localScaleX - 1f, movingDuration * 0.5f))
                     .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(meshTransform.localScaleX, movingDuration * 0.5f));
             }
