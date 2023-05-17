@@ -54,7 +54,8 @@ namespace Player
         [Foldout("Autre")] [SerializeField] private float xOffset = 1f;
         [Foldout("Autre")] [SerializeField] private float yOffset = 2f;
         [Foldout("Autre")] public float rumbleIntensity;
-        [Foldout("Autre")]public float overlapBoxSize = 2;
+        [Foldout("Variables pour Enzo")][Tooltip("La taille de la marge de sécurité pour la collision des spots")]public float overlapBoxSize = 2;
+        [Label("")] [ShowNonSerializedField][TextArea] private string agaga = "Tu peux avoir une représentation visuelle de la marge de sécurité en cliquant sur un spot, sous forme de box rouge, le script DynamicObject contient aussi OverlapBox Size";
         private float inputLag = 0.2f;
 
         private const RigidbodyConstraints BaseConstraints = RigidbodyConstraints.FreezeRotation;
