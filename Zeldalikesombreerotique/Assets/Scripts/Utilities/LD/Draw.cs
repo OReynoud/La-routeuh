@@ -6,6 +6,15 @@ namespace Utilities.LD
     public class Draw : MonoBehaviour
     {
         internal readonly List<(Link link, int index)> Links = new();
+        [SerializeField] private bool isEnabledAtStart;
+        
+        private void Start()
+        {
+            if (isEnabledAtStart)
+            {
+                Enable();
+            }
+        }
 
         internal void Disable()
         {
