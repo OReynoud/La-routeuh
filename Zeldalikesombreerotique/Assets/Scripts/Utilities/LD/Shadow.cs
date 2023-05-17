@@ -61,6 +61,14 @@ namespace Utilities.LD
 
             StartCoroutine(ShadowWhisperSoundCoroutine());
         }
+
+        internal void Initialize(Vector3 move)
+        {
+            for (var i = 0; i < _meshTransforms.Count; i++)
+            {
+                _meshTransforms[i] = (_meshTransforms[i].transform, _meshTransforms[i].position + move, _meshTransforms[i].localPosition, _meshTransforms[i].localScaleX);
+            }
+        }
         
         internal void MoveShadow(float angle, Vector3 hitPoint, Vector3 lightPosition, float lightDistance)
         {

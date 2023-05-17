@@ -35,7 +35,7 @@ namespace Utilities.Cinematic
                 
                 spotLight.SetActive(true);
                 coneMesh.SetActive(true);
-                // audioSource.PlayOneShot(switchOnSound);
+                audioSource.PlayOneShot(switchOnSound);
                 
                 foreach (var objectToAppear in objectsToAppear)
                 {
@@ -64,7 +64,7 @@ namespace Utilities.Cinematic
             
             spotLight.SetActive(false);
             coneMesh.SetActive(false);
-            // audioSource.PlayOneShot(switchOffSound);
+            audioSource.PlayOneShot(switchOffSound);
                 
             foreach (var objectToAppear in objectsToAppear)
             {
