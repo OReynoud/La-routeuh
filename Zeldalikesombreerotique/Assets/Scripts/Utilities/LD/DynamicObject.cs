@@ -108,26 +108,29 @@ namespace Utilities
 
         private void LautreCheckDeSesMorts()
         {
-            var oui = Physics.OverlapBox(col.center + transform.position, col.size * PlayerController.instance.overlapBoxSize + Vector3.up, transform.rotation,PlayerController.instance.mask);
+            var oui = Physics.OverlapBox(transform.position, col.size * PlayerController.instance.overlapBoxSize + Vector3.up, transform.rotation,PlayerController.instance.mask);
 
-            /*foreach (var non in oui)
-            {
-                Debug.Log(non, non);
-            }*/
+            
 
-            var frontSide = transform.forward;
-            var backSide = -transform.forward;
+            var frontSide = PlayerController.instance.transform.forward;
+            var backSide = -PlayerController.instance.transform.forward;
             if (oui.Length ==1)
             {
                 
                 PlayerController.instance.canPull = true;
                 PlayerController.instance.canPush = true;
             }
+            /*foreach (var non in oui)
+            {
+                Debug.Log(non, non);
+            }*/
             for (int i = 0; i < oui.Length; i++)
             {
-                if (i == 0) continue;
+                if (oui[i] == col) continue;
                 var delta1 = Vector3.Distance(frontSide, oui[i].ClosestPoint(frontSide))- Vector3.Distance(backSide, oui[i].ClosestPoint(backSide));
-                Debug.Log(delta1);
+                Debug.Log(Vector3.Distance(frontSide, oui[i].ClosestPoint(frontSide))+ "frontside");
+                Debug.Log(Vector3.Distance(backSide, oui[i].ClosestPoint(backSide)) + "backside");
+                Debug.Log("",oui[i]);
                 if (delta1 > 0)
                 {
                     PlayerController.instance.canPull = false;
