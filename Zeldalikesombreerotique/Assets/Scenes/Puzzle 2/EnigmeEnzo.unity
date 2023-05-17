@@ -7081,7 +7081,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1695863287
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -20548,6 +20548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec4dd41b93dfdb4ca61d9f7a1cfdf5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasSpotToRotate: 0
   timeBeforeSpot: 0
   spotToRotate: {fileID: 0}
   angleToRotateSpot: 20
@@ -20586,11 +20587,12 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   timeBetweenFootprints: 0.08
-  soundToAppearFootprints: {fileID: 8300000, guid: ed36107a548be9045ac98b68e96ad3fc,
-    type: 3}
   randomValuePitchFootprints: 0.5
-  scriptFille: {fileID: 0}
+  littleSisterScript: {fileID: 0}
+  isStandingAtStart: 0
+  hasToFall: 0
   timeBeforeFall: 0
+  easeToSlowDownBeforeFall: 0
   timeToFall: 0
 --- !u!1 &2093802433
 GameObject:
