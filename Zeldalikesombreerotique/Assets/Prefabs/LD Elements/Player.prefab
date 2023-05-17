@@ -287,12 +287,12 @@ MonoBehaviour:
   modelRotate: 0.1
   groundSpeed: 15
   sprintSpeed: 10
-  grabbedSpeed: 10
+  grabbedSpeed: 15
   minSpeed: 3
   maxSpeed: 4
   rotationSpeed: 1
-  grabbedMinFactor: 0.4
-  allowedDrift: 0.5
+  grabbedMinFactor: 0.1
+  allowedDrift: 0.52
   pickUpTime: 1
   playerDir: {x: 0, y: 0, z: 0}
   isGrounded: 1
@@ -313,6 +313,8 @@ MonoBehaviour:
   canPush: 1
   canPull: 1
   grabAdjustTimer: 0.3
+  decelerationFactor: 0.922
+  grabAccelerationTime: 1
   mask:
     serializedVersion: 2
     m_Bits: 1
