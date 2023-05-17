@@ -120,17 +120,19 @@ namespace Utilities
                 PlayerController.instance.canPull = true;
                 PlayerController.instance.canPush = true;
             }
-            /*foreach (var non in oui)
+            foreach (var non in oui)
             {
                 Debug.Log(non, non);
-            }*/
+            }
             for (int i = 0; i < oui.Length; i++)
             {
                 if (oui[i] == col) continue;
-                var delta1 = Vector3.Distance(frontSide, oui[i].ClosestPoint(frontSide))- Vector3.Distance(backSide, oui[i].ClosestPoint(backSide));
-                Debug.DrawLine(transform.position + frontSide, oui[i].ClosestPoint(frontSide),Color.blue);
-                Debug.DrawLine(transform.position + backSide, oui[i].ClosestPoint(backSide),Color.red);
-                if (delta1 > 0)
+                if (oui[i] == GetComponentInChildren<Collider>()) continue;
+                var distanceToFrontSide = Vector3.Distance(transform.position + frontSide, oui[i].ClosestPoint(transform.position + frontSide));
+                var distanceToBackSide = Vector3.Distance(transform.position + backSide, oui[i].ClosestPoint(transform.position + backSide));
+                Debug.DrawLine(transform.position + frontSide, oui[i].ClosestPoint(transform.position + frontSide),Color.blue);
+                Debug.DrawLine(transform.position + backSide, oui[i].ClosestPoint(transform.position + backSide),Color.red);
+                if (distanceToFrontSide > distanceToBackSide)
                 {
                     PlayerController.instance.canPull = false;
                     PlayerController.instance.canPush = true;

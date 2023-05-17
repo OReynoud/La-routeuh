@@ -59,11 +59,14 @@ namespace Player
 
         private const RigidbodyConstraints BaseConstraints = RigidbodyConstraints.FreezeRotation;
         public Gamepad gamepad;
-        public bool canRotateClockwise = true;
-        public bool canRotateCounterClockwise = true;
-        public bool canPush = true;
-        public bool canPull = true;
-        public float grabAdjustTimer;
+        [Foldout("Débug")]public bool canRotateClockwise = true;
+        [Foldout("Débug")]public bool canRotateCounterClockwise = true;
+        [Foldout("Débug")]public bool canPush = true;
+        [Foldout("Débug")]public bool canPull = true;
+        [Foldout("Variables pour Enzo")] [Tooltip("Le temps que le perso mets pour ajuster sa position en grabbant un objet")]public float grabAdjustTimer;
+        [Foldout("Variables pour Enzo")] [Tooltip("Plus c'est bas, plus la décélerration est forte")][Range(0,1)]public float decelerationFactor;
+        [Foldout("Variables pour Enzo")] [Tooltip("Le temps maximal avant avant que le joueur pousse/tire à pleine vitesse")]public float grabAccelerationTime;
+        [Foldout("Variables pour Enzo")][ShowNonSerializedField]private float accelerationTimer;
         private float grabTimer = 0;
         private bool oui;
         [Foldout("Autre")] public LayerMask mask;
@@ -115,6 +118,10 @@ namespace Player
                 inputLag -= Time.deltaTime;
             }
 
+            if (accelerationTimer < grabAccelerationTime)
+            {
+                accelerationTimer += Time.fixedDeltaTime;
+            }
             if (isGrabbing && grabTimer < grabAdjustTimer)
             {
                 oui = false;
@@ -177,7 +184,7 @@ namespace Player
         {
             //if (isGrabbing) Debug.Log("Decelerating");
             if (!isGrabbing)playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
-            rb.velocity *= 0.9f;
+            rb.velocity *= decelerationFactor;
             rb.angularVelocity = Vector3.zero;
         }
 
@@ -232,6 +239,7 @@ namespace Player
                     return;
                 }
 
+                rb.velocity = Vector3.zero;
                 grabTimer = 0;
                 canMove = false;
                 switch (objectType.mobilityType)
@@ -322,7 +330,7 @@ namespace Player
                     objectToGrab.GetComponent<ObjectReseter>().ResetObjects();
                     return;
                 }
-
+                rb.velocity = Vector3.zero;
                 grabTimer = 0;
                 canMove = false;
                 switch (objectType.mobilityType)
@@ -413,6 +421,12 @@ namespace Player
                 {
                     //Debug.Log("pushing");
                     playerDir = new Vector3(fwrd.x, playerDir.y, fwrd.z);
+                    var dirPush = playerDir - rb.velocity.normalized;
+                    var dpush = Mathf.Abs(dirPush.x) + Mathf.Abs(dirPush.z);
+                    if (Mathf.Abs(dpush) > 2f)
+                    {
+                        accelerationTimer = 0;
+                    }
                     var delta = Vector2.Distance(new Vector2(transform.position.x, transform.position.z),
                         new Vector2(objectType.handlePos.position.x, objectType.handlePos.position.z));
                     if (delta > 0.1f)
@@ -430,12 +444,18 @@ namespace Player
                     }
                     rig.SetBool("IsPushing",true);
                     
-                    rb.AddForce(playerDir * appliedModifier);
+                    rb.AddForce(playerDir * (appliedModifier * (accelerationTimer/grabAccelerationTime)));
                 }
                 else if(absDiff >= 2f && canPull) // Pulling
                 { 
                     //Debug.Log("pulling");
                     playerDir = new Vector3(-fwrd.x, playerDir.y, -fwrd.z);
+                    var dirPush = playerDir - rb.velocity.normalized;
+                    var dpush = Mathf.Abs(dirPush.x) + Mathf.Abs(dirPush.z);
+                    if (Mathf.Abs(dpush) > 2f)
+                    {
+                        accelerationTimer = 0;
+                    }
                     var delta = Vector2.Distance(new Vector2(transform.position.x, transform.position.z),
                         new Vector2(objectType.handlePos.position.x, objectType.handlePos.position.z));
                     if (delta > 0.3f)
@@ -455,7 +475,7 @@ namespace Player
                         return;
                     }
                     rig.SetBool("IsPushing",false);
-                    rb.AddForce(playerDir * appliedModifier);
+                    rb.AddForce(playerDir * (appliedModifier * (accelerationTimer/grabAccelerationTime)));
                 }
                 else
                 {

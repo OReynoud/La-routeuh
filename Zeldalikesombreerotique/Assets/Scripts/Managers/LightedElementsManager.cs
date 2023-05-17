@@ -17,6 +17,7 @@ namespace Managers
         internal readonly Dictionary<Shadow, Dictionary<Light, bool>> AffectedShadows = new();
         
         internal Coroutine CurrentCheckCoroutine;
+        internal bool DoCheckDictionaries = true;
 
         private void Awake()
         {
@@ -33,7 +34,14 @@ namespace Managers
         internal IEnumerator CheckDictionariesCoroutine()
         {
             yield return new WaitForEndOfFrame();
-            CheckDictionaries();
+            if (DoCheckDictionaries)
+            {
+                CheckDictionaries();
+            }
+            else
+            {
+                DoCheckDictionaries = true;
+            }
             CurrentCheckCoroutine = null;
         }
 

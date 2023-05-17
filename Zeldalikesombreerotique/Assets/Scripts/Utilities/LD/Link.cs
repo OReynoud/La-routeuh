@@ -25,7 +25,7 @@ namespace Utilities.LD
         [SerializeField] private Ease easeToDraw;
         private Sequence _drawSequence;
 
-        private void Start()
+        private void Awake()
         {
             _object1Position = objectToLink1.transform.position;
             _object2Position = objectToLink2.transform.position;
