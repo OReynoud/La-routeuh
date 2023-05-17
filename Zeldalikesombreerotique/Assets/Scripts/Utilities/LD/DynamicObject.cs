@@ -120,10 +120,10 @@ namespace Utilities
                 PlayerController.instance.canPull = true;
                 PlayerController.instance.canPush = true;
             }
-            /*foreach (var non in oui)
+            foreach (var non in oui)
             {
                 Debug.Log(non, non);
-            }*/
+            }
             for (int i = 0; i < oui.Length; i++)
             {
                 if (oui[i] == col) continue;
