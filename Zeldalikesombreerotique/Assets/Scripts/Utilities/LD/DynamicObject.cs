@@ -110,10 +110,10 @@ namespace Utilities
         {
             var oui = Physics.OverlapBox(col.center + transform.position, col.size * PlayerController.instance.overlapBoxSize + Vector3.up, transform.rotation,PlayerController.instance.mask);
 
-            foreach (var non in oui)
+            /*foreach (var non in oui)
             {
                 Debug.Log(non, non);
-            }
+            }*/
 
             var frontSide = transform.forward;
             var backSide = -transform.forward;
@@ -127,6 +127,7 @@ namespace Utilities
             {
                 if (i == 0) continue;
                 var delta1 = Vector3.Distance(frontSide, oui[i].ClosestPoint(frontSide))- Vector3.Distance(backSide, oui[i].ClosestPoint(backSide));
+                Debug.Log(delta1);
                 if (delta1 > 0)
                 {
                     PlayerController.instance.canPull = false;

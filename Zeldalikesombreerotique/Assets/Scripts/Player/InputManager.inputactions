@@ -43,20 +43,11 @@
                 },
                 {
                     "name": "SecondaryEnter",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "e402e382-1e21-427a-87f6-8a40ef13665f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "SecondaryLeave",
-                    "type": "Value",
-                    "id": "330a55d4-9b9b-4cf2-b940-9184c0c4da27",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press(pressPoint=1.401298E-45,behavior=1)",
                     "initialStateCheck": true
                 },
                 {
@@ -353,39 +344,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "InteractLeave",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6aed1d53-9905-42dc-b9e0-1ed22c84085e",
-                    "path": "<XInputController>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SecondaryLeave",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f25e6d43-5531-4e80-bf61-4f882098fdb5",
-                    "path": "<Keyboard>/c",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SecondaryLeave",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3f224eba-ad2e-4966-ba88-84980303258a",
-                    "path": "<XInputController>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SecondaryLeave",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

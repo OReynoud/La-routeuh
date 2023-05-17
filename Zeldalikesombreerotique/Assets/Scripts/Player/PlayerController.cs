@@ -65,6 +65,7 @@ namespace Player
         public bool canPull = true;
         public float grabAdjustTimer;
         private float grabTimer = 0;
+        private bool oui;
         [Foldout("Autre")] public LayerMask mask;
 
 
@@ -87,11 +88,11 @@ namespace Player
             controls.Enable();
             controls.Player.Enable();
             controls.Player.Move.performed += Move;
-            controls.Player.InteractEnter.performed += _ => PushPullEnter();
-            controls.Player.InteractLeave.performed += _ => PushPullLeave();
+            controls.Player.InteractEnter.performed += PushPullEnter;
+            controls.Player.InteractEnter.canceled += PushPullEnter;
             controls.Player.Sprint.performed += _ => TogleSprint();
-            controls.Player.SecondaryEnter.performed += _ => SecondaryInteract();
-            controls.Player.SecondaryLeave.performed += _ => SecondaryExit();
+            controls.Player.SecondaryEnter.performed += SecondaryInteract;
+            controls.Player.SecondaryEnter.canceled +=  SecondaryInteract;
             controls.Player.Oui.performed += _ => Test();
                 gamepad = Gamepad.current;
             
@@ -104,6 +105,10 @@ namespace Player
         }
         private void FixedUpdate()
         {
+            if (rb.velocity.y > 0)
+            {
+                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            }
             //incrémentation du inputBuffer pour éviter le spam de bouttons
             if (inputLag > 0)
             {
@@ -112,27 +117,28 @@ namespace Player
 
             if (isGrabbing && grabTimer < grabAdjustTimer)
             {
+                oui = false;
                 grabTimer += Time.fixedDeltaTime;
                 transform.position = Vector3.Lerp(transform.position, new Vector3(objectType.handlePos.position.x, transform.position.y, objectType.handlePos.position.z),grabTimer/grabAdjustTimer);
+                RotateModel();
                 return;
             }
-            else if(isGrabbing)
+            if(!oui && isGrabbing)
             {
+                oui = true;
                 if (!pushingPullingRotate)
                 {
                     
                     SetJoint(true);
                     rig.SetBool("IsGrabbing", true);
                     canMove = true;
-                    controls.Enable();
-                    RotateModel();
+                    
                 }
                 else
                 {
                     SetJoint(true);
                     canMove = true;
-                    controls.Enable();
-                    RotateModel();
+                    rig.SetBool("IsGrabbing", true);
                     joint.autoConfigureConnectedAnchor = false;
                     if (!objectType.isColliding)
                     {
@@ -187,10 +193,32 @@ namespace Player
         }
         
                                                                             #region ManipulationDobjets
-        public void PushPullEnter()
+        public void PushPullEnter(InputAction.CallbackContext context)
         {
-            if (!isGrabbing && !objectToGrab)
+            if (context.ReadValue<float>() == 0)
             {
+                if (pushingPullingRotate)return;
+                if (!objectToGrab || !objectType)return;
+                switch (objectType.mobilityType)
+                {
+                    case DynamicObject.MobilityType.CanCarry:
+                        PickupObject();
+                        break;
+                    case DynamicObject.MobilityType.CanMove:
+                        SetJoint(false);
+                        break;
+                    case DynamicObject.MobilityType.MoveWithHandle:
+                        SetJoint(false);
+                        break;
+                }
+                rig.SetBool("IsGrabbing",false);
+                pushingPullingRotate = false;
+                isGrabbing = false;
+                canMove = true;
+            }
+            else
+            {
+                if (isGrabbing || objectToGrab) return;
                 objectToGrab = GetClosestObject();
                 if (!objectToGrab)
                 {
@@ -205,12 +233,10 @@ namespace Player
                 }
 
                 grabTimer = 0;
-                controls.Disable();
                 canMove = false;
                 switch (objectType.mobilityType)
                 {
                     case DynamicObject.MobilityType.None:
-                        controls.Enable();
                         return;
                     case DynamicObject.MobilityType.CanCarry:
                         PickupObject();
@@ -238,71 +264,58 @@ namespace Player
                             if (coll != playerColl) continue;
                             isPlayerNear = true;
                             /*StartCoroutine(SetPlayerPos(0.3f,
-                                new Vector3(objectType.handlePos.position.x, transform.position.y,
-                                    objectType.handlePos.position.z)));*/
+                                    new Vector3(objectType.handlePos.position.x, transform.position.y,
+                                        objectType.handlePos.position.z)));*/
                             break;
                         }
 
                         if (!isPlayerNear)
                         {
                             Debug.Log("Player is too far from handle");
-                            controls.Enable();
                             canMove = true;
                             return;
                         }
                         isGrabbing = true;
+                        rig.SetBool("IsGrabbing", true);
                         break;
                 }
-                //transform.DOMove(transform.position, 0.3f).OnComplete((() => { }));
             }
+            //transform.DOMove(transform.position, 0.3f).OnComplete((() => { }));
         }
 
-        IEnumerator SetPlayerPos(float duration, Vector3 position)
-        {
-            yield return new WaitForSeconds(duration);
-            transform.position = position;
-            SetJoint(true);
-            canMove = true;
-            controls.Enable();
-            isGrabbing = true;
-            RotateModel();
-        }
-
-        public void PushPullLeave()
-        {
-            if (pushingPullingRotate)return;
-            if (!objectToGrab || !objectType)return;
-            switch (objectType.mobilityType)
-            {
-                case DynamicObject.MobilityType.CanCarry:
-                    PickupObject();
-                    break;
-                case DynamicObject.MobilityType.CanMove:
-                    SetJoint(false);
-                    break;
-                case DynamicObject.MobilityType.MoveWithHandle:
-                    SetJoint(false);
-                    break;
-            }
-
-            rig.SetBool("IsGrabbing",false);
-            pushingPullingRotate = false;
-            isGrabbing = false;
-        }
-        
         /// <summary>
         /// Switch entre le rotate et le pousser tirer
         /// </summary>
-        public void SecondaryInteract()
+        public void SecondaryInteract(InputAction.CallbackContext context)
         {
-            if (!isGrabbing && !objectToGrab)
+            Debug.Log(context.ReadValue<float>());
+            if (context.ReadValue<float>() == 0)
             {
-                objectToGrab = GetClosestObject();
-                if (!objectToGrab)
+                if (!pushingPullingRotate)return;
+                joint.autoConfigureConnectedAnchor = true;
+                objectToGrab.constraints = BaseConstraints;
+                switch (objectType.mobilityType)
                 {
-                    return;
+                    case DynamicObject.MobilityType.CanCarry:
+                        PickupObject();
+                        break;
+                    case DynamicObject.MobilityType.CanMove:
+                        SetJoint(false);
+                        break;
+                    case DynamicObject.MobilityType.MoveWithHandle:
+                        SetJoint(false);
+                        break;
                 }
-
+                rig.SetBool("IsGrabbing", false);
+                pushingPullingRotate = false;
+                isGrabbing = false;
+                canMove = true;
+            }
+            else
+            {
+                if (isGrabbing || objectToGrab) return;
+                objectToGrab = GetClosestObject();
+                if (!objectToGrab) return;
                 objectType = objectToGrab.GetComponent<DynamicObject>();
                 if (objectToGrab.GetComponent<ObjectReseter>())
                 {
@@ -311,12 +324,10 @@ namespace Player
                 }
 
                 grabTimer = 0;
-                controls.Disable();
                 canMove = false;
                 switch (objectType.mobilityType)
                 {
                     case DynamicObject.MobilityType.None:
-                        controls.Enable();
                         return;
                     case DynamicObject.MobilityType.CanCarry:
                         PickupObject();
@@ -352,48 +363,23 @@ namespace Player
                         if (!isPlayerNear)
                         {
                             Debug.Log("Player is too far from handle");
-                            controls.Enable();
                             canMove = true;
                             return;
                         }
 
                         break;
                 }
+
                 isGrabbing = true;
                 pushingPullingRotate = true;
                 rig.SetBool("IsGrabbing", true);
                 //transform.DOMove(transform.position, 0.3f).OnComplete((() => {}));
                 
-
-            }
-        }
-
-        public void SecondaryExit()
-        {
-            Debug.Log("1");
-            if (!pushingPullingRotate)return;
-            Debug.Log("2");
-            if (!objectToGrab || !objectType)return;
-            Debug.Log("3 c'est good");
-            joint.autoConfigureConnectedAnchor = true;
-            objectToGrab.constraints = BaseConstraints;
-            switch (objectType.mobilityType)
-            {
-                case DynamicObject.MobilityType.CanCarry:
-                    PickupObject();
-                    break;
-                case DynamicObject.MobilityType.CanMove:
-                    SetJoint(false);
-                    break;
-                case DynamicObject.MobilityType.MoveWithHandle:
-                    SetJoint(false);
-                    break;
             }
 
-            rig.SetBool("IsGrabbing",false);
-            pushingPullingRotate = false;
-            isGrabbing = false;
+
         }
+        
         /// <summary>
         /// </summary>
         /// <param name="appliedModifier"> modifcateur de force</param>
@@ -548,7 +534,6 @@ namespace Player
         {
             if (isGrabbing)
             {
-                controls.Disable();
                 rb.velocity = Vector3.zero;
                 canMove = false;
                 var rot = Quaternion.AngleAxis(transform.localRotation.eulerAngles.y, Vector3.up);
@@ -560,12 +545,10 @@ namespace Player
                     objectToGrab.isKinematic = true;
                     objectToGrab.transform.SetParent(null);
                     objectToGrab.useGravity = true;
-                    controls.Enable();
                 });
             }
             else
             {
-                controls.Disable();
                 var rot = Quaternion.AngleAxis(transform.localRotation.eulerAngles.y, Vector3.up);
                 var currentDir = rot * Vector3.forward;
                 var transform1 = transform;
@@ -578,7 +561,6 @@ namespace Player
                 {
                     canMove = true;
                     objectToGrab.isKinematic = true;
-                    controls.Enable();
                 });
             }
         }

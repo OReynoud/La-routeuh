@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -144,7 +144,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 81912248}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 253401715}
   - component: {fileID: 253401714}
   - component: {fileID: 253401713}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -346,7 +346,7 @@ GameObject:
   - component: {fileID: 339783322}
   - component: {fileID: 339783321}
   - component: {fileID: 339783320}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -1398,13 +1398,13 @@ MonoBehaviour:
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/right,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 883218532}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1851201280}
+        m_TargetAssemblyTypeName: Player.PlayerController, Assembly-CSharp
+        m_MethodName: PushPullEnter
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1414,13 +1414,13 @@ MonoBehaviour:
     m_ActionName: Player/InteractEnter[/Keyboard/space,/XInputControllerWindows/buttonSouth,/XInputControllerWindows/leftTrigger]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 883218532}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1851201280}
+        m_TargetAssemblyTypeName: Player.PlayerController, Assembly-CSharp
+        m_MethodName: PushPullLeave
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1446,13 +1446,13 @@ MonoBehaviour:
     m_ActionName: Player/Sprint[/Keyboard/shift]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 883218532}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 1851201280}
+        m_TargetAssemblyTypeName: Player.PlayerController, Assembly-CSharp
+        m_MethodName: SecondaryInteract
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1460,22 +1460,6 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: e402e382-1e21-427a-87f6-8a40ef13665f
     m_ActionName: Player/SecondaryEnter[/XInputControllerWindows/buttonEast,/Keyboard/c,/XInputControllerWindows/rightTrigger]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 883218532}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 330a55d4-9b9b-4cf2-b940-9184c0c4da27
-    m_ActionName: Player/SecondaryLeave[/XInputControllerWindows/buttonEast,/Keyboard/c,/XInputControllerWindows/rightTrigger]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: fc24154e-dda8-422c-9c9a-ff4b357a1893
@@ -1485,6 +1469,18 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1851201280 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
+    type: 3}
+  m_PrefabInstance: {fileID: 514780967}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 883218532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73991574b8684364eba7e0e3d9dd9b3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1852226879
 GameObject:
   m_ObjectHideFlags: 0
@@ -1589,7 +1585,7 @@ GameObject:
   - component: {fileID: 2032479420}
   - component: {fileID: 2032479419}
   - component: {fileID: 2032479418}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Cube (3)
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -1686,7 +1682,7 @@ GameObject:
   - component: {fileID: 2067586091}
   - component: {fileID: 2067586090}
   - component: {fileID: 2067586089}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -1846,7 +1842,7 @@ PrefabInstance:
     - target: {fileID: 4080244975864671295, guid: 0c4c067a6fa3977428d8a5b689cd5fa3,
         type: 3}
       propertyPath: m_Layer
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5263049707537139389, guid: 0c4c067a6fa3977428d8a5b689cd5fa3,
         type: 3}
@@ -1876,7 +1872,7 @@ PrefabInstance:
     - target: {fileID: 5901019342849153373, guid: 0c4c067a6fa3977428d8a5b689cd5fa3,
         type: 3}
       propertyPath: m_Layer
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6545029044101065192, guid: 0c4c067a6fa3977428d8a5b689cd5fa3,
         type: 3}
@@ -1886,7 +1882,7 @@ PrefabInstance:
     - target: {fileID: 6545029044101065192, guid: 0c4c067a6fa3977428d8a5b689cd5fa3,
         type: 3}
       propertyPath: m_Layer
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7595095616686552954, guid: 0c4c067a6fa3977428d8a5b689cd5fa3,
         type: 3}
@@ -1896,17 +1892,17 @@ PrefabInstance:
     - target: {fileID: 8365045341584129181, guid: 0c4c067a6fa3977428d8a5b689cd5fa3,
         type: 3}
       propertyPath: m_Layer
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8766165274463127469, guid: 0c4c067a6fa3977428d8a5b689cd5fa3,
         type: 3}
       propertyPath: m_Layer
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8766165274628586201, guid: 0c4c067a6fa3977428d8a5b689cd5fa3,
         type: 3}
       propertyPath: m_Layer
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8766165274628586205, guid: 0c4c067a6fa3977428d8a5b689cd5fa3,
         type: 3}
@@ -1916,7 +1912,7 @@ PrefabInstance:
     - target: {fileID: 8766165274960030922, guid: 0c4c067a6fa3977428d8a5b689cd5fa3,
         type: 3}
       propertyPath: m_Layer
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c4c067a6fa3977428d8a5b689cd5fa3, type: 3}
@@ -1947,7 +1943,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2114100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.09, y: 0.72, z: -1.45}
+  m_LocalPosition: {x: -5.94, y: 0.72, z: -7.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

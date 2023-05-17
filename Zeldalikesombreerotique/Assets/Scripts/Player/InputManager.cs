@@ -65,20 +65,11 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""SecondaryEnter"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""e402e382-1e21-427a-87f6-8a40ef13665f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""SecondaryLeave"",
-                    ""type"": ""Value"",
-                    ""id"": ""330a55d4-9b9b-4cf2-b940-9184c0c4da27"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press(pressPoint=1.401298E-45,behavior=1)"",
                     ""initialStateCheck"": true
                 },
                 {
@@ -377,39 +368,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""action"": ""InteractLeave"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6aed1d53-9905-42dc-b9e0-1ed22c84085e"",
-                    ""path"": ""<XInputController>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SecondaryLeave"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f25e6d43-5531-4e80-bf61-4f882098fdb5"",
-                    ""path"": ""<Keyboard>/c"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SecondaryLeave"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3f224eba-ad2e-4966-ba88-84980303258a"",
-                    ""path"": ""<XInputController>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SecondaryLeave"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -451,7 +409,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         m_Player_InteractLeave = m_Player.FindAction("InteractLeave", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_SecondaryEnter = m_Player.FindAction("SecondaryEnter", throwIfNotFound: true);
-        m_Player_SecondaryLeave = m_Player.FindAction("SecondaryLeave", throwIfNotFound: true);
         m_Player_Oui = m_Player.FindAction("Oui", throwIfNotFound: true);
     }
 
@@ -519,7 +476,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_InteractLeave;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_SecondaryEnter;
-    private readonly InputAction m_Player_SecondaryLeave;
     private readonly InputAction m_Player_Oui;
     public struct PlayerActions
     {
@@ -530,7 +486,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         public InputAction @InteractLeave => m_Wrapper.m_Player_InteractLeave;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @SecondaryEnter => m_Wrapper.m_Player_SecondaryEnter;
-        public InputAction @SecondaryLeave => m_Wrapper.m_Player_SecondaryLeave;
         public InputAction @Oui => m_Wrapper.m_Player_Oui;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -556,9 +511,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @SecondaryEnter.started += instance.OnSecondaryEnter;
             @SecondaryEnter.performed += instance.OnSecondaryEnter;
             @SecondaryEnter.canceled += instance.OnSecondaryEnter;
-            @SecondaryLeave.started += instance.OnSecondaryLeave;
-            @SecondaryLeave.performed += instance.OnSecondaryLeave;
-            @SecondaryLeave.canceled += instance.OnSecondaryLeave;
             @Oui.started += instance.OnOui;
             @Oui.performed += instance.OnOui;
             @Oui.canceled += instance.OnOui;
@@ -581,9 +533,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @SecondaryEnter.started -= instance.OnSecondaryEnter;
             @SecondaryEnter.performed -= instance.OnSecondaryEnter;
             @SecondaryEnter.canceled -= instance.OnSecondaryEnter;
-            @SecondaryLeave.started -= instance.OnSecondaryLeave;
-            @SecondaryLeave.performed -= instance.OnSecondaryLeave;
-            @SecondaryLeave.canceled -= instance.OnSecondaryLeave;
             @Oui.started -= instance.OnOui;
             @Oui.performed -= instance.OnOui;
             @Oui.canceled -= instance.OnOui;
@@ -629,7 +578,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         void OnInteractLeave(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnSecondaryEnter(InputAction.CallbackContext context);
-        void OnSecondaryLeave(InputAction.CallbackContext context);
         void OnOui(InputAction.CallbackContext context);
     }
 }
