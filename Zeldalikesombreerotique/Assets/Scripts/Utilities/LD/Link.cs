@@ -24,6 +24,8 @@ namespace Utilities.LD
         [SerializeField] private float timeToBeDrawn;
         [SerializeField] private Ease easeToDraw;
         private Sequence _drawSequence;
+        internal bool IsTotallyLinked;
+        internal bool IsDrawn;
 
         private void Awake()
         {
@@ -54,8 +56,11 @@ namespace Utilities.LD
             }
             else
             {
-                _drawSequence?.Kill();
-                enabledLineRenderer.enabled = false;
+                if (!IsTotallyLinked)
+                {
+                    _drawSequence?.Kill();
+                    enabledLineRenderer.enabled = false;
+                }
             }
         }
 
@@ -68,7 +73,11 @@ namespace Utilities.LD
             _drawSequence.Append(DOTween.To(() => enabledLineRenderer.GetPosition(positionIndex), 
                     x => enabledLineRenderer.SetPosition(positionIndex, x), 
                     endingPosition, timeToBeDrawn).SetEase(easeToDraw)
-                .OnComplete(() => _drawSequence = null));
+                .OnComplete(() =>
+                {
+                    _drawSequence = null;
+                    IsDrawn = true;
+                }));
         }
         
         private static Vector3 SlightlyLift(Vector3 position)

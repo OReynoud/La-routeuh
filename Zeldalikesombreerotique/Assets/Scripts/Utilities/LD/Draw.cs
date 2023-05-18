@@ -7,6 +7,8 @@ namespace Utilities.LD
     {
         internal readonly List<(Link link, int index)> Links = new();
         [SerializeField] private bool isEnabledAtStart;
+        internal readonly List<TrafficLights> LinkedTrafficLights = new();
+        internal bool IsEnabled;
         
         private void Start()
         {
@@ -18,12 +20,22 @@ namespace Utilities.LD
 
         internal void Disable()
         {
+            IsEnabled = false;
             ChangeLinkValues(false);
+            foreach (var trafficLight in LinkedTrafficLights)
+            {
+                trafficLight.CheckIfLinked();
+            }
         }
 
         internal void Enable()
         {
+            IsEnabled = true;
             ChangeLinkValues(true);
+            foreach (var trafficLight in LinkedTrafficLights)
+            {
+                trafficLight.CheckIfLinked();
+            }
         }
 
         private void ChangeLinkValues(bool isEnabled)
