@@ -137,10 +137,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 0
+  MaxDistance: 30
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -275,8 +275,8 @@ MonoBehaviour:
   audioSource: {fileID: 2320287228988089604}
   spotLight: {fileID: 2024067247114603715}
   coneMesh: {fileID: 3229064650883977465}
-  switchOnSound: {fileID: 0}
-  switchOffSound: {fileID: 0}
+  switchOnSound: {fileID: 8300000, guid: 727f4a9a92fc7d14d9e169ae6c957672, type: 3}
+  switchOffSound: {fileID: 8300000, guid: 727f4a9a92fc7d14d9e169ae6c957672, type: 3}
   objectsToAppear: []
   canSwitchOff: 0
   timeBeforeSwitchOff: 0
