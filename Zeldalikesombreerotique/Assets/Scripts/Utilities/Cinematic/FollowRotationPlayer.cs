@@ -7,7 +7,9 @@ namespace Utilities.Cinematic
     {
         private void Update()
         {
-            transform.LookAt(PlayerController.instance.transform);
+            var direction = PlayerController.instance.transform.position - transform.position;
+            direction = new Vector3(direction.x, 0f, direction.z);
+            transform.rotation = Quaternion.LookRotation(direction);
         }
     }
 }
