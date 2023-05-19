@@ -3,15 +3,15 @@ using Managers;
 using Player;
 using UnityEngine;
 
-namespace Utilities.LD
+namespace Utilities.Cinematic
 {
-    public class ShadowKill : MonoBehaviour
+    public class ThreateningCollision : MonoBehaviour
     {
-        [SerializeField] private float timeBeforeKill = 1f;
-        internal Transform RespawnPoint;
+        [SerializeField] private float timeBeforeKill;
+        [SerializeField] private Transform respawnPoint;
         private Coroutine _killPlayerCoroutine;
 
-        private void OnTriggerEnter(Collider other)
+        private void OnCollisionEnter(Collision other)
         {
             if (other.gameObject.CompareTag("Player") && !PlayerController.instance.isProtected)
             {
@@ -20,7 +20,7 @@ namespace Utilities.LD
             }
         }
 
-        private void OnTriggerExit(Collider other)
+        private void OnCollisionExit(Collision other)
         {
             if (other.gameObject.CompareTag("Player") && !PlayerController.instance.isProtected)
             {
@@ -39,7 +39,7 @@ namespace Utilities.LD
             yield return new WaitForSeconds(timeBeforeKill);
             
             CameraManager.Instance.NoMoreBoutToBeKilled();
-            PlayerController.instance.transform.position = RespawnPoint.position;
+            PlayerController.instance.transform.position = respawnPoint.position;
             
             _killPlayerCoroutine = null;
         }
