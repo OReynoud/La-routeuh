@@ -298,34 +298,46 @@ namespace Utilities.LD
 
         private void CreateMesh()
         {
+            // Create the mesh if it doesn't exist
+            if (!meshFilter.mesh)
+            {
+                meshFilter.mesh = new Mesh();
+            }
+            
+            // Clear the mesh
             var mesh = meshFilter.mesh;
             mesh.Clear();
-            mesh.vertices = null;
+            
+            // Initialize the arrays
             var verts = new Vector3[_rayOutPosition.Length * 3];
             var tris  = new int[_rayOutPosition.Length * 3];
+            var uvs  = new Vector2[_rayOutPosition.Length * 3];
 
+            // Fill the arrays
             var index = 0;
             for (var i = 0; i < _rayOutPosition.Length-1; i++)
             {
-                verts[index + 0] = transform.InverseTransformPoint(_rayOutPosition[i + 0]);
+                // Vertices
+                verts[index] = transform.InverseTransformPoint(_rayOutPosition[i]);
                 verts[index + 1] = transform.InverseTransformPoint(_rayOutPosition[i + 1]);
                 verts[index + 2] = Vector3.zero;
-                        
-                tris[index + 0] = index + 0;
+                
+                // Triangles
+                tris[index] = index;
                 tris[index + 2] = index + 1;
                 tris[index + 1] = index + 2;
                 
+                // UVs
+                uvs[index] = new Vector2(verts[index].x, verts[index].z);
+                uvs[index + 1] = new Vector2(verts[index + 1].x, verts[index + 1].z);
+                uvs[index + 2] = new Vector2(verts[index + 2].x, verts[index + 2].z);
+                
                 index +=3;
-            }
-
-            if (mesh == null)
-            {
-                meshFilter.mesh = new Mesh { vertices = verts, triangles = tris };
-                return;
             }
             
             mesh.vertices = verts;
             mesh.triangles = tris;
+            mesh.uv = uvs;
         }
     }
 }
