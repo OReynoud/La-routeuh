@@ -74,7 +74,7 @@ namespace Utilities.LD
             
             // Light component initialization
             _lightComponent.color = lightColorType.color;
-            lightMeshRenderer.material.color = new Color(lightColorType.color.r, lightColorType.color.g, lightColorType.color.b, 0.5f);
+            lightMeshRenderer.material.color = new Color(lightColorType.color.r, lightColorType.color.g, lightColorType.color.b, 1f);
             lightMeshRenderer.material.SetColor(EmissionColor, lightColorType.color);
             _lightComponent.range = distance;
             _lightComponent.spotAngle = angle;
