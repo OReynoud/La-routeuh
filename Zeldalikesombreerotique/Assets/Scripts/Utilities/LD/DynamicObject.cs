@@ -1,6 +1,12 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using NaughtyAttributes;
 using Player;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Networking.PlayerConnection;
+
 // ReSharper disable Unity.InefficientPropertyAccess
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 
@@ -41,7 +47,19 @@ namespace Utilities
         [ReadOnly]public bool isColliding;
         private bool _start;
         public float overlapBox = 1.6f;
-        
+        public bool isTutorial;
+        [ShowIf("isTutorial")] public float detectionRadius;
+        [ShowIf("isTutorial")] public float distanceTravelledRequired;
+        [ShowIf("isTutorial")] public float rotationRequired;
+        [ShowIf("isTutorial")] public Transform pushPullUI;
+        private List<SpriteRenderer> pushPullSprites = new List<SpriteRenderer>();
+        [ShowIf("isTutorial")] public Transform rotateUI;
+        private List<SpriteRenderer> rotateSprites = new List<SpriteRenderer>();
+        private bool pushPullActive;
+        private bool rotateActive;
+        private Vector3 lastSavedPos;
+        private Vector3 lastSavedRotation;
+
 
         private void Awake()
         {
@@ -49,6 +67,15 @@ namespace Utilities
             mesh = GetComponentInChildren<MeshRenderer>();
             rb = GetComponent<Rigidbody>();
             col = GetComponent<BoxCollider>();
+            if (!isTutorial) return;
+            for (int i = 0; i < pushPullUI.childCount; i++)
+            {
+                pushPullSprites.Add(pushPullUI.GetChild(i).GetComponent<SpriteRenderer>());
+            }
+            for (int i = 0; i < rotateUI.childCount; i++)
+            {
+                rotateSprites.Add(rotateUI.GetChild(i).GetComponent<SpriteRenderer>());
+            }
         }
 
         private void OnDrawGizmosSelected()
@@ -57,6 +84,11 @@ namespace Utilities
             //Gizmos.matrix = transform.localToWorldMatrix;
             Gizmos.color = Color.red;
             Gizmos.DrawWireCube(transform.position + Vector3.up * 0.5f, overlapBox * Vector3.one);
+            if (isTutorial)
+            {
+                Gizmos.color = Color.blue;
+                Gizmos.DrawWireSphere(transform.position,detectionRadius);
+            }
         }
 
         private void FixedUpdate()
@@ -66,6 +98,44 @@ namespace Utilities
                 if (!rb.isKinematic && !PlayerController.instance.pushingPullingRotate)
                 {
                     LautreCheckDeSesMorts();
+                }
+            }
+
+            if (isTutorial)
+            {
+                var coll = Physics.OverlapSphere(transform.position,detectionRadius);
+                foreach (var hit in coll)
+                {
+                    if (hit.gameObject == PlayerController.instance.gameObject && isTutorial)
+                    {
+                        isTutorial = false;
+                        pushPullActive = true;
+                        StartCoroutine(FadeIn(pushPullSprites));
+                        lastSavedPos = transform.position;
+                    }
+                }
+            }
+            
+            if (pushPullActive)
+            {
+                var diff = Mathf.Abs(lastSavedPos.magnitude - transform.position.magnitude);
+                distanceTravelledRequired -= diff;
+                if (distanceTravelledRequired <= 0)
+                {
+                    pushPullActive = false;
+                    rotateActive = true;
+                    StartCoroutine(FadeOut(pushPullSprites,true));
+                }
+            }
+
+            if (rotateActive)
+            {
+                var diff = Mathf.Abs(lastSavedRotation.magnitude - transform.rotation.eulerAngles.magnitude);
+                rotationRequired -= diff;
+                if (rotationRequired <= 0)
+                {
+                    rotateActive = false;
+                    StartCoroutine(FadeOut(rotateSprites, false));
                 }
             }
             if (visibilityType != VisibilityType.DelayedReappear) return;
@@ -173,6 +243,42 @@ namespace Utilities
             isColliding = false;
             PlayerController.instance.canRotateClockwise = true;
             PlayerController.instance.canRotateCounterClockwise = true;
+        }
+
+        IEnumerator FadeOut(List<SpriteRenderer> sprites, bool chainFadeIn)
+        {
+            foreach (var sr in sprites)
+            {
+                sr.color = Color.Lerp(sr.color,
+                    new Color(sr.color.r, sr.color.g, sr.color.b, 0),0.06f);
+            }
+            yield return new WaitForFixedUpdate();
+            if (sprites[0].color.a > 0.001f)
+            {
+                StartCoroutine(FadeOut(sprites, chainFadeIn));
+                Debug.Log("oui");
+                yield break;
+            }
+
+            if (chainFadeIn)
+            {
+                Debug.Log("cbon laaa");
+                lastSavedRotation = transform.rotation.eulerAngles;
+                StartCoroutine(FadeIn(rotateSprites));
+            }
+        }
+        IEnumerator FadeIn(List<SpriteRenderer> sprites)
+        {
+            foreach (var sr in sprites)
+            {
+                sr.color = Color.Lerp(sr.color,
+                    new Color(sr.color.r, sr.color.g, sr.color.b, 1),0.03f);
+            }
+            yield return new WaitForFixedUpdate();
+            if (sprites[0].color.a <= 0.9f)
+            {
+                StartCoroutine(FadeIn(sprites));
+            }
         }
     }
 }
