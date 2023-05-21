@@ -55,7 +55,7 @@ namespace Player
         [Foldout("Autre")] [SerializeField] private float yOffset = 2f;
         [Foldout("Autre")] public float rumbleIntensity;
         [Foldout("Variables pour Enzo")][Tooltip("La taille de la marge de sécurité pour la collision des spots")]public float overlapBoxSize = 2;
-        [Label("")] [ShowNonSerializedField][TextArea] private string agaga = "Tu peux avoir une représentation visuelle de la marge de sécurité en cliquant sur un spot, sous forme de box rouge, le script DynamicObject contient aussi OverlapBox Size";
+
         private float inputLag = 0.2f;
 
         private const RigidbodyConstraints BaseConstraints = RigidbodyConstraints.FreezeRotation;
@@ -71,7 +71,21 @@ namespace Player
         private float grabTimer = 0;
         private bool oui;
         [Foldout("Autre")] public LayerMask mask;
-
+        [HorizontalLine(2,EColor.Blue)]
+        [BoxGroup("Anim d'intro")]public bool introCinematic;
+        [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public Transform pointToMove;
+        [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public float timeToStandUp;
+        [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public float timeToPickUpCone;
+        [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public float timeToPutOnCone;
+        [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public Transform characterHand;
+        [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public Transform characterHead;
+        [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public Transform cone;
+        [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public Vector3 finalConePosition;
+        [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public Vector3 finalConeRotation;
+        [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public float conePutOnDuration;
+        
+        [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public float walkAnimationSpeed;
+        [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public float walkAnimationDuration;
 
         public void OnDrawGizmosSelected()
         {
@@ -79,7 +93,7 @@ namespace Player
         }
 
         private void Awake()
-        {
+        {   
             if (instance != null)
             {
                 DestroyImmediate(gameObject);
@@ -89,26 +103,57 @@ namespace Player
             instance = this;
             canMove = true;
             controls = new InputManager();
-            controls.Enable();
-            controls.Player.Enable();
+            
             controls.Player.Move.performed += Move;
             controls.Player.InteractEnter.performed += PushPullEnter;
             controls.Player.InteractEnter.canceled += PushPullEnter;
             controls.Player.Sprint.performed += _ => TogleSprint();
             controls.Player.SecondaryEnter.performed += SecondaryInteract;
             controls.Player.SecondaryEnter.canceled +=  SecondaryInteract;
-            controls.Player.Oui.performed += _ => Test();
                 gamepad = Gamepad.current;
-            
+                if (introCinematic)
+                {
+                    StartCoroutine(IntroCinematic());
+                }
+                else
+                {
+                    controls.Enable();
+                    controls.Player.Enable();
+                }
         }
         
         // Update is called once per frame
-        void Test()
+        IEnumerator IntroCinematic()
         {
-            Debug.Log("Test input");
+            Debug.Log("Starting cinematic");
+            rig.SetBool("isBullshit",true);
+            yield return new WaitForSeconds(timeToStandUp);
+            Debug.Log("Walking to cone");
+            rig.SetFloat("Speed", walkAnimationSpeed);
+            transform.DOJump(pointToMove.position,0,0, walkAnimationDuration);
+            yield return new WaitForSeconds(walkAnimationDuration);
+            Debug.Log("Picking up cone");
+            rig.SetFloat("Speed", -0.1f);
+            yield return new WaitForSeconds(timeToPickUpCone);
+            Debug.Log("Picked up cone");
+            cone.SetParent(characterHand);
+            yield return new WaitForSeconds(timeToPutOnCone);
+            Debug.Log("Putting cone on head");
+            cone.SetParent(characterHead);
+            yield return new WaitForSeconds(0.2f);
+            cone.DOLocalJump(finalConePosition,0.1f,1, conePutOnDuration);
+            cone.DOLocalRotate(finalConeRotation, conePutOnDuration);
+            yield return new WaitForSeconds(conePutOnDuration);
+            Debug.Log("Completed");
+            introCinematic = false;
+            rig.SetBool("isBullshit",false);
+            controls.Enable();
+            controls.Player.Enable();
+
         }
         private void FixedUpdate()
         {
+            if (introCinematic)return;
             if (rb.velocity.y > 0)
             {
                 rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
