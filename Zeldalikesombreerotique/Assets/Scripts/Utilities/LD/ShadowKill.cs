@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using Managers;
 using Player;
 using UnityEngine;
@@ -10,12 +11,17 @@ namespace Utilities.LD
         [SerializeField] private float timeBeforeKill = 1f;
         internal Transform RespawnPoint;
         private Coroutine _killPlayerCoroutine;
+        
+        [SerializeField] private float slowDownValue;
+        [SerializeField] private float slowDownTime;
+        [SerializeField] private Ease slowDownEase;
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Player") && !PlayerController.instance.isProtected)
             {
                 CameraManager.Instance.BoutToBeKilled();
+                DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, slowDownValue, slowDownTime).SetEase(slowDownEase);
                 _killPlayerCoroutine = StartCoroutine(KillPlayer());
             }
         }
