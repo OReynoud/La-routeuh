@@ -117,6 +117,8 @@ namespace Player
                 }
                 else
                 {
+                    var aga =Instantiate(cone.gameObject, finalConePosition + characterHead.position,Quaternion.identity, characterHead);
+                    aga.transform.DOLocalRotate(finalConeRotation, 0);
                     controls.Enable();
                     controls.Player.Enable();
                 }
@@ -125,26 +127,26 @@ namespace Player
         // Update is called once per frame
         IEnumerator IntroCinematic()
         {
-            Debug.Log("Starting cinematic");
+            //Debug.Log("Starting cinematic");
             rig.SetBool("isBullshit",true);
             yield return new WaitForSeconds(timeToStandUp);
-            Debug.Log("Walking to cone");
+            //Debug.Log("Walking to cone");
             rig.SetFloat("Speed", walkAnimationSpeed);
             transform.DOJump(pointToMove.position,0,0, walkAnimationDuration);
             yield return new WaitForSeconds(walkAnimationDuration);
-            Debug.Log("Picking up cone");
+            //Debug.Log("Picking up cone");
             rig.SetFloat("Speed", -0.1f);
             yield return new WaitForSeconds(timeToPickUpCone);
-            Debug.Log("Picked up cone");
+            //Debug.Log("Picked up cone");
             cone.SetParent(characterHand);
             yield return new WaitForSeconds(timeToPutOnCone);
-            Debug.Log("Putting cone on head");
+            //Debug.Log("Putting cone on head");
             cone.SetParent(characterHead);
             yield return new WaitForSeconds(0.2f);
             cone.DOLocalJump(finalConePosition,0.1f,1, conePutOnDuration);
             cone.DOLocalRotate(finalConeRotation, conePutOnDuration);
             yield return new WaitForSeconds(conePutOnDuration);
-            Debug.Log("Completed");
+            //Debug.Log("Completed");
             introCinematic = false;
             rig.SetBool("isBullshit",false);
             controls.Enable();

@@ -101,7 +101,7 @@ namespace Utilities
                 }
             }
 
-            if (isTutorial)
+            if (isTutorial && PlayerController.instance)
             {
                 var coll = Physics.OverlapSphere(transform.position,detectionRadius);
                 foreach (var hit in coll)
