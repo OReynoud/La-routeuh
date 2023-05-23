@@ -141,9 +141,9 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""2D Vector"",
                     ""id"": ""df9036a4-bc1a-4a57-8a96-2eea8ccc7732"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=2)"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""StickDeadzone(min=0.2,max=0.8),AxisDeadzone(min=0.2,max=0.8),Clamp(min=-1,max=1)"",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": true,
