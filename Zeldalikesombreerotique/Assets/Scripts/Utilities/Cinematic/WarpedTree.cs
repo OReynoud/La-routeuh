@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Utilities.Cinematic
 {
-    public class TornTree : MonoBehaviour
+    public class WarpedTree : MonoBehaviour
     {
         // Components
         [Header("Components")]
