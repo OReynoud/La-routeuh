@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -14,9 +15,9 @@ public class MainMenu : MonoBehaviour
     }
 
     // Update is called once per frame
-  /*  void Update()
+    void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Return))
+        /*if(Input.GetKeyDown(KeyCode.Return))
         {
             SceneValue += 1;
             if(SceneValue >= 4)
@@ -25,8 +26,8 @@ public class MainMenu : MonoBehaviour
             }
             PlayerPrefs.SetInt("TheValue", SceneValue);
             SceneManager.LoadScene(SceneName[SceneValue]);
-        }
-    } */
+        }*/
+    } 
 
     public void Play()
     {
