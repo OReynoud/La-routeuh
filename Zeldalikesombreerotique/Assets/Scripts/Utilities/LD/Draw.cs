@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Managers;
 using UnityEngine;
 
 namespace Utilities.LD
@@ -10,12 +12,26 @@ namespace Utilities.LD
         internal readonly List<TrafficLights> LinkedTrafficLights = new();
         internal bool IsEnabled;
         
+        private LightedElementsManager _lightedElementsManager;
+        
         private void Start()
         {
+            _lightedElementsManager = LightedElementsManager.Instance;
+            
             if (isEnabledAtStart)
             {
                 Enable();
             }
+        }
+
+        private void FixedUpdate()
+        {
+            if (IsEnabled)
+            {
+                _lightedElementsManager.RevealedObjects[gameObject] = true;
+            }
+            
+            _lightedElementsManager.CurrentCheckCoroutine ??= StartCoroutine(_lightedElementsManager.CheckDictionariesCoroutine());
         }
 
         internal void Disable()
