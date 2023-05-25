@@ -1,6 +1,8 @@
+using System;
 using DG.Tweening;
 using UnityEditor.Search;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace UI
@@ -9,18 +11,34 @@ namespace UI
     {
         public string[] SceneName;
         public int SceneValue;
+        public InputManager controls;
 
         public RectTransform mainGroup;
 
+        public ButtonScript[] mainButtons;
+
         public RectTransform optionGroup;
+        public ButtonScript[] optionButtons;
 
         public Vector3[] mainPos;
 
         public Vector3[] optionsPos;
         // Start is called before the first frame update
+        private void Awake()
+        {
+            controls.Enable();
+            controls.UIControls.Enable();
+            controls.UIControls.Selection.performed += SwapSelection;
+        }
+
         void Start()
         {
             SceneValue = PlayerPrefs.GetInt("TheValue", SceneValue);
+        }
+
+        void SwapSelection(InputAction.CallbackContext context)
+        {
+            var selectionDir = context.ReadValue<Vector2>().y > 0;
         }
 
         // Update is called once per frame
