@@ -2,7 +2,9 @@ using System;
 using DG.Tweening;
 using UnityEditor.Search;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 
 namespace UI
@@ -11,39 +13,44 @@ namespace UI
     {
         public string[] SceneName;
         public int SceneValue;
-        public InputManager controls;
-
+        private InputSystemUIInputModule input;
+        public RectTransform title;
+        public RectTransform controlsImage;
         public RectTransform mainGroup;
-
-        public ButtonScript[] mainButtons;
-
+        
         public RectTransform optionGroup;
-        public ButtonScript[] optionButtons;
 
-        public Vector3[] mainPos;
-
-        public Vector3[] optionsPos;
-        // Start is called before the first frame update
-        private void Awake()
+        public float mainOffset;
+        public float settingsOffset;
+        public float controlsOffset;
+        public enum Menus
         {
-            controls.Enable();
-            controls.UIControls.Enable();
-            controls.UIControls.Selection.performed += SwapSelection;
+            Main,
+            Option,
+            Credits
         }
+
+        public Menus currentMenu = Menus.Main;
+        // Start is called before the first frame update
+        
 
         void Start()
         {
             SceneValue = PlayerPrefs.GetInt("TheValue", SceneValue);
+            Cursor.lockState = CursorLockMode.Locked;
         }
-
-        void SwapSelection(InputAction.CallbackContext context)
-        {
-            var selectionDir = context.ReadValue<Vector2>().y > 0;
-        }
-
         // Update is called once per frame
         void Update()
         {
+            switch (currentMenu)
+            {
+                case Menus.Main:
+                    break;
+                case Menus.Option:
+                    break;
+                case Menus.Credits:
+                    break;
+            }
             /*if(Input.GetKeyDown(KeyCode.Return))
             {
                 SceneValue += 1;
@@ -63,14 +70,18 @@ namespace UI
 
         public void ShowOptions()
         {
-            mainGroup.DOMove(mainPos[1], 0.5f);
-            optionGroup.DOMove(optionsPos[0], 0.5f);
+            mainGroup.DOLocalMove(mainGroup.localPosition + Vector3.left * mainOffset, 0.5f);
+            title.DOLocalMove(title.localPosition + Vector3.left * mainOffset, 0.5f); 
+            optionGroup.DOLocalMove(optionGroup.localPosition + Vector3.up * settingsOffset, 0.5f);
+            controlsImage.DOLocalMove(controlsImage.localPosition + Vector3.down * controlsOffset, 0.5f);
         }
 
         public void HideOptions()
         {
-            mainGroup.DOMove(mainPos[0], 0.5f);
-            optionGroup.DOMove(optionsPos[1], 0.5f);
+            mainGroup.DOLocalMove(mainGroup.localPosition + Vector3.right * mainOffset, 0.5f);
+            title.DOLocalMove(title.localPosition + Vector3.right * mainOffset, 0.5f); 
+            optionGroup.DOLocalMove(optionGroup.localPosition + Vector3.down * settingsOffset, 0.5f);
+            controlsImage.DOLocalMove(controlsImage.localPosition + Vector3.up * controlsOffset, 0.5f);
         }
 
         public void ShowCredits()

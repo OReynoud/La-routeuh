@@ -1,34 +1,35 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using Utilities;
+using Button = UnityEngine.UI.Button;
+using Image = UnityEngine.UI.Image;
 
-public class ButtonScript : Selectable
+public class ButtonScript : MonoBehaviour, ISelectHandler, IDeselectHandler
 {
+    public Button self;
     private BaseEventData eventData;
-    public Color baseColor;
-    public Color highlightedColor;
-    public float baseScale = 0.25f;
-    public float highlightedScale = 0.3f;
+    public float baseScale = 1f;
+    public float highlightedScale = 1.05f;
 
     private Image sprite;
-    // Start is called before the first frame update
-
-    // Update is called once per frame
-    void FixedUpdate()
+    private void Awake()
     {
-        if (IsHighlighted())
-        {
-            targetGraphic.color = highlightedColor;
-            transform.localScale = Vector3.one * highlightedScale;
-            Debug.Log("Highlighted");
-        }
-        else
-        {
-            transform.localScale = Vector3.one * baseScale;
-            targetGraphic.color = baseColor;
-        }
+        self = GetComponent<Button>();
+    }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        transform.localScale = Vector3.one * highlightedScale;
+    }
+
+    public void OnDeselect(BaseEventData eventData)
+    {
+        transform.localScale = Vector3.one * baseScale;
     }
 }
+    
