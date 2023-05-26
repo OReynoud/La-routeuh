@@ -11,7 +11,6 @@ namespace UI
 {
     internal class MainMenuManager : MonoBehaviour
     {
-        public string[] SceneName;
         public int SceneValue;
         private InputSystemUIInputModule input;
         public RectTransform title;
@@ -23,14 +22,6 @@ namespace UI
         public float mainOffset;
         public float settingsOffset;
         public float controlsOffset;
-        public enum Menus
-        {
-            Main,
-            Option,
-            Credits
-        }
-
-        public Menus currentMenu = Menus.Main;
         // Start is called before the first frame update
         
 
@@ -40,28 +31,20 @@ namespace UI
             Cursor.lockState = CursorLockMode.Locked;
         }
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
-            switch (currentMenu)
+            if (Keyboard.current.anyKey.isPressed && Cursor.lockState != CursorLockMode.None)
             {
-                case Menus.Main:
-                    break;
-                case Menus.Option:
-                    break;
-                case Menus.Credits:
-                    break;
+                Debug.Log("switch to mouse kb");
+                Cursor.lockState = CursorLockMode.None;
             }
-            /*if(Input.GetKeyDown(KeyCode.Return))
+
+            if (Gamepad.current.wasUpdatedThisFrame && Cursor.lockState != CursorLockMode.Locked)
             {
-                SceneValue += 1;
-                if(SceneValue >= 4)
-                {
-                    SceneValue = 0;
-                }
-                PlayerPrefs.SetInt("TheValue", SceneValue);
-                SceneManager.LoadScene(SceneName[SceneValue]);
-            }*/
-        } 
+                Debug.Log("switch to gamepad");
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
 
         public void Play()
         {
@@ -90,6 +73,20 @@ namespace UI
         }
 
         public void HideCredits()
+        {
+            
+        }
+
+        public void UpdateSoundSettings()
+        {
+            
+        }
+
+        public void UpdateMusicSettings()
+        {
+            
+        }
+        public void UpdateVibrationSettings()
         {
             
         }
