@@ -219,8 +219,10 @@ namespace Player
             }
             if (isGrabbing && objectType.mobilityType is DynamicObject.MobilityType.CanMove or DynamicObject.MobilityType.MoveWithHandle)    //Si le joueur bouge en grabbant un truc
             {
-                
-                gamepad?.SetMotorSpeeds(0f,0f);
+                if (PlayerPrefs.GetInt("Vibrations",1) == 1)
+                {
+                    gamepad?.SetMotorSpeeds(0f,0f);
+                }
                 ApplyForce(grabbedSpeed);
             }
             else
