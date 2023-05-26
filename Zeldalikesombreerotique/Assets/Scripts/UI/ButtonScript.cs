@@ -8,11 +8,11 @@ using UnityEngine.UIElements;
 using Utilities;
 using Button = UnityEngine.UI.Button;
 using Image = UnityEngine.UI.Image;
+using Toggle = UnityEngine.UI.Toggle;
 
-public class ButtonScript : MonoBehaviour, ISelectHandler, IDeselectHandler
+public class ButtonScript : MonoBehaviour, ISelectHandler, IDeselectHandler, ISubmitHandler
 {
     public Button self;
-    private BaseEventData eventData;
     public float baseScale = 1f;
     public float highlightedScale = 1.05f;
 
@@ -30,6 +30,14 @@ public class ButtonScript : MonoBehaviour, ISelectHandler, IDeselectHandler
     public void OnDeselect(BaseEventData eventData)
     {
         transform.localScale = Vector3.one * baseScale;
+    }
+
+    public void OnSubmit(BaseEventData eventData)
+    {
+        if (transform.GetComponentInChildren<Toggle>())
+        {
+            transform.GetComponentInChildren<Toggle>().isOn = !transform.GetComponentInChildren<Toggle>().isOn;
+        }
     }
 }
     
