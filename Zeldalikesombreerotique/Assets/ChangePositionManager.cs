@@ -24,7 +24,7 @@ public class ChangePositionManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Keypad0) && currentScene == "LesPetitsPuzzles")
+        if(Input.GetKeyDown(KeyCode.Keypad0) && currentScene == "Puzzle2 Layout")
         {
                 if(currentPuzzle == 3)
               {
