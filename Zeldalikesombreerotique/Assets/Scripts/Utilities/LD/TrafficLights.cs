@@ -19,9 +19,9 @@ namespace Utilities.LD
             }
         }
 
-        internal void CheckIfLinked()
+        internal bool CheckIfLinked()
         {
-            if (appearedDraws.Any(draw => !draw.IsEnabled)) return;
+            if (appearedDraws.Any(draw => !draw.IsEnabled)) return false;
 
             foreach (var draw in appearedDraws)
             {
@@ -32,6 +32,8 @@ namespace Utilities.LD
             }
 
             StartCoroutine(ChangeLightColor());
+            
+            return true;
         }
 
         private IEnumerator ChangeLightColor()

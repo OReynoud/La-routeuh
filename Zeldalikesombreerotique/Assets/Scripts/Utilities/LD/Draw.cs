@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using Managers;
 using UnityEngine;
 
@@ -36,6 +36,8 @@ namespace Utilities.LD
 
         internal void Disable()
         {
+            if (LinkedTrafficLights.All(x => x.CheckIfLinked())) return;
+            
             IsEnabled = false;
             ChangeLinkValues(false);
             foreach (var trafficLight in LinkedTrafficLights)

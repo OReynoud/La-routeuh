@@ -18,6 +18,7 @@ namespace Utilities.Cinematic
         [ShowIf("canSwitchOff")] [SerializeField] private float timeBeforeSwitchOff;
         private Coroutine _switchOffCoroutine;
         private WaitForSeconds _switchOffWaitForSeconds;
+        private bool _isOn;
         
         private void Awake()
         {
@@ -26,7 +27,7 @@ namespace Utilities.Cinematic
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (other.CompareTag("Player") && !_isOn)
             {
                 if (_switchOffCoroutine != null)
                 {
@@ -36,6 +37,7 @@ namespace Utilities.Cinematic
                 spotLight.SetActive(true);
                 coneMesh.SetActive(true);
                 audioSource.PlayOneShot(switchOnSound);
+                _isOn = true;
                 
                 foreach (var objectToAppear in objectsToAppear)
                 {
@@ -65,6 +67,7 @@ namespace Utilities.Cinematic
             spotLight.SetActive(false);
             coneMesh.SetActive(false);
             audioSource.PlayOneShot(switchOffSound);
+            _isOn = false;
                 
             foreach (var objectToAppear in objectsToAppear)
             {
