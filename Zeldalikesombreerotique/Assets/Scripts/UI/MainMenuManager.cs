@@ -1,8 +1,6 @@
 using System;
 using DG.Tweening;
-using UnityEditor.Search;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
