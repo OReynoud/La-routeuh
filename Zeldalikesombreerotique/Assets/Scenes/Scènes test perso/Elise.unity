@@ -7910,7 +7910,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 848715047}
   m_LocalRotation: {x: 0.38226506, y: 0.0056685093, z: -0.0023452088, w: 0.92403233}
-  m_LocalPosition: {x: -4.63, y: -14.82, z: -12.75}
+  m_LocalPosition: {x: -17.32, y: -14.37, z: -17.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9962,7 +9962,7 @@ ParticleSystemRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_RenderMode: 3
+  m_RenderMode: 2
   m_MeshDistribution: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -10000,7 +10000,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1609275684}
   serializedVersion: 8
-  lengthInSec: 5
+  lengthInSec: 26.4
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -10075,7 +10075,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 9.7
+      scalar: 38.05
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -10826,7 +10826,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 4
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -13636,7 +13636,7 @@ ParticleSystem:
     m_Bounce:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -14707,7 +14707,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1609275684}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -5.29, y: -16.08, z: -7.4}
+  m_LocalPosition: {x: -16.32, y: -12.28, z: -10.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16563,6 +16563,7 @@ GameObject:
   - component: {fileID: 2078238770}
   - component: {fileID: 2078238769}
   - component: {fileID: 2078238768}
+  - component: {fileID: 2078238772}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -16579,9 +16580,9 @@ MeshCollider:
   m_GameObject: {fileID: 2078238767}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &2078238769
@@ -16649,6 +16650,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 140
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2078238772
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2078238767}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 2.2204459e-16, z: 9.999999}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2103447920
 PrefabInstance:
   m_ObjectHideFlags: 0
