@@ -32,7 +32,7 @@ public class UIObject : MonoBehaviour
     {
         if (!switchWithOrientation)
         { 
-            transform.position = new Vector3(objectToFollow.localPosition.x + xOffset, 0.01f,objectToFollow.localPosition.z + yOffset);
+            transform.position = new Vector3(objectToFollow.position.x + xOffset, 0.01f,objectToFollow.position.z + yOffset);
             return;
         }
 
@@ -41,14 +41,14 @@ public class UIObject : MonoBehaviour
             transform.position =
                 new Vector3(objectToFollow.position.x - xOffset, 0.01f, objectToFollow.position.z - yOffset) -
                 objectToFollow.right; 
-            sr.flipX = true;
+            sr.flipY = true;
         }
         else
         {
             transform.position =
                 new Vector3(objectToFollow.position.x + xOffset, 0.01f, objectToFollow.position.z + yOffset) +
                 objectToFollow.right; 
-            sr.flipX = false;
+            sr.flipY = false;
         }
     }
 
