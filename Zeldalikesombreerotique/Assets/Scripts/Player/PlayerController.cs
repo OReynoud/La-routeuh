@@ -128,6 +128,7 @@ namespace Player
         IEnumerator IntroCinematic()
         {
             //Debug.Log("Starting cinematic");
+            rb.isKinematic = true;
             rig.SetBool("isBullshit",true);
             yield return new WaitForSeconds(timeToStandUp);
             //Debug.Log("Walking to cone");
@@ -151,7 +152,7 @@ namespace Player
             rig.SetBool("isBullshit",false);
             controls.Enable();
             controls.Player.Enable();
-
+            rb.isKinematic = false;
         }
         private void FixedUpdate()
         {
