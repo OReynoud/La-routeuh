@@ -11,6 +11,8 @@ namespace Utilities.LD
         [SerializeField] private float timeBeforeKill = 1f;
         internal Transform RespawnPoint;
         private Coroutine _killPlayerCoroutine;
+        private float _tempPlayerMaxSpeed;
+        private Tween _slowDownTween;
         
         [SerializeField] private float slowDownValue;
         [SerializeField] private float slowDownTime;
@@ -21,7 +23,8 @@ namespace Utilities.LD
             if (other.gameObject.CompareTag("Player") && !PlayerController.instance.isProtected)
             {
                 CameraManager.Instance.BoutToBeKilled();
-                DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, slowDownValue, slowDownTime).SetEase(slowDownEase);
+                _tempPlayerMaxSpeed = PlayerController.instance.maxSpeed;
+                _slowDownTween = DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, slowDownValue, slowDownTime).SetEase(slowDownEase);
                 _killPlayerCoroutine = StartCoroutine(KillPlayer());
             }
         }
@@ -35,6 +38,8 @@ namespace Utilities.LD
                     StopCoroutine(_killPlayerCoroutine);
                     _killPlayerCoroutine = null;
                     
+                    _slowDownTween.Kill();
+                    PlayerController.instance.maxSpeed = _tempPlayerMaxSpeed;
                     CameraManager.Instance.NoMoreBoutToBeKilled(true);
                 }
             }
@@ -46,6 +51,7 @@ namespace Utilities.LD
             
             CameraManager.Instance.NoMoreBoutToBeKilled();
             PlayerController.instance.transform.position = RespawnPoint.position;
+            PlayerController.instance.maxSpeed = _tempPlayerMaxSpeed;
             
             _killPlayerCoroutine = null;
         }
