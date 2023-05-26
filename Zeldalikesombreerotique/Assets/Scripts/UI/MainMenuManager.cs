@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -20,6 +21,10 @@ namespace UI
         public float mainOffset;
         public float settingsOffset;
         public float controlsOffset;
+
+        public Slider soundSlider;
+        public Slider musicSlider;
+        public Toggle vibrationsCheck;
         // Start is called before the first frame update
         
 
@@ -77,16 +82,16 @@ namespace UI
 
         public void UpdateSoundSettings()
         {
-            
+            PlayerPrefs.SetFloat("Sound",soundSlider.value);
         }
 
         public void UpdateMusicSettings()
         {
-            
+            PlayerPrefs.SetFloat("Music",musicSlider.value);
         }
         public void UpdateVibrationSettings()
         {
-            
+            PlayerPrefs.SetInt("Vibrations",vibrationsCheck.isOn? 1:0);
         }
     }
 }

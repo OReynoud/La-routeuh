@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Utilities;
@@ -15,6 +16,8 @@ public class ButtonScript : MonoBehaviour, ISelectHandler, IDeselectHandler, ISu
     public Button self;
     public float baseScale = 1f;
     public float highlightedScale = 1.05f;
+    public Image checkedBox;
+    public Image uncheckedBox;
 
     private Image sprite;
     private void Awake()
@@ -36,7 +39,18 @@ public class ButtonScript : MonoBehaviour, ISelectHandler, IDeselectHandler, ISu
     {
         if (transform.GetComponentInChildren<Toggle>())
         {
-            transform.GetComponentInChildren<Toggle>().isOn = !transform.GetComponentInChildren<Toggle>().isOn;
+            var state = transform.GetComponentInChildren<Toggle>().isOn;
+            transform.GetComponentInChildren<Toggle>().isOn = !state;
+            if (!state == false)
+            {
+                uncheckedBox.enabled = true;
+                checkedBox.enabled = false;
+            }
+            else
+            {
+                uncheckedBox.enabled = false;
+                checkedBox.enabled = true;
+            }
         }
     }
 }

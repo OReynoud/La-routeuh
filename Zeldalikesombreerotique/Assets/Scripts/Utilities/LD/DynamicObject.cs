@@ -158,8 +158,10 @@ namespace Utilities
             }
             if (PlayerController.instance.pushingPullingRotate)
             {
-                    
-                PlayerController.instance.gamepad?.SetMotorSpeeds(PlayerController.instance.rumbleIntensity,PlayerController.instance.rumbleIntensity);
+                if (PlayerPrefs.GetInt("Vibrations", 1) == 1)
+                {
+                    PlayerController.instance.gamepad?.SetMotorSpeeds(PlayerController.instance.rumbleIntensity,PlayerController.instance.rumbleIntensity);
+                }
                 rb.constraints = RigidbodyConstraints.FreezeAll;
                 Collider[] oui;
                 do
