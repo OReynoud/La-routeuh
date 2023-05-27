@@ -117,8 +117,12 @@ namespace Player
                 }
                 else
                 {
-                    var aga =Instantiate(cone.gameObject, finalConePosition + characterHead.position,Quaternion.identity, characterHead);
-                    aga.transform.DOLocalRotate(finalConeRotation, 0);
+                    if (cone)
+                    {
+                        var aga = Instantiate(cone.gameObject, finalConePosition + characterHead.position,Quaternion.identity, characterHead);
+                        aga.transform.DOLocalRotate(finalConeRotation, 0);
+                        Debug.Log("Le cône tête de cul !");
+                    }
                     controls.Enable();
                     controls.Player.Enable();
                 }
