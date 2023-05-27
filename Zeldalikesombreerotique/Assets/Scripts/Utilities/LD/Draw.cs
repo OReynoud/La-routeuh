@@ -11,6 +11,7 @@ namespace Utilities.LD
         [SerializeField] private bool isEnabledAtStart;
         internal readonly List<TrafficLights> LinkedTrafficLights = new();
         internal bool IsEnabled;
+        internal bool IsPermanentlyEnabled;
         
         private LightedElementsManager _lightedElementsManager;
         
@@ -40,20 +41,15 @@ namespace Utilities.LD
             
             IsEnabled = false;
             ChangeLinkValues(false);
-            foreach (var trafficLight in LinkedTrafficLights)
-            {
-                trafficLight.CheckIfLinked();
-            }
         }
 
         internal void Enable()
         {
+            if (IsPermanentlyEnabled) return;
+            
+            LinkedTrafficLights.ForEach(x => x.CheckIfLinked());
             IsEnabled = true;
             ChangeLinkValues(true);
-            foreach (var trafficLight in LinkedTrafficLights)
-            {
-                trafficLight.CheckIfLinked();
-            }
         }
 
         private void ChangeLinkValues(bool isEnabled)

@@ -38,6 +38,8 @@ namespace Utilities.LD
 
             foreach (var draw in appearedDraws)
             {
+                draw.IsPermanentlyEnabled = true;
+                
                 foreach (var link in draw.Links)
                 {
                     link.link.IsTotallyLinked = true;
