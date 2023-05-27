@@ -8,14 +8,11 @@ namespace Utilities.Cinematic
         [Header("Components")]
         [SerializeField] private Animator animator;
 
-        // Animator values
-        private static readonly int Torn = Animator.StringToHash("Torn");
-
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
             {
-                animator.SetTrigger(Torn);
+                animator.enabled = true;
             }
         }
     }
