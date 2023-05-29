@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3545157729509720581}
   - component: {fileID: 476596205366234528}
   - component: {fileID: 2412173414303775082}
-  - component: {fileID: 2988706219542185178}
+  - component: {fileID: 6719790569540840465}
   m_Layer: 0
   m_Name: "l\xE9go un cran"
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2988706219542185178
-MeshCollider:
+--- !u!65 &6719790569540840465
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94,7 +94,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 8185898599955483056, guid: 92c520875e6503c47b53028a9db54311, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 1, z: 0.5}
+  m_Center: {x: 0, y: 0.5, z: 6.501325e-16}
