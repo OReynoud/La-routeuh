@@ -18,7 +18,17 @@ public class Parkour : MonoBehaviour
     
     public void OnDrawGizmos()
     {
-        
+        for (int j = 0; j < startPoint.Count; j++)
+        {
+            for (float i = 0; i < 1; i += 0.05f)
+            {
+                var m1 = Vector3.Lerp( startPoint[j].position, controlPoint[j].position, i );
+                var m2 = Vector3.Lerp( controlPoint[j].position, endPoint[j].position, i );
+                Gizmos.DrawSphere(Vector3.Lerp(m1, m2, i),0.1f);
+                Gizmos.DrawLine(startPoint[j].position,controlPoint[j].position);
+                Gizmos.DrawLine(endPoint[j].position,controlPoint[j].position);
+            }
+        }
     }
     private void FixedUpdate()
     {
@@ -62,4 +72,12 @@ public class Parkour : MonoBehaviour
             objectToMove.SetActive(true);
         }
     }
+
+    /*private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            TriggerGirl(true);
+        }
+    }*/
 }
