@@ -103,7 +103,7 @@ namespace Player
             instance = this;
             canMove = true;
             controls = new InputManager();
-            
+            rig.transform.rotation = Quaternion.identity;
             controls.Player.Move.performed += Move;
             controls.Player.InteractEnter.performed += PushPullEnter;
             controls.Player.InteractEnter.canceled += PushPullEnter;
