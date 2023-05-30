@@ -18,7 +18,7 @@ namespace Player
         public static PlayerController instance;
         [Foldout("Références")]public Rigidbody rb;
         [Foldout("Références")]public ConfigurableJoint joint;
-        [Foldout("Références")] public Animator rig;
+        [Foldout("Références")] public Animator[] rig;
         [Foldout("Références")] public Collider playerColl;
 
         [HorizontalLine(color: EColor.Black)] [BoxGroup("Mouvements")] [Range(0,1)] public float modelRotate;
@@ -103,7 +103,7 @@ namespace Player
             instance = this;
             canMove = true;
             controls = new InputManager();
-            rig.transform.rotation = Quaternion.identity;
+            rig[1].transform.rotation = Quaternion.identity;
             controls.Player.Move.performed += Move;
             controls.Player.InteractEnter.performed += PushPullEnter;
             controls.Player.InteractEnter.canceled += PushPullEnter;
@@ -133,14 +133,14 @@ namespace Player
         {
             //Debug.Log("Starting cinematic");
             rb.isKinematic = true;
-            rig.SetBool("isBullshit",true);
+            rig[0].SetBool("isBullshit",true);
             yield return new WaitForSeconds(timeToStandUp);
             //Debug.Log("Walking to cone");
-            rig.SetFloat("Speed", walkAnimationSpeed);
+            rig[0].SetFloat("Speed", walkAnimationSpeed);
             transform.DOJump(pointToMove.position,0,0, walkAnimationDuration);
             yield return new WaitForSeconds(walkAnimationDuration);
             //Debug.Log("Picking up cone");
-            rig.SetFloat("Speed", -0.1f);
+            rig[0].SetFloat("Speed", -0.1f);
             yield return new WaitForSeconds(timeToPickUpCone);
             //Debug.Log("Picked up cone");
             cone.SetParent(characterHand);
@@ -153,10 +153,12 @@ namespace Player
             yield return new WaitForSeconds(conePutOnDuration);
             //Debug.Log("Completed");
             introCinematic = false;
-            rig.SetBool("isBullshit",false);
+            rig[0].SetBool("isBullshit",false);
             controls.Enable();
             controls.Player.Enable();
             rb.isKinematic = false;
+            rig[0].gameObject.SetActive(false);
+            rig[1].gameObject.SetActive(true);
         }
         private void FixedUpdate()
         {
@@ -190,7 +192,7 @@ namespace Player
                 {
                     
                     SetJoint(true);
-                    rig.SetBool("IsGrabbing", true);
+                    rig[0].SetBool("IsGrabbing", true);
                     canMove = true;
                     
                 }
@@ -198,7 +200,7 @@ namespace Player
                 {
                     SetJoint(true);
                     canMove = true;
-                    rig.SetBool("IsGrabbing", true);
+                    rig[0].SetBool("IsGrabbing", true);
                     joint.autoConfigureConnectedAnchor = false;
                     if (!objectType.isColliding)
                     {
@@ -207,16 +209,16 @@ namespace Player
                 }
             }
             var speedFactor = rb.velocity.magnitude / maxSpeed;
-            if (!proofOfConcept) rig.SetFloat("Speed",speedFactor);
+            if (!proofOfConcept) rig[0].SetFloat("Speed",speedFactor);
             if (!canMove)
             {
-                if (!proofOfConcept)rig.SetBool("isWalking", false);
+                if (!proofOfConcept)rig[0].SetBool("isWalking", false);
                 return;
             }
             if (!controls.Player.Move.IsPressed() && isGrounded)    //Si ya aucune input du joueur
             {
-                if (!proofOfConcept)rig.SetBool("isWalking", false);
-                rig.SetBool("IsPushing",false);
+                if (!proofOfConcept)rig[0].SetBool("isWalking", false);
+                rig[0].SetBool("IsPushing",false);
                 Decelerate();
                 gamepad?.SetMotorSpeeds(0f,0f);
                 return;
@@ -273,7 +275,7 @@ namespace Player
                         SetJoint(false);
                         break;
                 }
-                rig.SetBool("IsGrabbing",false);
+                rig[0].SetBool("IsGrabbing",false);
                 pushingPullingRotate = false;
                 isGrabbing = false;
                 canMove = true;
@@ -339,7 +341,7 @@ namespace Player
                             return;
                         }
                         isGrabbing = true;
-                        rig.SetBool("IsGrabbing", true);
+                        rig[0].SetBool("IsGrabbing", true);
                         break;
                 }
             }
@@ -369,7 +371,7 @@ namespace Player
                         SetJoint(false);
                         break;
                 }
-                rig.SetBool("IsGrabbing", false);
+                rig[0].SetBool("IsGrabbing", false);
                 pushingPullingRotate = false;
                 isGrabbing = false;
                 canMove = true;
@@ -435,7 +437,7 @@ namespace Player
 
                 isGrabbing = true;
                 pushingPullingRotate = true;
-                rig.SetBool("IsGrabbing", true);
+                rig[0].SetBool("IsGrabbing", true);
                 //transform.DOMove(transform.position, 0.3f).OnComplete((() => {}));
                 
             }
@@ -450,7 +452,7 @@ namespace Player
         private void ApplyForce(float appliedModifier)
         {
             RotateModel();
-            if (!proofOfConcept)rig.SetBool("isWalking", true);
+            if (!proofOfConcept)rig[0].SetBool("isWalking", true);
             var dx = playerDir - rb.velocity.normalized;
             if (Mathf.Abs(dx.x) > allowedDrift)
             {
@@ -497,7 +499,7 @@ namespace Player
                         rb.velocity = ctxMax * playerDir;
                         return;
                     }
-                    rig.SetBool("IsPushing",true);
+                    rig[0].SetBool("IsPushing",true);
                     
                     rb.AddForce(playerDir * (appliedModifier * (accelerationTimer/grabAccelerationTime)));
                 }
@@ -529,7 +531,7 @@ namespace Player
                         rb.velocity = (ctxMax) * playerDir;
                         return;
                     }
-                    rig.SetBool("IsPushing",false);
+                    rig[0].SetBool("IsPushing",false);
                     rb.AddForce(playerDir * (appliedModifier * (accelerationTimer/grabAccelerationTime)));
                 }
                 else

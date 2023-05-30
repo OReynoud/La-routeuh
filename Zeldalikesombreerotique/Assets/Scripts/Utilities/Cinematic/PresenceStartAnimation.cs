@@ -108,13 +108,13 @@ namespace Utilities.Cinematic
             PlayerController.instance.controls.Disable();
             PlayerController.instance.canMove = false;
             PlayerController.instance.rb.velocity = Vector3.zero;
-            PlayerController.instance.rig.SetBool(IsTripping,true);
+            PlayerController.instance.rig[0].SetBool(IsTripping,true);
             
            // yield return new WaitForNextFrameUnit();
             
             
             yield return new WaitForSeconds(timeToFall);
-            PlayerController.instance.rig.SetBool(IsTripping,false);
+            PlayerController.instance.rig[0].SetBool(IsTripping,false);
             
             PlayerController.instance.controls.Enable();
             PlayerController.instance.canMove = true;
