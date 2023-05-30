@@ -15,7 +15,11 @@ public class Parkour : MonoBehaviour
     private bool _triggerCinematic;
 
     [SerializeField] private GameObject objectToMove;
-
+    
+    public void OnDrawGizmos()
+    {
+        
+    }
     private void FixedUpdate()
     {
         if (_triggerCinematic && startPoint.Count != 0)
