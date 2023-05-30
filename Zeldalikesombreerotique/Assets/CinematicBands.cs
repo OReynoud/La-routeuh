@@ -1,12 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CinematicBands : MonoBehaviour
 {
+    public static CinematicBands instance;
     private Animator animator;
     private GameObject BandUp;
     private GameObject BandDown;
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            DestroyImmediate(this);
+        }
+
+        instance = this;
+    }
 
     private void Start()
     {
