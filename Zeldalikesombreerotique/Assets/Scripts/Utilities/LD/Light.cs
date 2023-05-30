@@ -40,6 +40,7 @@ namespace Utilities.LD
         private LightedElementsManager _lightedElementsManager;
         
         private bool _stopMesh;
+        private Bounds _bounds;
 
         private void Awake()
         {
@@ -101,7 +102,6 @@ namespace Utilities.LD
 
         private void ThrowRaycasts()
         {
-
             // Optimization to avoid calling transform multiple times
             var transform1 = transform;
             var position = transform1.position;
@@ -312,7 +312,7 @@ namespace Utilities.LD
             var verts = new Vector3[_rayOutPosition.Length * 3];
             var tris  = new int[_rayOutPosition.Length * 3];
             var uvs  = new Vector2[_rayOutPosition.Length * 3];
-
+            
             // Fill the arrays
             var index = 0;
             for (var i = 0; i < _rayOutPosition.Length-1; i++)
@@ -327,10 +327,20 @@ namespace Utilities.LD
                 tris[index + 2] = index + 1;
                 tris[index + 1] = index + 2;
                 
-                // UVs
-                uvs[index] = new Vector2(verts[index].x, verts[index].z);
-                uvs[index + 1] = new Vector2(verts[index + 1].x, verts[index + 1].z);
-                uvs[index + 2] = new Vector2(verts[index + 2].x, verts[index + 2].z);
+                index +=3;
+            }
+
+            if (_bounds.size == Vector3.zero)
+            {
+                _bounds = mesh.bounds;
+            }
+
+            index = 0;
+            for (var i = 0; i < _rayOutPosition.Length-1; i++)
+            {
+                uvs[index] = new Vector2(verts[index].x / _bounds.size.x, verts[index].z / _bounds.size.z);
+                uvs[index + 1] = new Vector2(verts[index + 1].x / _bounds.size.x, verts[index + 1].z / _bounds.size.z);
+                uvs[index + 2] = new Vector2(verts[index + 2].x / _bounds.size.x, verts[index + 2].z / _bounds.size.z);
                 
                 index +=3;
             }
