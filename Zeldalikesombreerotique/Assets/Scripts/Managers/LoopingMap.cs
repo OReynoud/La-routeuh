@@ -10,12 +10,18 @@ namespace Managers
         [SerializeField] internal GameObject mapPartToMove;
         [SerializeField] internal List<GameObject> mapPartsToDisable = new();
         private readonly List<Shadow> _shadowsToReset = new();
+        private readonly List<Link> _linksToReset = new();
 
         private void Start()
         {
             foreach (var shadow in FindObjectsOfType<Shadow>())
             {
                 _shadowsToReset.Add(shadow);
+            }
+            
+            foreach (var link in FindObjectsOfType<Link>())
+            {
+                _linksToReset.Add(link);
             }
         }
 
@@ -42,6 +48,11 @@ namespace Managers
                 {
                     var shadow = _shadowsToReset[i];
                     shadow.Initialize(shadow.transform.position - initialPositions[i]);
+                }
+
+                foreach (var link in _linksToReset)
+                {
+                    link.InitializeLineRenderers();
                 }
             }
         }
