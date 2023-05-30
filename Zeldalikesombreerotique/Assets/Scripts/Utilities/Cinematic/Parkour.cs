@@ -15,7 +15,13 @@ public class Parkour : MonoBehaviour
     private bool _triggerCinematic;
 
     [SerializeField] private GameObject objectToMove;
-    
+    private Animator petiteFilleRig;
+
+    private void Awake()
+    {
+        petiteFilleRig = GetComponentInChildren<Animator>();
+    }
+
     public void OnDrawGizmos()
     {
         for (int j = 0; j < startPoint.Count; j++)
@@ -36,6 +42,7 @@ public class Parkour : MonoBehaviour
         {
             if (_timer < 1)
             {
+                petiteFilleRig.SetBool("isRunning",true);
                 _timer += (speed/ Vector3.Distance(startPoint[0].position,endPoint[0].position)) * Time.fixedDeltaTime;
                 
                 var m1 = Vector3.Lerp( startPoint[0].position, controlPoint[0].position, _timer );
