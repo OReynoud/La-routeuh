@@ -27,7 +27,7 @@ namespace Utilities.LD
 
         private void FixedUpdate()
         {
-            if (IsEnabled)
+            if (IsEnabled && !isEnabledAtStart)
             {
                 _lightedElementsManager.RevealedObjects[gameObject] = true;
             }
