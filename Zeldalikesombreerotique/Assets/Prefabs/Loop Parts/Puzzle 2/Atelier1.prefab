@@ -6757,7 +6757,7 @@ Transform:
   m_Children:
   - {fileID: 1655691806418671239}
   m_Father: {fileID: 477156571196810354}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6768467640143997065
 MonoBehaviour:
@@ -6773,7 +6773,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   newPosition: {fileID: 1655691806418671239}
   mapPartToMove: {fileID: 0}
-  mapPartsToDisable: []
+  mapPartsToDisable:
+  - {fileID: 0}
 --- !u!65 &8139246772500578052
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20458,8 +20459,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4928218142371701833}
   - {fileID: 7900484462970993375}
+  - {fileID: 4928218142371701833}
   m_Father: {fileID: 6046728067548375471}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -26550,7 +26551,7 @@ Transform:
   m_Children:
   - {fileID: 9033712786092975619}
   m_Father: {fileID: 477156571196810354}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5209252270714128924
 MonoBehaviour:
@@ -26566,7 +26567,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   newPosition: {fileID: 9033712786092975619}
   mapPartToMove: {fileID: 0}
-  mapPartsToDisable: []
+  mapPartsToDisable:
+  - {fileID: 0}
 --- !u!65 &5615435766085898716
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -34877,7 +34879,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7750067712635029421}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -52.5, y: 0, z: 0}
+  m_LocalPosition: {x: 44, y: 0, z: 11.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
