@@ -87,6 +87,15 @@ namespace Player
         
         [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public float walkAnimationSpeed;
         [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public float walkAnimationDuration;
+        [BoxGroup("Cinématique de fin")] public bool cinematiqueDeFin;
+        [BoxGroup("Cinématique de fin")][ShowIf("cinematiqueDeFin")] public Transform[] playerDestinations;
+        [BoxGroup("Cinématique de fin")][ShowIf("cinematiqueDeFin")] public Transform[] filleDestinations;
+        [BoxGroup("Cinématique de fin")][ShowIf("cinematiqueDeFin")] public float[] playerTTR;
+        [BoxGroup("Cinématique de fin")][ShowIf("cinematiqueDeFin")] public float[] filleTTR;
+        [BoxGroup("Cinématique de fin")][ShowIf("cinematiqueDeFin")] public float[] playerWaitingTime;
+        [BoxGroup("Cinématique de fin")][ShowIf("cinematiqueDeFin")] public float[] filleWaitingTime;
+        [BoxGroup("Cinématique de fin")][ShowIf("cinematiqueDeFin")] public bool lookAtFille;
+        public Transform laPetite;
 
         public void OnDrawGizmosSelected()
         {
@@ -770,5 +779,69 @@ namespace Player
                 yield return new WaitForFixedUpdate();
             }
         }
+
+        private Quaternion GetDir(Vector3 otherPos, Vector3 ownPos)
+        {
+            var dir = otherPos - ownPos;
+            var dirNormed = dir.normalized;
+            var angle = Mathf.Atan2(dirNormed.x, dirNormed.z) * Mathf.Rad2Deg;
+            return Quaternion.AngleAxis(angle,Vector3.up);
+        }
+
+        public IEnumerator LaDerniereRoute()
+        {
+            Debug.Log("Begining Cinematic");
+            transform.rotation = GetDir(playerDestinations[0].position, transform.position);
+            laPetite.rotation = GetDir(filleDestinations[0].position, laPetite.position);
+            rb.velocity = Vector3.zero;
+            rig[0].SetBool("isWalking", true);
+            rig[1].SetBool("isWalking", true);
+            rig[0].SetFloat("Speed", 1/playerTTR[0]);
+            rig[1].SetFloat("Speed", 1/playerTTR[0]);
+            introCinematic = true;
+            var animFille = laPetite.gameObject.GetComponentInChildren<Animator>();
+            animFille.SetBool("isRunning",true);
+            transform.DOMove(playerDestinations[0].position, playerTTR[0]);
+            laPetite.DOMove(filleDestinations[0].position, filleTTR[0]);
+            yield return new WaitForSeconds(filleTTR[0]);
+            Debug.Log("girl reached First Point");
+            animFille.SetBool("isRunning",false);
+            laPetite.DORotateQuaternion(GetDir(filleDestinations[^1].position,laPetite.position),playerTTR[0] - filleTTR[0] + 0.2f);
+            yield return new WaitForSeconds(playerTTR[0] - filleTTR[0]);
+            Debug.Log("Player reached first point");
+            rig[0].SetBool("isWalking", false);
+            rig[1].SetBool("isWalking", false);
+            yield return new WaitForSeconds(playerWaitingTime[0]);
+            Debug.Log("player looks at girl");
+            lookAtFille = true;
+            transform.DORotateQuaternion(GetDir(laPetite.position,transform.position),0.5f);
+            yield return new WaitForSeconds(0.5f);
+
+            StartCoroutine(LookingAtGirl());
+
+            yield return new WaitForSeconds(filleWaitingTime[0]);
+            Debug.Log("girl running to door");
+            animFille.SetBool("isRunning",true);
+            laPetite.DOMove(filleDestinations[^1].position, filleTTR[1]);
+            
+            yield return new WaitForSeconds(playerWaitingTime[1] + filleTTR[1]);
+            lookAtFille = false;
+            Debug.Log("player walking to door");
+            rig[0].SetBool("isWalking", true);
+            rig[1].SetBool("isWalking", true);
+            rig[0].SetFloat("Speed", 0.5f);
+            rig[1].SetFloat("Speed", 0.5f);
+            transform.DOMove(playerDestinations[^1].position, playerTTR[^1]);
+        }
+
+        IEnumerator LookingAtGirl()
+        {
+            while (lookAtFille)
+            {
+                transform.rotation = GetDir(laPetite.position,transform.position);
+                yield return new WaitForFixedUpdate();
+            }
+        }
     }
+    
 }
