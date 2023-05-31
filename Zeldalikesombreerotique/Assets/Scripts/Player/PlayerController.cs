@@ -218,7 +218,7 @@ namespace Player
                     rig[0].SetBool("isWalking", false);
                     rig[1].SetBool("isWalking", false);
                 }
-            return;
+                return;
             }
             if (!controls.Player.Move.IsPressed() && isGrounded)    //Si ya aucune input du joueur
             {
@@ -248,7 +248,9 @@ namespace Player
 
         void Decelerate()
         {
-            //if (isGrabbing) Debug.Log("Decelerating");
+            if (!canMove)return;
+            
+                //if (isGrabbing) Debug.Log("Decelerating");
             if (!isGrabbing)playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
             rb.velocity *= decelerationFactor;
             rb.angularVelocity = Vector3.zero;
