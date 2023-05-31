@@ -38,6 +38,7 @@ namespace Utilities.LD
 
         internal void Disable(bool isStreetLight = false)
         {
+            if (IsPermanentlyEnabled) return;
             if (LinkedTrafficLights.All(x => x.CheckIfLinked())) return;
             
             IsEnabled = false;
@@ -47,7 +48,7 @@ namespace Utilities.LD
 
         internal void Enable(bool isStreetLight = false)
         {
-            if (IsPermanentlyEnabled) return;
+            if (IsPermanentlyEnabled || IsEnabled) return;
             
             LinkedTrafficLights.ForEach(x => x.CheckIfLinked());
             IsEnabled = true;
