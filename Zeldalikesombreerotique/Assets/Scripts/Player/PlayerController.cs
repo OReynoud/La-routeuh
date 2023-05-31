@@ -20,6 +20,8 @@ namespace Player
         [Foldout("Références")]public Rigidbody rb;
         [Foldout("Références")]public ConfigurableJoint joint;
         [Foldout("Références")] public Animator[] rig;
+        [Foldout("Références")] public Avatar baseAvatar;
+        [Foldout("Références")] public Avatar pushAvatar;
         [Foldout("Références")] public Collider playerColl;
 
         [HorizontalLine(color: EColor.Black)] [BoxGroup("Mouvements")] [Range(0,1)] public float modelRotate;
@@ -501,6 +503,7 @@ namespace Player
                 if (absDiff < 2f && canPush) // Pushing
                 {
                     //Debug.Log("pushing");
+                    rig[0].avatar = pushAvatar;
                     playerDir = new Vector3(fwrd.x, playerDir.y, fwrd.z);
                     var dirPush = playerDir - rb.velocity.normalized;
                     var dpush = Mathf.Abs(dirPush.x) + Mathf.Abs(dirPush.z);
@@ -529,6 +532,7 @@ namespace Player
                 }
                 else if(absDiff >= 2f && canPull) // Pulling
                 { 
+                    rig[0].avatar = baseAvatar;
                     //Debug.Log("pulling");
                     playerDir = new Vector3(-fwrd.x, playerDir.y, -fwrd.z);
                     var dirPush = playerDir - rb.velocity.normalized;
@@ -564,7 +568,7 @@ namespace Player
                 }
                 return;
             }
-            
+            rig[0].avatar = baseAvatar;
                 //Rotate______________________________________________________________________________________________________________________________________
             
             if (isGrabbing && pushingPullingRotate && playerDir.magnitude > 0.1f)
