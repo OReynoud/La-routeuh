@@ -27,6 +27,7 @@ namespace Utilities.Cinematic
         // Footprints
         [Header("Footprints")]
         [SerializeField] private List<GameObject> footprintsToAppear; 
+        [SerializeField] private float timeToBeginFootprints;
         [SerializeField] private float timeBetweenFootprints;
         [SerializeField] private float randomValuePitchFootprints;
         
@@ -78,6 +79,7 @@ namespace Utilities.Cinematic
         
         private IEnumerator FootprintsCoroutine()
         {
+            yield return new WaitForSeconds(timeToBeginFootprints);
             littleSisterScript.TriggerGirl(isStandingAtStart);
             var i = 0;
             
@@ -100,12 +102,24 @@ namespace Utilities.Cinematic
 
         private IEnumerator WaitToFallCoroutine()
         {
+            yield return new WaitForEndOfFrame();
+            PlayerController.instance.introCinematic = true;
+            PlayerController.instance.rig[0].SetBool("isWalking",true);
+            PlayerController.instance.rig[1].SetBool("isWalking",true);
             var maxSpeedTemp = PlayerController.instance.maxSpeed;
-            DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, 0f, timeBeforeFall).SetEase(easeToSlowDownBeforeFall);
+            var minSpeedTemp = PlayerController.instance.minSpeed;
+            /*DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, 0f, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
+            DOTween.To(()=> PlayerController.instance.minSpeed, x=> PlayerController.instance.minSpeed = x, 0f, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);*/
+            DOTween.To(()=> PlayerController.instance.rb.velocity, x=> PlayerController.instance.rb.velocity = x, Vector3.zero, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
+            DOTween.To(()=> PlayerController.instance.rig[0].GetFloat("Speed"), x=> PlayerController.instance.rig[0].GetFloat("Speed"), 0, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
+            DOTween.To(()=> PlayerController.instance.rig[1].GetFloat("Speed"), x=> PlayerController.instance.rig[1].GetFloat("Speed"), 0, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
             CinematicBands.instance.OpenBands();
             PlayerController.instance.controls.Disable();
-            yield return new WaitForSeconds(timeBeforeFall);
             PlayerController.instance.canMove = false;
+            yield return new WaitForSeconds(timeToBeginFootprints);
+            PlayerController.instance.rig[0].SetBool("isWalking",false);
+            PlayerController.instance.rig[1].SetBool("isWalking",false);
+            yield return new WaitForSeconds(timeBeforeFall - timeToBeginFootprints);
             PlayerController.instance.rb.velocity = Vector3.zero;
             StartCoroutine(PlayerController.instance.OmgJeSuisSurpris(littleSisterScript.objectToMove.transform));
             //PlayerController.instance.rig[0].SetBool(IsTripping,true);
@@ -114,12 +128,14 @@ namespace Utilities.Cinematic
             
             
             yield return new WaitForSeconds(timeToFall);
+            PlayerController.instance.introCinematic = false;
             PlayerController.instance.rig[0].SetBool(IsTripping,false);
             CinematicBands.instance.CloseBands();
             PlayerController.instance.controls.Enable();
             PlayerController.instance.canMove = true;
             PlayerController.instance.rb.velocity = Vector3.zero;
             PlayerController.instance.maxSpeed = maxSpeedTemp;
+            PlayerController.instance.minSpeed = minSpeedTemp;
         }
     }
 }
