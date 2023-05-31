@@ -462,7 +462,7 @@ GameObject:
   - component: {fileID: 3031821121138098501}
   - component: {fileID: 3031821121138098503}
   - component: {fileID: 3031821121138098502}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Trigger Down Road
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -500,6 +500,8 @@ MonoBehaviour:
   newPosition: {fileID: 3031821121452715696}
   mapPartToMove: {fileID: 0}
   mapPartsToDisable: []
+  gameObjectsToEnable: []
+  gameObjectsToDisable: []
 --- !u!65 &3031821121138098502
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -646,7 +648,6 @@ Transform:
   - {fileID: 3031821122904789465}
   - {fileID: 3031821121112370716}
   - {fileID: 3031821122027311879}
-  - {fileID: 8608566164952728349}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -661,7 +662,7 @@ GameObject:
   - component: {fileID: 3031821121334078727}
   - component: {fileID: 3031821121334078745}
   - component: {fileID: 3031821121334078744}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Trigger Up Road
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -699,6 +700,8 @@ MonoBehaviour:
   newPosition: {fileID: 3031821121170889861}
   mapPartToMove: {fileID: 0}
   mapPartsToDisable: []
+  gameObjectsToEnable: []
+  gameObjectsToDisable: []
 --- !u!65 &3031821121334078744
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1007,7 +1010,7 @@ GameObject:
   - component: {fileID: 3031821121806391839}
   - component: {fileID: 3031821121806391825}
   - component: {fileID: 3031821121806391824}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Trigger Left Road
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1046,6 +1049,8 @@ MonoBehaviour:
   mapPartToMove: {fileID: 0}
   mapPartsToDisable:
   - {fileID: 0}
+  gameObjectsToEnable: []
+  gameObjectsToDisable: []
 --- !u!65 &3031821121806391824
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1240,6 +1245,7 @@ Transform:
   - {fileID: 7755982029219963012}
   - {fileID: 1529083310339339435}
   - {fileID: 716414823674103997}
+  - {fileID: 8608566164952728349}
   m_Father: {fileID: 3031821121112370716}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9369,7 +9375,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 3031821121324361804}
+    m_TransformParent: {fileID: 3031821122379716888}
     m_Modifications:
     - target: {fileID: 7016198721019984898, guid: df8cb4e17e682264583ec76a0ac39b4b,
         type: 3}
@@ -9379,17 +9385,17 @@ PrefabInstance:
     - target: {fileID: 7644116258694260408, guid: df8cb4e17e682264583ec76a0ac39b4b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 7644116258694260408, guid: df8cb4e17e682264583ec76a0ac39b4b,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.08867719
+      value: 0.0886772
       objectReference: {fileID: 0}
     - target: {fileID: 7644116258694260408, guid: df8cb4e17e682264583ec76a0ac39b4b,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.08867719
+      value: 0.0886772
       objectReference: {fileID: 0}
     - target: {fileID: 7644116258694260408, guid: df8cb4e17e682264583ec76a0ac39b4b,
         type: 3}
@@ -9409,7 +9415,7 @@ PrefabInstance:
     - target: {fileID: 7644116258694260408, guid: df8cb4e17e682264583ec76a0ac39b4b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -22.53
+      value: -22.529999
       objectReference: {fileID: 0}
     - target: {fileID: 7644116258694260408, guid: df8cb4e17e682264583ec76a0ac39b4b,
         type: 3}

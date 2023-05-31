@@ -11256,6 +11256,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b7e5c6c8b9aa3b4691c84a9b9392574, type: 3}
+--- !u!1 &638986000 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7845098839649985024, guid: 6f8d307589954b84a9a8ebfa84595a73,
+    type: 3}
+  m_PrefabInstance: {fileID: 2232143589594583961}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &645410614
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23919,6 +23925,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c3785fb067b3a747ac579eb6a26dd6e, type: 3}
+--- !u!1 &1472301123 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9151553804043920839, guid: 98aa3a2931e793b43a918bce237ea759,
+    type: 3}
+  m_PrefabInstance: {fileID: 1985743311}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1472612056 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1902381308210886919, guid: 17bce2e3e2f22cd4dbb90019c70913f6,
@@ -24285,6 +24297,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4638871006428976775, guid: 1a1c5ba698bd87442b093aa6ffc7edb2,
     type: 3}
   m_PrefabInstance: {fileID: 1537083172}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1494290347 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9151553804043920839, guid: 98aa3a2931e793b43a918bce237ea759,
+    type: 3}
+  m_PrefabInstance: {fileID: 4013783203634698523}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1496900702
 PrefabInstance:
@@ -27582,6 +27600,8 @@ MonoBehaviour:
   newPosition: {fileID: 1957191437}
   mapPartToMove: {fileID: 976309091}
   mapPartsToDisable: []
+  gameObjectsToEnable: []
+  gameObjectsToDisable: []
 --- !u!1001 &1780402071
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35082,9 +35102,19 @@ PrefabInstance:
       objectReference: {fileID: 8387445061258601888}
     - target: {fileID: 4951847770326391763, guid: d5a95edf64d31d342b035a2cb222a9ab,
         type: 3}
+      propertyPath: gameObjectsToDisable.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4951847770326391763, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
       propertyPath: mapPartsToDisable.Array.data[0]
       value: 
       objectReference: {fileID: 976309091}
+    - target: {fileID: 4951847770326391763, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
+      propertyPath: gameObjectsToDisable.Array.data[0]
+      value: 
+      objectReference: {fileID: 638986000}
     - target: {fileID: 4951847771291278753, guid: d5a95edf64d31d342b035a2cb222a9ab,
         type: 3}
       propertyPath: mapPartToMove
@@ -35092,9 +35122,19 @@ PrefabInstance:
       objectReference: {fileID: 976309091}
     - target: {fileID: 4951847771291278753, guid: d5a95edf64d31d342b035a2cb222a9ab,
         type: 3}
+      propertyPath: gameObjectsToDisable.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4951847771291278753, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
       propertyPath: mapPartsToDisable.Array.data[0]
       value: 
       objectReference: {fileID: 8387445061258601888}
+    - target: {fileID: 4951847771291278753, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
+      propertyPath: gameObjectsToDisable.Array.data[0]
+      value: 
+      objectReference: {fileID: 1494290347}
     - target: {fileID: 4951847771513324945, guid: d5a95edf64d31d342b035a2cb222a9ab,
         type: 3}
       propertyPath: mapPartToMove
@@ -35102,9 +35142,19 @@ PrefabInstance:
       objectReference: {fileID: 1985743312}
     - target: {fileID: 4951847771513324945, guid: d5a95edf64d31d342b035a2cb222a9ab,
         type: 3}
+      propertyPath: gameObjectsToDisable.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4951847771513324945, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
       propertyPath: mapPartsToDisable.Array.data[0]
       value: 
       objectReference: {fileID: 212591225}
+    - target: {fileID: 4951847771513324945, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
+      propertyPath: gameObjectsToDisable.Array.data[0]
+      value: 
+      objectReference: {fileID: 1472301123}
     - target: {fileID: 4951847771638643907, guid: d5a95edf64d31d342b035a2cb222a9ab,
         type: 3}
       propertyPath: m_RootOrder
@@ -35170,6 +35220,11 @@ PrefabInstance:
       propertyPath: mapPartToMove
       value: 
       objectReference: {fileID: 212591225}
+    - target: {fileID: 4951847771680879572, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
+      propertyPath: gameObjectsToDisable.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4951847771680879572, guid: d5a95edf64d31d342b035a2cb222a9ab,
         type: 3}
       propertyPath: mapPartsToDisable.Array.data[0]
@@ -37469,7 +37524,7 @@ PrefabInstance:
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
       propertyPath: introCinematic
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}

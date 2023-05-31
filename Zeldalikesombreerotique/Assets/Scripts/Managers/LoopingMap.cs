@@ -9,6 +9,8 @@ namespace Managers
         [SerializeField] private Transform newPosition;
         [SerializeField] internal GameObject mapPartToMove;
         [SerializeField] internal List<GameObject> mapPartsToDisable = new();
+        [SerializeField] internal List<GameObject> gameObjectsToEnable = new();
+        [SerializeField] internal List<GameObject> gameObjectsToDisable = new();
         private readonly List<Shadow> _shadowsToReset = new();
         private readonly List<Link> _linksToReset = new();
 
@@ -42,6 +44,16 @@ namespace Managers
                 foreach (var mapPart in mapPartsToDisable)
                 {
                     mapPart.SetActive(false);
+                }
+
+                foreach (var go in gameObjectsToEnable)
+                {
+                    go.SetActive(true);
+                }
+
+                foreach (var go in gameObjectsToDisable)
+                {
+                    go.SetActive(false);
                 }
 
                 for (var i = 0; i < _shadowsToReset.Count; i++)
