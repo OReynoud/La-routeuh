@@ -14,14 +14,13 @@ public class Parkour : MonoBehaviour
 
     private bool _triggerCinematic;
 
-    [SerializeField] private GameObject objectToMove;
+    public GameObject objectToMove;
     private Animator petiteFilleRig;
 
     private void Awake()
     {
         petiteFilleRig = GetComponentInChildren<Animator>();
     }
-
     public void OnDrawGizmos()
     {
         for (int j = 0; j < startPoint.Count; j++)
@@ -77,6 +76,8 @@ public class Parkour : MonoBehaviour
         {
             objectToMove.transform.position = startPoint[0].position;
             objectToMove.SetActive(true);
+            
+            petiteFilleRig = GetComponentInChildren<Animator>();
         }
     }
 

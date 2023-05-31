@@ -6736,7 +6736,7 @@ GameObject:
   - component: {fileID: 4928218142371701833}
   - component: {fileID: 6768467640143997065}
   - component: {fileID: 8139246772500578052}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Trigger Previous Puzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26529,7 +26529,7 @@ GameObject:
   - component: {fileID: 7900484462970993375}
   - component: {fileID: 5209252270714128924}
   - component: {fileID: 5615435766085898716}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Trigger Next Puzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63607,6 +63607,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6410609041444524696, guid: 33715702b0278764d887c6624eecd319,
         type: 3}
+      propertyPath: loopingMapToChange
+      value: 
+      objectReference: {fileID: 6768467640143997065}
+    - target: {fileID: 6410609041444524696, guid: 33715702b0278764d887c6624eecd319,
+        type: 3}
       propertyPath: appearedDraws.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -64199,6 +64204,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TrafficLights (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6410609041444524696, guid: 33715702b0278764d887c6624eecd319,
+        type: 3}
+      propertyPath: loopingMapToChange
+      value: 
+      objectReference: {fileID: 5209252270714128924}
     - target: {fileID: 6410609041444524696, guid: 33715702b0278764d887c6624eecd319,
         type: 3}
       propertyPath: appearedDraws.Array.size

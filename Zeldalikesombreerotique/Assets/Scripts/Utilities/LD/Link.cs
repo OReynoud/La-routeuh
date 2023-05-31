@@ -29,16 +29,23 @@ namespace Utilities.LD
 
         private void Awake()
         {
-            _object1Position = objectToLink1.transform.position;
-            _object2Position = objectToLink2.transform.position;
+            InitializeLineRenderers();
             
-            disabledLineRenderer.SetPositions(new[] { SlightlyLift(_object1Position), SlightlyLift(_object2Position) });
             enabledLineRenderer.enabled = false;
-            
+
             objectToLink1.Links.Add((this, 1));
             objectToLink2.Links.Add((this, 2));
         }
-        
+
+        internal void InitializeLineRenderers()
+        {
+            _object1Position = objectToLink1.transform.position;
+            _object2Position = objectToLink2.transform.position;
+
+            disabledLineRenderer.SetPositions(new[] { SlightlyLift(_object1Position), SlightlyLift(_object2Position) });
+            enabledLineRenderer.SetPositions(new[] { SlightlyLift(_object1Position), SlightlyLift(_object2Position) });
+        }
+
         internal void CheckIfBothObjectsAreEnabled(int index)
         {
             if (IsObject1Enabled && IsObject2Enabled)

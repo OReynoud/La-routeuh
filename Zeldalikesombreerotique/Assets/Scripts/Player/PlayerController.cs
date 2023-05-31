@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
 using UnityEngine;
@@ -123,6 +124,8 @@ namespace Player
                         aga.transform.DOLocalRotate(finalConeRotation, 0);
                         Debug.Log("Le cône tête de cul !");
                     }
+                    rig[0].gameObject.SetActive(false);
+                    rig[1].gameObject.SetActive(true);
                     controls.Enable();
                     controls.Player.Enable();
                 }
@@ -157,8 +160,6 @@ namespace Player
             controls.Enable();
             controls.Player.Enable();
             rb.isKinematic = false;
-            rig[0].gameObject.SetActive(false);
-            rig[1].gameObject.SetActive(true);
         }
         private void FixedUpdate()
         {
@@ -212,12 +213,20 @@ namespace Player
             if (!proofOfConcept) rig[0].SetFloat("Speed",speedFactor);
             if (!canMove)
             {
-                if (!proofOfConcept)rig[0].SetBool("isWalking", false);
-                return;
+                if (!proofOfConcept)
+                {
+                    rig[0].SetBool("isWalking", false);
+                    rig[1].SetBool("isWalking", false);
+                }
+            return;
             }
             if (!controls.Player.Move.IsPressed() && isGrounded)    //Si ya aucune input du joueur
             {
-                if (!proofOfConcept)rig[0].SetBool("isWalking", false);
+                if (!proofOfConcept)
+                {
+                    rig[0].SetBool("isWalking", false);
+                    rig[1].SetBool("isWalking", false);
+                }
                 rig[0].SetBool("IsPushing",false);
                 Decelerate();
                 gamepad?.SetMotorSpeeds(0f,0f);
@@ -452,7 +461,11 @@ namespace Player
         private void ApplyForce(float appliedModifier)
         {
             RotateModel();
-            if (!proofOfConcept)rig[0].SetBool("isWalking", true);
+            if (!proofOfConcept)
+            {
+                rig[0].SetBool("isWalking", true);
+                rig[1].SetBool("isWalking", true);
+            }
             var dx = playerDir - rb.velocity.normalized;
             if (Mathf.Abs(dx.x) > allowedDrift)
             {
@@ -741,24 +754,19 @@ namespace Player
             canRotateClockwise = true;
             canRotateCounterClockwise = true;
         }
+
+        public IEnumerator OmgJeSuisSurpris(Transform objectToLookAt)
+        {
+            transform.DOJump(transform.position -transform.forward * 0.5f, 0.3f, 1, 0.2f);
+            yield return new WaitForSeconds(0.4f);
+            while (!canMove)
+            {
+                Vector3 dir = objectToLookAt.position - transform.position;
+                var dirNormed = dir.normalized;
+                var angle2 = Mathf.Atan2(dirNormed.x, dirNormed.z) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.AngleAxis(angle2,Vector3.up);
+                yield return new WaitForFixedUpdate();
+            }
+        }
     }
 }
-
-/*if (willTriggerCinematic)   //Cinématique pour la voiture
-            {
-                controls.Disable();
-                objectToGrab = GetClosestObject();
-                var dir = tpLocation.position - objectToGrab.position;
-                var angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-                var rotationValue = Quaternion.AngleAxis(angle, Vector3.up);
-                objectToGrab.transform.DOLocalRotate(rotationValue.eulerAngles, 1).OnComplete(()=>
-                {
-                    objectToGrab.transform.DOJump(tpLocation.position, 2, 1, 3).AppendCallback((() =>
-                    {
-                        controls.Enable();
-                        willTriggerCinematic = false;
-                        objectToGrab.GetComponent<RollbackCar>().flyToHub = false;
-                    }));
-                }); 
-                return;
-            }*/

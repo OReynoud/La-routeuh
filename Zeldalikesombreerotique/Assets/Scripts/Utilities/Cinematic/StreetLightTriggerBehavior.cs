@@ -42,7 +42,7 @@ namespace Utilities.Cinematic
                 foreach (var objectToAppear in objectsToAppear)
                 {
                     objectToAppear.transform.GetChild(0).gameObject.SetActive(true);
-                    if (objectToAppear.CompareTag("Draw")) objectToAppear.GetComponent<Draw>().Enable();
+                    if (objectToAppear.CompareTag("Draw")) objectToAppear.GetComponent<Draw>().Enable(true);
                 }
 
                 if (!canSwitchOff)
@@ -73,7 +73,7 @@ namespace Utilities.Cinematic
             {
                 if (objectToAppear.CompareTag("Draw"))
                 {
-                    objectToAppear.GetComponent<Draw>().Disable();
+                    objectToAppear.GetComponent<Draw>().Disable(true);
                 }
                 else
                 {

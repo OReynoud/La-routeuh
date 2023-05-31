@@ -11,6 +11,7 @@ namespace Utilities.LD
         [SerializeField] private bool isEnabledAtStart;
         internal readonly List<TrafficLights> LinkedTrafficLights = new();
         internal bool IsEnabled;
+        private bool _isLightedByStreetLight;
         internal bool IsPermanentlyEnabled;
         
         private LightedElementsManager _lightedElementsManager;
@@ -27,7 +28,7 @@ namespace Utilities.LD
 
         private void FixedUpdate()
         {
-            if (IsEnabled)
+            if (IsEnabled && _isLightedByStreetLight && !isEnabledAtStart)
             {
                 _lightedElementsManager.RevealedObjects[gameObject] = true;
             }
@@ -35,20 +36,23 @@ namespace Utilities.LD
             _lightedElementsManager.CurrentCheckCoroutine ??= StartCoroutine(_lightedElementsManager.CheckDictionariesCoroutine());
         }
 
-        internal void Disable()
+        internal void Disable(bool isStreetLight = false)
         {
+            if (IsPermanentlyEnabled) return;
             if (LinkedTrafficLights.All(x => x.CheckIfLinked())) return;
             
             IsEnabled = false;
+            if (isStreetLight) _isLightedByStreetLight = false;
             ChangeLinkValues(false);
         }
 
-        internal void Enable()
+        internal void Enable(bool isStreetLight = false)
         {
-            if (IsPermanentlyEnabled) return;
+            if (IsPermanentlyEnabled || IsEnabled) return;
             
             LinkedTrafficLights.ForEach(x => x.CheckIfLinked());
             IsEnabled = true;
+            if (isStreetLight) _isLightedByStreetLight = true;
             ChangeLinkValues(true);
         }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Managers;
 using UnityEngine;
 
 namespace Utilities.LD
@@ -15,6 +16,11 @@ namespace Utilities.LD
         [SerializeField] private List<Draw> appearedDraws;
         private static readonly int ColorRouge = Shader.PropertyToID("_ColorRouge");
         private static readonly int ColorVert = Shader.PropertyToID("_ColorVert");
+        
+        // Changer de trigger
+        [SerializeField] private GameObject nextHubGameObject;
+        [SerializeField] private List<GameObject> previousHubGameObjects = new();
+        [SerializeField] private LoopingMap loopingMapToChange;
 
         private void Awake()
         {
@@ -48,6 +54,8 @@ namespace Utilities.LD
 
             StartCoroutine(ChangeLightColor());
             
+            NextPuzzle();
+            
             return true;
         }
 
@@ -65,6 +73,12 @@ namespace Utilities.LD
             
             greenLight.SetActive(true);
             redLight.SetActive(false);
+        }
+        
+        private void NextPuzzle()
+        {
+            loopingMapToChange.mapPartsToDisable.AddRange(previousHubGameObjects);
+            loopingMapToChange.mapPartToMove = nextHubGameObject;
         }
     }
 }

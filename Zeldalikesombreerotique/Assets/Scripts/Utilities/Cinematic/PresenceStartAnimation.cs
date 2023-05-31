@@ -102,20 +102,20 @@ namespace Utilities.Cinematic
         {
             var maxSpeedTemp = PlayerController.instance.maxSpeed;
             DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, 0f, timeBeforeFall).SetEase(easeToSlowDownBeforeFall);
-            
-            yield return new WaitForSeconds(timeBeforeFall);
-            
+            CinematicBands.instance.OpenBands();
             PlayerController.instance.controls.Disable();
+            yield return new WaitForSeconds(timeBeforeFall);
             PlayerController.instance.canMove = false;
             PlayerController.instance.rb.velocity = Vector3.zero;
-            PlayerController.instance.rig[0].SetBool(IsTripping,true);
+            StartCoroutine(PlayerController.instance.OmgJeSuisSurpris(littleSisterScript.objectToMove.transform));
+            //PlayerController.instance.rig[0].SetBool(IsTripping,true);
             
            // yield return new WaitForNextFrameUnit();
             
             
             yield return new WaitForSeconds(timeToFall);
             PlayerController.instance.rig[0].SetBool(IsTripping,false);
-            
+            CinematicBands.instance.CloseBands();
             PlayerController.instance.controls.Enable();
             PlayerController.instance.canMove = true;
             PlayerController.instance.rb.velocity = Vector3.zero;
