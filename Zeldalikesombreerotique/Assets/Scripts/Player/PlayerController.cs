@@ -789,7 +789,8 @@ namespace Player
 
         public IEnumerator LaDerniereRoute()
         {
-            Debug.Log("Begining Cinematic");
+            
+            //Debug.Log("Begining Cinematic");
             transform.rotation = GetDir(playerDestinations[0].position, transform.position);
             laPetite.rotation = GetDir(filleDestinations[0].position, laPetite.position);
             rb.velocity = Vector3.zero;
@@ -803,15 +804,18 @@ namespace Player
             transform.DOMove(playerDestinations[0].position, playerTTR[0]);
             laPetite.DOMove(filleDestinations[0].position, filleTTR[0]);
             yield return new WaitForSeconds(filleTTR[0]);
-            Debug.Log("girl reached First Point");
+            
+            //Debug.Log("girl reached First Point");
             animFille.SetBool("isRunning",false);
             laPetite.DORotateQuaternion(GetDir(filleDestinations[^1].position,laPetite.position),playerTTR[0] - filleTTR[0] + 0.2f);
             yield return new WaitForSeconds(playerTTR[0] - filleTTR[0]);
-            Debug.Log("Player reached first point");
+            
+            //Debug.Log("Player reached first point");
             rig[0].SetBool("isWalking", false);
             rig[1].SetBool("isWalking", false);
             yield return new WaitForSeconds(playerWaitingTime[0]);
-            Debug.Log("player looks at girl");
+            
+            //Debug.Log("player looks at girl");
             lookAtFille = true;
             transform.DORotateQuaternion(GetDir(laPetite.position,transform.position),0.5f);
             yield return new WaitForSeconds(0.5f);
@@ -819,13 +823,15 @@ namespace Player
             StartCoroutine(LookingAtGirl());
 
             yield return new WaitForSeconds(filleWaitingTime[0]);
-            Debug.Log("girl running to door");
+            
+            //Debug.Log("girl running to door");
             animFille.SetBool("isRunning",true);
             laPetite.DOMove(filleDestinations[^1].position, filleTTR[1]);
             
-            yield return new WaitForSeconds(playerWaitingTime[1] + filleTTR[1]);
+            yield return new WaitForSeconds(playerWaitingTime[1]);
             lookAtFille = false;
-            Debug.Log("player walking to door");
+            
+            //Debug.Log("player walking to door");
             rig[0].SetBool("isWalking", true);
             rig[1].SetBool("isWalking", true);
             rig[0].SetFloat("Speed", 0.5f);
