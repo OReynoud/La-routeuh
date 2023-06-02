@@ -490,7 +490,8 @@ namespace Player
                 var differential = playerDir - fwrd;
                 var absDiff = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
                 var ctxMax = maxSpeed / objectToGrab.mass;
-                if (absDiff < 2f && canPush) // Pushing
+                Debug.Log(absDiff);
+                if (absDiff < 1.25f && canPush) // Pushing
                 {
                     //Debug.Log("pushing");
                     playerDir = new Vector3(fwrd.x, playerDir.y, fwrd.z);
@@ -498,6 +499,7 @@ namespace Player
                     var dpush = Mathf.Abs(dirPush.x) + Mathf.Abs(dirPush.z);
                     if (Mathf.Abs(dpush) > 2f)
                     {
+                        rb.velocity = Vector3.zero;
                         accelerationTimer = 0;
                     }
                     var delta = Vector2.Distance(new Vector2(transform.position.x, transform.position.z),
@@ -841,6 +843,7 @@ namespace Player
             yield return new WaitForSeconds(0.3f);
             //Debug.Log("girl runs to door");
             animFille.SetBool("isRunning",true);
+            laPetite.rotation = GetDir(filleDestinations[0].position, laPetite.position);
             laPetite.DOMove(filleDestinations[0].position, filleTTR[0] - 0.3f).SetEase(Ease.Linear);
             yield return new WaitForSeconds(filleTTR[0] - 0.3f);
             //Debug.Log("reached door");
