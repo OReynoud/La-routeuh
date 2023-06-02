@@ -149,6 +149,7 @@ namespace Player
                     controls.Enable();
                     controls.Player.Enable();
                 }
+                DOTween.SetTweensCapacity(2000,1000);
         }
         
         // Update is called once per frame
