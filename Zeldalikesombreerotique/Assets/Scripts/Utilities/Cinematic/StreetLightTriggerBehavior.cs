@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 using Utilities.LD;
+using DG.Tweening;
 
 namespace Utilities.Cinematic
 {
     public class StreetLightTriggerBehavior : MonoBehaviour
     {
+        public AudioSource neon;
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private GameObject spotLight;
         [SerializeField] private GameObject coneMesh;
@@ -37,6 +39,9 @@ namespace Utilities.Cinematic
                 spotLight.SetActive(true);
                 coneMesh.SetActive(true);
                 audioSource.PlayOneShot(switchOnSound);
+                
+                neon.DOFade(1, 0.4f); //son
+                
                 _isOn = true;
                 
                 foreach (var objectToAppear in objectsToAppear)
@@ -64,6 +69,8 @@ namespace Utilities.Cinematic
         {
             yield return _switchOffWaitForSeconds;
             
+            neon.DOFade(0, 0.4f); //son
+
             spotLight.SetActive(false);
             coneMesh.SetActive(false);
             audioSource.PlayOneShot(switchOffSound);
