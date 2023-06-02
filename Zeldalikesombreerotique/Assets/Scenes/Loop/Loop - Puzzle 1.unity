@@ -497,12 +497,22 @@ PrefabInstance:
         type: 3}
       propertyPath: mapPartToMove
       value: 
-      objectReference: {fileID: 76672559}
+      objectReference: {fileID: 1245626507}
+    - target: {fileID: 7682043774847173731, guid: 6f8d307589954b84a9a8ebfa84595a73,
+        type: 3}
+      propertyPath: mapPartsToDisable.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7682043774847173731, guid: 6f8d307589954b84a9a8ebfa84595a73,
         type: 3}
       propertyPath: mapPartsToDisable.Array.data[0]
       value: 
       objectReference: {fileID: 76672559}
+    - target: {fileID: 7682043774847173731, guid: 6f8d307589954b84a9a8ebfa84595a73,
+        type: 3}
+      propertyPath: mapPartsToDisable.Array.data[1]
+      value: 
+      objectReference: {fileID: 963248887}
     - target: {fileID: 8510390319763245782, guid: 6f8d307589954b84a9a8ebfa84595a73,
         type: 3}
       propertyPath: mapPartToMove
@@ -1197,6 +1207,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08621819de1985e4884b8f9f448c69a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1245626507 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2638126182198574941, guid: a3dabca07104c114f9a9df74082957c8,
+    type: 3}
+  m_PrefabInstance: {fileID: 2049750354}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1339044264
 GameObject:
   m_ObjectHideFlags: 0
@@ -1884,6 +1900,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2638126182198574941, guid: a3dabca07104c114f9a9df74082957c8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5442586393045583364, guid: a3dabca07104c114f9a9df74082957c8,
         type: 3}
       propertyPath: m_Name
@@ -1892,7 +1913,7 @@ PrefabInstance:
     - target: {fileID: 5442586393045583364, guid: a3dabca07104c114f9a9df74082957c8,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5442586393045583371, guid: a3dabca07104c114f9a9df74082957c8,
         type: 3}
@@ -2133,12 +2154,22 @@ PrefabInstance:
         type: 3}
       propertyPath: mapPartToMove
       value: 
-      objectReference: {fileID: 76672559}
+      objectReference: {fileID: 1245626507}
+    - target: {fileID: 7682043774847173731, guid: 6f8d307589954b84a9a8ebfa84595a73,
+        type: 3}
+      propertyPath: mapPartsToDisable.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7682043774847173731, guid: 6f8d307589954b84a9a8ebfa84595a73,
         type: 3}
       propertyPath: mapPartsToDisable.Array.data[0]
       value: 
       objectReference: {fileID: 76672559}
+    - target: {fileID: 7682043774847173731, guid: 6f8d307589954b84a9a8ebfa84595a73,
+        type: 3}
+      propertyPath: mapPartsToDisable.Array.data[1]
+      value: 
+      objectReference: {fileID: 963248887}
     - target: {fileID: 8510390319763245782, guid: 6f8d307589954b84a9a8ebfa84595a73,
         type: 3}
       propertyPath: mapPartToMove
