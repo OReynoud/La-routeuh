@@ -47,6 +47,7 @@ namespace Utilities.LD
         private IEnumerator KillPlayer()
         {
             yield return new WaitForSeconds(timeBeforeKill);
+            PlayerController.instance.isDead = true;
             
             CameraManager.Instance.NoMoreBoutToBeKilled();
             PlayerController.instance.transform.position = RespawnPoint.position;
@@ -61,11 +62,19 @@ namespace Utilities.LD
             PlayerController.instance.isGrabbing = false;
             PlayerController.instance.canMove = true;
             PlayerController.instance.joint.autoConfigureConnectedAnchor = true;
-            PlayerController.instance.objectToGrab.constraints = RigidbodyConstraints.FreezeRotation;
-            PlayerController.instance.objectToGrab = null;
-            PlayerController.instance.objectType = null; 
-            
+            if (PlayerController.instance.objectToGrab)
+            {
+                PlayerController.instance.objectToGrab.constraints = RigidbodyConstraints.FreezeRotation;
+                PlayerController.instance.objectToGrab.position = PlayerController.instance.objectType.spawnPos;
+                PlayerController.instance.objectToGrab = null;
+            }
+            PlayerController.instance.objectType = null;
+
             _killPlayerCoroutine = null;
+            
+            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
+            PlayerController.instance.isDead = false;
         }
     }
 }

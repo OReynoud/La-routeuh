@@ -105,6 +105,7 @@ namespace Player
         public Transform laPetite;
         private Vector3 savedLeft;
         private Vector3 savedRight;
+        [HideInInspector]public bool isDead;
 
         public void OnDrawGizmosSelected()
         {
