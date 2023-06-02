@@ -23,7 +23,6 @@ namespace Utilities.LD
             if (other.gameObject.CompareTag("Player") && !PlayerController.instance.isProtected)
             {
                 CameraManager.Instance.BoutToBeKilled();
-                _tempPlayerMaxSpeed = PlayerController.instance.maxSpeed;
                 _slowDownTween = DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, slowDownValue, slowDownTime).SetEase(slowDownEase);
                 _killPlayerCoroutine = StartCoroutine(KillPlayer());
             }
@@ -39,8 +38,8 @@ namespace Utilities.LD
                     _killPlayerCoroutine = null;
                     
                     _slowDownTween.Kill();
-                    PlayerController.instance.maxSpeed = _tempPlayerMaxSpeed;
                     CameraManager.Instance.NoMoreBoutToBeKilled(true);
+                    PlayerController.instance.maxSpeed = PlayerController.instance.savedMaxSpeed;
                 }
             }
         }
@@ -52,6 +51,19 @@ namespace Utilities.LD
             CameraManager.Instance.NoMoreBoutToBeKilled();
             PlayerController.instance.transform.position = RespawnPoint.position;
             PlayerController.instance.maxSpeed = _tempPlayerMaxSpeed;
+            PlayerController.instance.rig[0].Play("idle");
+            PlayerController.instance.rig[1].Play("idle");
+            PlayerController.instance.rig[0].SetBool("isWalking",false);
+            PlayerController.instance.rig[0].SetBool("isPulling",false);
+            PlayerController.instance.rig[0].SetBool("isPushing",false);
+            PlayerController.instance.rig[0].SetBool("IsGrabbing",false);
+            PlayerController.instance.pushingPullingRotate = false;
+            PlayerController.instance.isGrabbing = false;
+            PlayerController.instance.canMove = true;
+            PlayerController.instance.joint.autoConfigureConnectedAnchor = true;
+            PlayerController.instance.objectToGrab.constraints = RigidbodyConstraints.FreezeRotation;
+            PlayerController.instance.objectToGrab = null;
+            PlayerController.instance.objectType = null; 
             
             _killPlayerCoroutine = null;
         }
