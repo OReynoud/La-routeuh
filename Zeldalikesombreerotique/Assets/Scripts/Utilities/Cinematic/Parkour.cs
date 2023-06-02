@@ -21,9 +21,7 @@ public class Parkour : MonoBehaviour
 
 
     public AudioSource song;
-    public AudioSource breathe;
-    
-    public GameObject audiosong;
+    public GameObject bush;
     public GameObject audiobreathe;
 
     private void Awake()
@@ -80,6 +78,11 @@ public class Parkour : MonoBehaviour
 
     public void TriggerGirl(bool isStandingAtStart = false)
     {
+        if (bush != null)
+        {
+            bush.SetActive(true);
+        }
+        
         if (song != null)
         {
             song.DOFade(0, 0.15f);
