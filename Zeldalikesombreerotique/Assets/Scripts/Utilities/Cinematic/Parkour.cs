@@ -80,10 +80,20 @@ public class Parkour : MonoBehaviour
 
     public void TriggerGirl(bool isStandingAtStart = false)
     {
-        song.DOFade(0, 0.15f);
+        if (song != null)
+        {
+            song.DOFade(0, 0.15f);
+
+        }
+        
+        if (audiobreathe != null)
+        {
+            audiobreathe.SetActive(true);
+
+        }
         //breathe.DOFade(1, 0.1f);
         //audiosong.SetActive(false);
-        audiobreathe.SetActive(true);
+
 
         _triggerCinematic = true;
         if (!isStandingAtStart)
