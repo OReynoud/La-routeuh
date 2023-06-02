@@ -180,6 +180,7 @@ namespace Player
             controls.Enable();
             controls.Player.Enable();
             rb.isKinematic = false;
+            CinematicBands.instance.CloseBands();
         }
         private void FixedUpdate()
         {
