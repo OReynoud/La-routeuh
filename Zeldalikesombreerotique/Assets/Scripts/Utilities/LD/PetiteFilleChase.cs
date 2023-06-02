@@ -56,10 +56,18 @@ public class PetiteFilleChase : MonoBehaviour
             chaseScript.TriggerGirl(true);
             if (willSlowDownPlayer)
             {
-                willSlowDownPlayer = false;
-                PlayerController.instance.maxSpeed = savedMaxSpeed;
-                PlayerController.instance.minSpeed = savedMinSpeed;
+                StartCoroutine(ResetPlayerSpeed());
             }
         }
+    }
+
+    private IEnumerator ResetPlayerSpeed()
+    {
+        PlayerController.instance.maxSpeed = 0;
+        PlayerController.instance.minSpeed = 0;
+        yield return new WaitForSeconds(0.3f);
+        willSlowDownPlayer = false;
+        PlayerController.instance.maxSpeed = savedMaxSpeed;
+        PlayerController.instance.minSpeed = savedMinSpeed;
     }
 }

@@ -133,7 +133,8 @@ namespace Player
                 {
                     if (cone)
                     {
-                        var aga = Instantiate(cone.gameObject, finalConePosition + characterHead.position,Quaternion.identity, characterHead);
+                        var aga = Instantiate(cone.gameObject, characterHead.position,Quaternion.identity, characterHead);
+                        cone.localPosition = finalConePosition;
                         aga.transform.DOLocalRotate(finalConeRotation, 0);
                         Debug.Log("Le cône tête de cul !");
                     }
@@ -774,9 +775,8 @@ namespace Player
         public IEnumerator LaDerniereRoute()
         {
             
-            //Debug.Log("Begining Cinematic");
+            Debug.Log("Begining Cinematic");
             transform.rotation = GetDir(playerDestinations[0].position, transform.position);
-            laPetite.rotation = GetDir(filleDestinations[^1].position, laPetite.position);
             rb.velocity = Vector3.zero;
             rig[0].SetBool("isWalking", true);
             rig[1].SetBool("isWalking", true);
@@ -784,36 +784,57 @@ namespace Player
             rig[1].SetFloat("Speed", 1/playerTTR[0]);
             introCinematic = true;
             var animFille = laPetite.gameObject.GetComponentInChildren<Animator>();
-            animFille.SetBool("isRunning",true);
             transform.DOMove(playerDestinations[0].position, playerTTR[0]);
-            laPetite.DOMove(filleDestinations[^1].position, filleTTR[0]);
-            //yield return new WaitForSeconds(filleTTR[0]);
-            
-            //Debug.Log("girl reached First Point");
+            yield return new WaitForSeconds(filleWaitingTime[0]);
+            Debug.Log("girl picks up hat");
+            animFille.SetBool("isPickingUp",true);
             //laPetite.DORotateQuaternion(GetDir(filleDestinations[^1].position,laPetite.position),playerTTR[0] - filleTTR[0] + 0.2f);
-            yield return new WaitForSeconds(playerTTR[0]);
-            transform.rotation = GetDir(playerDestinations[^1].position, transform.position);
+            yield return new WaitForSeconds(playerTTR[0] - filleWaitingTime[0]);
+            animFille.SetBool("isPickingUp",false);
+            transform.DORotateQuaternion(GetDir(laPetite.position,transform.position),0.3f);
+            lookAtFille = true;
             //Debug.Log("Player reached first point");
+            Debug.Log("player looks at girl");
             rig[0].SetBool("isWalking", false);
             rig[1].SetBool("isWalking", false);
-            yield return new WaitForSeconds(playerWaitingTime[0]);
-            
-            //Debug.Log("player looks at girl");
-            lookAtFille = true;
-            transform.DORotateQuaternion(GetDir(laPetite.position + laPetite.forward,transform.position),0.3f);
-            yield return new WaitForSeconds(0.3f);
-
+            yield return new WaitForSeconds(filleWaitingTime[1]);
+            Debug.Log("Girl Looks at PLayer");
+            laPetite.rotation = GetDir(transform.position, laPetite.position);
             StartCoroutine(LookingAtGirl());
-            
-            //Debug.Log("girl running to door");
-            animFille.SetBool("isRunning",true);
-            laPetite.DOMove(filleDestinations[^1].position, filleTTR[1]);
-            
-            yield return new WaitForSeconds(playerWaitingTime[1]);
+            yield return new WaitForSeconds(playerWaitingTime[0]);
+            Debug.Log("player moves next to girl");
+            transform.DOMove(playerDestinations[1].position, playerTTR[1]);
+            rig[0].SetBool("isWalking", true);
+            rig[1].SetBool("isWalking", true);
+            rig[0].SetFloat("Speed", 1/playerTTR[1]);
+            rig[1].SetFloat("Speed", 1/playerTTR[1]);
+            yield return new WaitForSeconds(playerTTR[1]);
             lookAtFille = false;
-            
-            //Debug.Log("player walking to door");
-            transform.rotation = GetDir(playerDestinations[^1].position, transform.position);
+            Debug.Log("player walks to door");
+            transform.rotation = GetDir(playerDestinations[2].position, transform.position);
+            laPetite.DORotateQuaternion(GetDir(filleDestinations[0].position,laPetite.position),0.3f);
+            transform.DOMove(playerDestinations[2].position, playerTTR[2]);
+            rig[0].SetBool("isWalking", true);
+            rig[1].SetBool("isWalking", true);
+            rig[0].SetFloat("Speed", 1);
+            rig[1].SetFloat("Speed", 1);
+            yield return new WaitForSeconds(0.3f);
+            Debug.Log("girl runs to door");
+            animFille.SetBool("isRunning",true);
+            laPetite.DOMove(filleDestinations[0].position, filleTTR[0] - 0.3f);
+            yield return new WaitForSeconds(filleTTR[0] - 0.3f);
+            Debug.Log("reached door");
+            animFille.SetBool("isRunning",false);
+            rig[0].SetBool("isWalking", false);
+            rig[1].SetBool("isWalking", false);
+            transform.rotation = GetDir(playerDestinations[3].position, transform.position);
+            laPetite.rotation = GetDir(filleDestinations[1].position,laPetite.position);
+            yield return new WaitForSeconds(filleWaitingTime[2]);
+            Debug.Log("girls runs to door");
+            animFille.SetBool("isRunning",true);
+            laPetite.DOMove(filleDestinations[1].position, filleTTR[1]);
+            yield return new WaitForSeconds(playerWaitingTime[1]);
+            Debug.Log("player follows girls");
             rig[0].SetBool("isWalking", true);
             rig[1].SetBool("isWalking", true);
             rig[0].SetFloat("Speed", 0.5f);
@@ -825,7 +846,7 @@ namespace Player
         {
             while (lookAtFille)
             {
-                transform.rotation = GetDir(laPetite.position,transform.position);
+                laPetite.rotation = GetDir(transform.position,laPetite.position);
                 yield return new WaitForFixedUpdate();
             }
         }
