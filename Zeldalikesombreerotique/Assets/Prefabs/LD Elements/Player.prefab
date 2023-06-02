@@ -366,25 +366,37 @@ MonoBehaviour:
   conePutOnDuration: 0.2
   walkAnimationSpeed: 0.8
   walkAnimationDuration: 3.5
-  cinematiqueDeFin: 1
+  cinematiqueDeFin: 0
   playerDestinations:
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   filleDestinations:
   - {fileID: 0}
   - {fileID: 0}
   playerTTR:
-  - 1.5
+  - 2
+  - 2.5
+  - 12
   - 8
   filleTTR:
-  - 8
+  - 12
   - 6
   playerWaitingTime:
-  - 1.5
+  - 0.75
   - 1.7
   filleWaitingTime:
+  - 0.3
+  - 4
   - 1.5
   lookAtFille: 0
+  timeToPickChapo: 0.2
+  timeToPutChapo: 1.9
+  girlHand: {fileID: 0}
+  girlHead: {fileID: 0}
+  chapo: {fileID: 0}
+  fireHead: {fileID: 0}
   laPetite: {fileID: 0}
 --- !u!54 &6998835611510329064
 Rigidbody:
