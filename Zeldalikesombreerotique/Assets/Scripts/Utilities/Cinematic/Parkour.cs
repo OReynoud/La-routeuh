@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Parkour : MonoBehaviour
 {
+
     [SerializeField] private List<Transform> startPoint;
     [SerializeField] private List<Transform> controlPoint;
     [SerializeField] private List<Transform> endPoint;
-
+    
     [SerializeField] private float speed;
 
     private float _timer;
@@ -16,6 +18,13 @@ public class Parkour : MonoBehaviour
 
     public GameObject objectToMove;
     private Animator petiteFilleRig;
+
+
+    public AudioSource song;
+    public AudioSource breathe;
+    
+    public GameObject audiosong;
+    public GameObject audiobreathe;
 
     private void Awake()
     {
@@ -71,6 +80,11 @@ public class Parkour : MonoBehaviour
 
     public void TriggerGirl(bool isStandingAtStart = false)
     {
+        song.DOFade(0, 0.15f);
+        //breathe.DOFade(1, 0.1f);
+        //audiosong.SetActive(false);
+        audiobreathe.SetActive(true);
+
         _triggerCinematic = true;
         if (!isStandingAtStart)
         {
