@@ -12,16 +12,7 @@ public class EndingTrigger : MonoBehaviour
     public Transform chapo;
     public GameObject fireHead;
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 
     private void OnTriggerEnter(Collider other)
     {

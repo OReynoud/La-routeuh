@@ -45,7 +45,6 @@ namespace Utilities
         private bool clockwiseTimer;
         private bool counterClockwiseTimer;
         [ReadOnly]public bool isColliding;
-        private bool _start;
         public float overlapBox = 1.6f;
         public bool isTutorial;
         [ShowIf("isTutorial")] public float detectionRadius;
@@ -63,7 +62,6 @@ namespace Utilities
 
         private void Awake()
         {
-            _start = true;
             mesh = GetComponentInChildren<MeshRenderer>();
             rb = GetComponent<Rigidbody>();
             col = GetComponent<BoxCollider>();
