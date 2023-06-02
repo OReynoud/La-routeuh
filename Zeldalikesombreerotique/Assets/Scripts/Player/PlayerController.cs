@@ -96,6 +96,8 @@ namespace Player
         [BoxGroup("Cinématique de fin")][ShowIf("cinematiqueDeFin")] public float[] filleWaitingTime;
         [BoxGroup("Cinématique de fin")][ShowIf("cinematiqueDeFin")] public bool lookAtFille;
         public Transform laPetite;
+        private Vector3 savedLeft;
+        private Vector3 savedRight;
 
         public void OnDrawGizmosSelected()
         {
@@ -212,6 +214,8 @@ namespace Player
                 }
                 else
                 {
+                    savedLeft = -transform.right;
+                    savedRight= transform.right;
                     SetJoint(true);
                     canMove = true;
                     rig[0].SetBool("IsGrabbing", true);
@@ -240,6 +244,12 @@ namespace Player
                     rig[0].SetBool("isWalking", false);
                     rig[1].SetBool("isWalking", false);
                 }
+
+                if(isGrabbing && pushingPullingRotate)
+                {
+                    savedLeft = -transform.right;
+                    savedRight= transform.right;
+                }
                 rig[0].SetBool("IsPushing",false);
                 Decelerate();
                 gamepad?.SetMotorSpeeds(0f,0f);
@@ -262,9 +272,7 @@ namespace Player
         void Decelerate()
         {
             if (!canMove)return;
-            
-                //if (isGrabbing) Debug.Log("Decelerating");
-            if (!isGrabbing)playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
+            playerDir = new Vector3(playerDir.x * 0.1f,playerDir.y,playerDir.z * 0.1f);
             rb.velocity *= decelerationFactor;
             rb.angularVelocity = Vector3.zero;
         }
@@ -290,7 +298,6 @@ namespace Player
                 isGrabbing = false;
                 canMove = true;
             }
-            Debug.Log("push pull "+controls.Player.InteractEnter.IsPressed());
             if (context.ReadValue<float>() == 0 && !controls.Player.InteractEnter.IsPressed())
             {
                 if (!objectToGrab || !objectType)return;
@@ -369,7 +376,6 @@ namespace Player
                 isGrabbing = false;
                 canMove = true;
             }
-            Debug.Log("rotate "+controls.Player.SecondaryEnter.IsPressed());
             if (context.ReadValue<float>() == 0 && !controls.Player.SecondaryEnter.IsPressed())
             {
                 if (!objectToGrab || !objectType)return;
@@ -542,22 +548,22 @@ namespace Player
                 return;
             }
                 //Rotate______________________________________________________________________________________________________________________________________
-            
+               
             if (isGrabbing && pushingPullingRotate && playerDir.magnitude > 0.1f)
             {
                 rb.velocity = Vector3.zero;
-
+                
+                var fwrd = transform.forward;
+                var leftDiff = playerDir - savedLeft;
+                var rightDiff = playerDir - savedRight;
+                //Debug.Log(Mathf.Abs(leftDiff.x + leftDiff.z) + "left");
+                //Debug.Log(Mathf.Abs(rightDiff.x + rightDiff.z)+ "right");
                 var dirModifier = 1f;
                 // 1 is clockwise
                 // -1 is counter-clockwise
-                
-                
-                if (playerDir.x > 0)
+                if (Mathf.Abs(leftDiff.x + leftDiff.z) > Mathf.Abs(rightDiff.x + rightDiff.z))
                 {
-                    if (canRotateCounterClockwise)
-                        dirModifier = -1;
-                    else
-                        dirModifier = 0;
+                    dirModifier = canRotateCounterClockwise ? -1 : 0;
                 }
                 else
                 {
@@ -574,6 +580,7 @@ namespace Player
                 }
                 return;
             }
+            
             
                         
             if (rb.velocity.magnitude < minSpeed && !isGrabbing)
