@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -593,6 +593,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2106466159}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &364726429 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8136767338414580414, guid: 2d77a174e45e24a4286b8916a24c07eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 898999637}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,6 +848,12 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!4 &509514913 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4708802928095744537, guid: 2d77a174e45e24a4286b8916a24c07eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 898999637}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &514780967
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -861,6 +873,26 @@ PrefabInstance:
       objectReference: {fileID: 1564045231}
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
+      propertyPath: chapo
+      value: 
+      objectReference: {fileID: 509514913}
+    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
+        type: 3}
+      propertyPath: fireHead
+      value: 
+      objectReference: {fileID: 364726429}
+    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
+        type: 3}
+      propertyPath: girlHand
+      value: 
+      objectReference: {fileID: 1641239192}
+    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
+        type: 3}
+      propertyPath: girlHead
+      value: 
+      objectReference: {fileID: 1327913717}
+    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
+        type: 3}
       propertyPath: laPetite
       value: 
       objectReference: {fileID: 1743928907}
@@ -876,6 +908,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
+      propertyPath: timeToPutChapo
+      value: 1.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
+        type: 3}
+      propertyPath: timeToPickChapo
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
+        type: 3}
       propertyPath: playerTTR.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -883,6 +925,11 @@ PrefabInstance:
         type: 3}
       propertyPath: filleTTR.Array.data[0]
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
+        type: 3}
+      propertyPath: playerTTR.Array.data[0]
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
@@ -917,7 +964,7 @@ PrefabInstance:
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
       propertyPath: filleWaitingTime.Array.data[1]
-      value: 2.5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
@@ -1426,6 +1473,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16a620d2b550ff34b95edbad948da320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  girl: {fileID: 1743928907}
+  girlHand: {fileID: 1641239192}
+  girlHead: {fileID: 1327913717}
+  chapo: {fileID: 509514913}
+  fireHead: {fileID: 364726429}
 --- !u!135 &802539205
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1757,6 +1809,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4708802928095744537, guid: 2d77a174e45e24a4286b8916a24c07eb,
         type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.187
+      objectReference: {fileID: 0}
+    - target: {fileID: 4708802928095744537, guid: 2d77a174e45e24a4286b8916a24c07eb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.008
+      objectReference: {fileID: 0}
+    - target: {fileID: 4708802928095744537, guid: 2d77a174e45e24a4286b8916a24c07eb,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.349
+      objectReference: {fileID: 0}
+    - target: {fileID: 4708802928095744537, guid: 2d77a174e45e24a4286b8916a24c07eb,
+        type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0.47567752
       objectReference: {fileID: 0}
@@ -1889,7 +1956,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Avatar
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 9000000, guid: 53e5ab39bf8a1064ba720c65f6e049e8, type: 3}
     - target: {fileID: 6214262609976868180, guid: 2d77a174e45e24a4286b8916a24c07eb,
         type: 3}
       propertyPath: m_Controller
@@ -1920,6 +1987,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -11.87661
       objectReference: {fileID: 0}
+    - target: {fileID: 6895775708551088103, guid: 2d77a174e45e24a4286b8916a24c07eb,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7337165646405371225, guid: 2d77a174e45e24a4286b8916a24c07eb,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1934,6 +2006,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -14.650689
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136767338414580414, guid: 2d77a174e45e24a4286b8916a24c07eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8479750341909924090, guid: 2d77a174e45e24a4286b8916a24c07eb,
         type: 3}
@@ -2857,6 +2934,12 @@ Transform:
   m_Father: {fileID: 268783588}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: 0, z: 0}
+--- !u!4 &1327913717 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 566140054289893434, guid: 2d77a174e45e24a4286b8916a24c07eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 898999637}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1365031872
 GameObject:
   m_ObjectHideFlags: 0
@@ -3318,6 +3401,12 @@ Transform:
   m_Father: {fileID: 1852226881}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1641239192 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 865001452266530961, guid: 2d77a174e45e24a4286b8916a24c07eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 898999637}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1743928907 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5888394485642353337, guid: 2d77a174e45e24a4286b8916a24c07eb,
@@ -4726,6 +4815,12 @@ MonoBehaviour:
   playerWaitingTime: []
   filleWaitingTime: []
   lookAtFille: 0
+  timeToPickChapo: 0
+  timeToPutChapo: 0
+  girlHand: {fileID: 0}
+  girlHead: {fileID: 0}
+  chapo: {fileID: 0}
+  fireHead: {fileID: 0}
   laPetite: {fileID: 0}
 --- !u!1 &3754095988048808003
 GameObject:
