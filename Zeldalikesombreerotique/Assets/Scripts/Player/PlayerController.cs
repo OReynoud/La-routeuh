@@ -28,6 +28,7 @@ namespace Player
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur quand il manipule un objet")]public float grabbedSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur")] public float minSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse maximale du joueur")] public float maxSpeed;
+        [BoxGroup("Mouvements")]public float savedMaxSpeed;
         
         [BoxGroup("Mouvements")] [Tooltip("Vitesse de rotation quand le joueur grab")] public float rotationSpeed;
 
@@ -130,6 +131,7 @@ namespace Player
             controls.Player.SecondaryEnter.performed += SecondaryInteract;
             controls.Player.SecondaryEnter.canceled +=  SecondaryInteract;
             controls.Player.SecondaryEnter.canceled +=  PushPullEnter;
+            savedMaxSpeed = maxSpeed;
                 gamepad = Gamepad.current;
                 if (introCinematic)
                 {
@@ -490,7 +492,8 @@ namespace Player
                 var differential = playerDir - fwrd;
                 var absDiff = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
                 var ctxMax = maxSpeed / objectToGrab.mass;
-                if (absDiff < 2f && canPush) // Pushing
+                Debug.Log(absDiff);
+                if (absDiff < 1.25f && canPush) // Pushing
                 {
                     //Debug.Log("pushing");
                     playerDir = new Vector3(fwrd.x, playerDir.y, fwrd.z);
@@ -498,6 +501,7 @@ namespace Player
                     var dpush = Mathf.Abs(dirPush.x) + Mathf.Abs(dirPush.z);
                     if (Mathf.Abs(dpush) > 2f)
                     {
+                        rb.velocity = Vector3.zero;
                         accelerationTimer = 0;
                     }
                     var delta = Vector2.Distance(new Vector2(transform.position.x, transform.position.z),
@@ -841,6 +845,7 @@ namespace Player
             yield return new WaitForSeconds(0.3f);
             //Debug.Log("girl runs to door");
             animFille.SetBool("isRunning",true);
+            laPetite.rotation = GetDir(filleDestinations[0].position, laPetite.position);
             laPetite.DOMove(filleDestinations[0].position, filleTTR[0] - 0.3f).SetEase(Ease.Linear);
             yield return new WaitForSeconds(filleTTR[0] - 0.3f);
             //Debug.Log("reached door");
