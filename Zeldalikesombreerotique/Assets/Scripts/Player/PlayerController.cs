@@ -28,6 +28,7 @@ namespace Player
         [BoxGroup("Mouvements")][Tooltip("Accélération du joueur quand il manipule un objet")]public float grabbedSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse minimale du joueur")] public float minSpeed;
         [BoxGroup("Mouvements")] [Tooltip("Vitesse maximale du joueur")] public float maxSpeed;
+        [BoxGroup("Mouvements")]public float savedMaxSpeed;
         
         [BoxGroup("Mouvements")] [Tooltip("Vitesse de rotation quand le joueur grab")] public float rotationSpeed;
 
@@ -130,6 +131,7 @@ namespace Player
             controls.Player.SecondaryEnter.performed += SecondaryInteract;
             controls.Player.SecondaryEnter.canceled +=  SecondaryInteract;
             controls.Player.SecondaryEnter.canceled +=  PushPullEnter;
+            savedMaxSpeed = maxSpeed;
                 gamepad = Gamepad.current;
                 if (introCinematic)
                 {
