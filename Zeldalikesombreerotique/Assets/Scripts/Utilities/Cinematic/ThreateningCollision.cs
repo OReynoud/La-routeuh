@@ -69,6 +69,8 @@ namespace Utilities.Cinematic
             yield return new WaitForSeconds(timeBeforeKill);
             
             CameraManager.Instance.NoMoreBoutToBeKilled();
+            heartbeat.DOFade(0, 0.5f);
+            breathing.DOFade(0, 0.5f);
             PlayerController.instance.transform.position = respawnPoint.position;
             PlayerController.instance.maxSpeed = _tempPlayerMaxSpeed;
             
