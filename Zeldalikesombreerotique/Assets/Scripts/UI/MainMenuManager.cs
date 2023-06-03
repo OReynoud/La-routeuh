@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,7 +12,7 @@ namespace UI
     internal class MainMenuManager : MonoBehaviour
     {
         public int SceneValue;
-        private InputSystemUIInputModule input;
+        public  InputSystemUIInputModule input;
         public RectTransform title;
         public RectTransform controlsImage;
         public RectTransform mainGroup;
@@ -25,6 +26,8 @@ namespace UI
         public Slider soundSlider;
         public Slider musicSlider;
         public Toggle vibrationsCheck;
+
+        public CanvasGroup credits;
         // Start is called before the first frame update
         
 
@@ -42,6 +45,7 @@ namespace UI
                 Cursor.lockState = CursorLockMode.None;
             }
 
+            if (Gamepad.current == null)return;
             if (Gamepad.current.wasUpdatedThisFrame && Cursor.lockState != CursorLockMode.Locked)
             {
                 Debug.Log("switch to gamepad");
@@ -56,6 +60,7 @@ namespace UI
 
         public void ShowOptions()
         {
+            StartCoroutine(AvoidSpams());
             mainGroup.DOLocalMove(mainGroup.localPosition + Vector3.left * mainOffset, 0.5f);
             title.DOLocalMove(title.localPosition + Vector3.left * mainOffset, 0.5f); 
             optionGroup.DOLocalMove(optionGroup.localPosition + Vector3.up * settingsOffset, 0.5f);
@@ -64,6 +69,7 @@ namespace UI
 
         public void HideOptions()
         {
+            StartCoroutine(AvoidSpams());
             mainGroup.DOLocalMove(mainGroup.localPosition + Vector3.right * mainOffset, 0.5f);
             title.DOLocalMove(title.localPosition + Vector3.right * mainOffset, 0.5f); 
             optionGroup.DOLocalMove(optionGroup.localPosition + Vector3.down * settingsOffset, 0.5f);
@@ -72,12 +78,15 @@ namespace UI
 
         public void ShowCredits()
         {
-            
-        }
-
-        public void HideCredits()
-        {
-            
+            StartCoroutine(AvoidSpams());
+            if (credits.alpha == 1)
+            {
+                DOTween.To(() => credits.alpha,x => credits.alpha = x,0,0.4f);
+            }
+            else
+            {
+                DOTween.To(() => credits.alpha,x => credits.alpha = x,1,0.4f);
+            }
         }
 
         public void UpdateSoundSettings()
@@ -92,6 +101,13 @@ namespace UI
         public void UpdateVibrationSettings()
         {
             PlayerPrefs.SetInt("Vibrations",vibrationsCheck.isOn? 1:0);
+        }
+
+        public IEnumerator AvoidSpams()
+        {
+            input.enabled = false;
+            yield return new WaitForSeconds(0.6f);
+            input.enabled = true;
         }
     }
 }
