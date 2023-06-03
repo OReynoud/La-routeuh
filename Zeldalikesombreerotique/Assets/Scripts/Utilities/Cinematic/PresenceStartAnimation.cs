@@ -103,6 +103,7 @@ namespace Utilities.Cinematic
         private IEnumerator WaitToFallCoroutine()
         {
             yield return new WaitForEndOfFrame();
+            PlayerController.instance.rb.isKinematic = true;
             PlayerController.instance.introCinematic = true;
             PlayerController.instance.rig[0].SetBool("isWalking",true);
             PlayerController.instance.rig[1].SetBool("isWalking",true);
@@ -112,7 +113,6 @@ namespace Utilities.Cinematic
             DOTween.To(()=> PlayerController.instance.minSpeed, x=> PlayerController.instance.minSpeed = x, 0f, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);*/
             DOTween.To(()=> PlayerController.instance.rb.velocity, x=> PlayerController.instance.rb.velocity = x, Vector3.zero, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
             DOTween.To(()=> PlayerController.instance.rig[0].GetFloat("Speed"), x=> PlayerController.instance.rig[0].GetFloat("Speed"), 0, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
-            DOTween.To(()=> PlayerController.instance.rig[1].GetFloat("Speed"), x=> PlayerController.instance.rig[1].GetFloat("Speed"), 0, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
             CinematicBands.instance.OpenBands();
             PlayerController.instance.controls.Disable();
             PlayerController.instance.canMove = false;
@@ -136,6 +136,7 @@ namespace Utilities.Cinematic
             PlayerController.instance.rb.velocity = Vector3.zero;
             PlayerController.instance.maxSpeed = maxSpeedTemp;
             PlayerController.instance.minSpeed = minSpeedTemp;
+            PlayerController.instance.rb.isKinematic = false;
         }
     }
 }
