@@ -20,6 +20,7 @@ public class StopMusique : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+
             musique.DOFade(0, 0.8f);
             fond.DOFade(0, 0.8f);
             murmure1.DOFade(0, 0.8f);
