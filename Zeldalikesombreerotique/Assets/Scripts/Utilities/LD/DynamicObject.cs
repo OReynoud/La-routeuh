@@ -100,6 +100,10 @@ namespace Utilities
                 {
                     LautreCheckDeSesMorts();
                 }
+                else if (PlayerController.instance.pushingPullingRotate && PlayerController.instance.objectType == this)
+                {
+                    CheckDeSesMorts();
+                }
             }
 
             if (isTutorial && PlayerController.instance)
@@ -144,41 +148,27 @@ namespace Utilities
             childCollider.enabled = mesh.material.color.a > 0.9f;
         }
 
-        private void CheckDeSesMorts(Collision other)
+        private void CheckDeSesMorts()
         {
-            if (other.gameObject.CompareTag("Untagged") || other.gameObject.CompareTag("Player") ||
-                !PlayerController.instance.isGrabbing) return;
-            var frontSide = transform.forward;
-            var backSide = -transform.forward;
-            var delta1 = Vector3.Distance(frontSide, other.collider.ClosestPoint(frontSide))- Vector3.Distance(backSide, other.collider.ClosestPoint(backSide));
-            if (delta1 > 0)
+            if (PlayerPrefs.GetInt("Vibrations", 1) == 1)
             {
-                PlayerController.instance.canRotateClockwise = false;
-                PlayerController.instance.canRotateCounterClockwise = false;
-                return;
+                PlayerController.instance.gamepad?.SetMotorSpeeds(PlayerController.instance.rumbleIntensity,PlayerController.instance.rumbleIntensity);
             }
-            if (PlayerController.instance.pushingPullingRotate)
+            var oui = Physics.OverlapBox(col.center + transform.position, col.size / 2 + 0.1f * Vector3.one, transform.rotation,~PlayerController.instance.mask);
+            foreach (var non in oui)
             {
-                if (PlayerPrefs.GetInt("Vibrations", 1) == 1)
-                {
-                    PlayerController.instance.gamepad?.SetMotorSpeeds(PlayerController.instance.rumbleIntensity,PlayerController.instance.rumbleIntensity);
-                }
-                rb.constraints = RigidbodyConstraints.FreezeAll;
-                Collider[] oui;
-                do
-                {
-                    var closer = PlayerController.instance.transform;
-                    transform.position += -transform.forward * 0.1f; // Vector3.Distance(transform.position,handlePos.position);
-                    oui = Physics.OverlapBox(col.center + transform.position, col.size / 2 + 0.1f * Vector3.one, transform.rotation,PlayerController.instance.mask);
-                    Debug.Log(oui.Length);
-                } while (oui.Length > 1);
+                Debug.Log(non,non);
             }
-            isColliding = true;
+            if (oui.Length > 1)
+            {
+                Debug.Log("TIREZ");
+                transform.position += -transform.forward * 0.1f; // Vector3.Distance(transform.position,handlePos.position);
+            }
         }
 
         private void LautreCheckDeSesMorts()
         {
-            var oui = Physics.OverlapBox(transform.position, col.size * PlayerController.instance.overlapBoxSize + Vector3.up, transform.rotation,PlayerController.instance.mask);
+            var oui = Physics.OverlapBox(transform.position, col.size * PlayerController.instance.overlapBoxSize + Vector3.up, transform.rotation,~PlayerController.instance.mask);
 
             
 
@@ -212,17 +202,17 @@ namespace Utilities
                 }
             }
         }
-        private void OnCollisionEnter(Collision other)
+        /*private void OnCollisionEnter(Collision other)
         {
-            CheckDeSesMorts(other);
-        }
+            CheckDeSesMorts();
+        }*/
         private void OnCollisionStay(Collision other)
         {
             if (other.gameObject.CompareTag("Player"))
             {
                 PlayerController.instance.isProtected = true;
             }
-            CheckDeSesMorts(other);
+            
         }
         private void OnCollisionExit(Collision other)
         {
