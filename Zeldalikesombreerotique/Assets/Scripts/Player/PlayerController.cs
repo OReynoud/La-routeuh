@@ -495,7 +495,7 @@ namespace Player
                 var absDiff = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
                 var ctxMax = maxSpeed / objectToGrab.mass;
                 Debug.Log(absDiff);
-                if (absDiff < 1.25f && canPush) // Pushing
+                if (Vector3.Distance(playerDir, objectToGrab.transform.forward) < Vector3.Distance(playerDir, -objectToGrab.transform.forward) && canPush) // Pushing
                 {
                     //Debug.Log("pushing");
                     playerDir = new Vector3(fwrd.x, playerDir.y, fwrd.z);
@@ -525,7 +525,7 @@ namespace Player
                     
                     rb.AddForce(playerDir * (appliedModifier * (accelerationTimer/grabAccelerationTime)));
                 }
-                else if(absDiff >= 2f && canPull) // Pulling
+                else if(Vector3.Distance(playerDir, objectToGrab.transform.forward) > Vector3.Distance(playerDir, -objectToGrab.transform.forward) && canPull) // Pulling
                 { 
                     //Debug.Log("pulling");
                     playerDir = new Vector3(-fwrd.x, playerDir.y, -fwrd.z);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using Managers;
@@ -8,6 +9,9 @@ namespace Utilities.Cinematic
 {
     public class ThreateningCollision : MonoBehaviour
     {
+        public AudioSource heartbeat;
+        public AudioSource breathing;
+        
         [SerializeField] private float timeBeforeKill;
         [SerializeField] private Transform respawnPoint;
         private Coroutine _killPlayerCoroutine;
@@ -18,10 +22,22 @@ namespace Utilities.Cinematic
         [SerializeField] private float slowDownTime;
         [SerializeField] private Ease slowDownEase;
 
+        private void Awake()
+        {
+            heartbeat = GameObject.FindGameObjectWithTag("Heartbeat").GetComponent<AudioSource>();
+            breathing = GameObject.FindGameObjectWithTag("Breathing").GetComponent<AudioSource>();
+        }
+
         private void OnCollisionEnter(Collision other)
         {
             if (other.gameObject.CompareTag("Player") && !PlayerController.instance.isProtected)
             {
+
+
+                heartbeat.DOFade(1, 0.5f);
+                breathing.DOFade(1, 0.5f);
+                
+                
                 CameraManager.Instance.BoutToBeKilled();
                 _tempPlayerMaxSpeed = PlayerController.instance.maxSpeed;
                 DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, slowDownValue, slowDownTime).SetEase(slowDownEase);
@@ -35,6 +51,9 @@ namespace Utilities.Cinematic
             {
                 if (_killPlayerCoroutine != null)
                 {
+                    heartbeat.DOFade(0, 0.5f);
+                    breathing.DOFade(0, 0.5f);
+
                     StopCoroutine(_killPlayerCoroutine);
                     _killPlayerCoroutine = null;
                     
