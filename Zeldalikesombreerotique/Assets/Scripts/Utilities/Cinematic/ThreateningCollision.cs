@@ -71,6 +71,8 @@ namespace Utilities.Cinematic
             PlayerController.instance.isDead = true;
             _slowDownTween.Kill();
             CameraManager.Instance.NoMoreBoutToBeKilled();
+            heartbeat.DOFade(0, 0.5f);
+            breathing.DOFade(0, 0.5f);
             PlayerController.instance.transform.position = respawnPoint.position;
             PlayerController.instance.maxSpeed = PlayerController.instance.savedMaxSpeed;
             PlayerController.instance.rig[0].Play("idle");
