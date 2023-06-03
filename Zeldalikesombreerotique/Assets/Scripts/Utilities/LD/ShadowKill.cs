@@ -48,10 +48,10 @@ namespace Utilities.LD
         {
             yield return new WaitForSeconds(timeBeforeKill);
             PlayerController.instance.isDead = true;
-            
+            _slowDownTween.Kill();
             CameraManager.Instance.NoMoreBoutToBeKilled();
             PlayerController.instance.transform.position = RespawnPoint.position;
-            PlayerController.instance.maxSpeed = _tempPlayerMaxSpeed;
+            PlayerController.instance.maxSpeed = PlayerController.instance.savedMaxSpeed;
             PlayerController.instance.rig[0].Play("idle");
             PlayerController.instance.rig[1].Play("idle");
             PlayerController.instance.rig[0].SetBool("isWalking",false);

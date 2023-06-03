@@ -40,7 +40,7 @@ namespace Utilities.Cinematic
                 
                 CameraManager.Instance.BoutToBeKilled();
                 _tempPlayerMaxSpeed = PlayerController.instance.maxSpeed;
-                DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, slowDownValue, slowDownTime).SetEase(slowDownEase);
+                _slowDownTween = DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, slowDownValue, slowDownTime).SetEase(slowDownEase);
                 _killPlayerCoroutine = StartCoroutine(KillPlayer());
             }
         }
@@ -66,13 +66,37 @@ namespace Utilities.Cinematic
 
         private IEnumerator KillPlayer()
         {
-            yield return new WaitForSeconds(timeBeforeKill);
             
+            yield return new WaitForSeconds(timeBeforeKill);
+            PlayerController.instance.isDead = true;
+            _slowDownTween.Kill();
             CameraManager.Instance.NoMoreBoutToBeKilled();
             PlayerController.instance.transform.position = respawnPoint.position;
-            PlayerController.instance.maxSpeed = _tempPlayerMaxSpeed;
-            
+            PlayerController.instance.maxSpeed = PlayerController.instance.savedMaxSpeed;
+            PlayerController.instance.rig[0].Play("idle");
+            PlayerController.instance.rig[1].Play("idle");
+            PlayerController.instance.rig[0].SetBool("isWalking",false);
+            PlayerController.instance.rig[0].SetBool("isPulling",false);
+            PlayerController.instance.rig[0].SetBool("isPushing",false);
+            PlayerController.instance.rig[0].SetBool("IsGrabbing",false);
+            PlayerController.instance.pushingPullingRotate = false;
+            PlayerController.instance.isGrabbing = false;
+            PlayerController.instance.canMove = true;
+            PlayerController.instance.joint.autoConfigureConnectedAnchor = true;
+            if (PlayerController.instance.objectToGrab)
+            {
+                PlayerController.instance.objectToGrab.constraints = RigidbodyConstraints.FreezeRotation;
+                PlayerController.instance.objectToGrab.position = PlayerController.instance.objectType.spawnPos;
+                PlayerController.instance.objectToGrab = null;
+            }
+            PlayerController.instance.objectType = null;
+
             _killPlayerCoroutine = null;
+            
+            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
+            PlayerController.instance.maxSpeed = PlayerController.instance.savedMaxSpeed;
+            PlayerController.instance.isDead = false;
         }
     }
 }
