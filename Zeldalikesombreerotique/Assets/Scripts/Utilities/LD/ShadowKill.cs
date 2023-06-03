@@ -74,6 +74,7 @@ namespace Utilities.LD
             
             yield return new WaitForFixedUpdate();
             yield return new WaitForEndOfFrame();
+            PlayerController.instance.maxSpeed = PlayerController.instance.savedMaxSpeed;
             PlayerController.instance.isDead = false;
         }
     }
