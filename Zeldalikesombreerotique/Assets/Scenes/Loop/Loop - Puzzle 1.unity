@@ -1815,6 +1815,12 @@ RectTransform:
   m_AnchoredPosition: {x: 1083, y: -60}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!4 &578382389 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4428269727719056130, guid: a3dabca07104c114f9a9df74082957c8,
+    type: 3}
+  m_PrefabInstance: {fileID: 2049750354}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &614161455
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3349,6 +3355,12 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7845098839649985024, guid: 6f8d307589954b84a9a8ebfa84595a73,
     type: 3}
   m_PrefabInstance: {fileID: 614161455}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &962762846 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4428269726596170359, guid: a3dabca07104c114f9a9df74082957c8,
+    type: 3}
+  m_PrefabInstance: {fileID: 2049750354}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &963248887 stripped
 GameObject:
@@ -5503,6 +5515,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3887273675163995, guid: a3dabca07104c114f9a9df74082957c8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 428947318369703479, guid: a3dabca07104c114f9a9df74082957c8,
         type: 3}
       propertyPath: mapPartToMove
@@ -6020,6 +6036,21 @@ PrefabInstance:
       objectReference: {fileID: 955941211}
     - target: {fileID: 6411649780411246615, guid: a3dabca07104c114f9a9df74082957c8,
         type: 3}
+      propertyPath: StreetLights.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6411649780411246615, guid: a3dabca07104c114f9a9df74082957c8,
+        type: 3}
+      propertyPath: StreetLights.Array.data[0]
+      value: 
+      objectReference: {fileID: 578382389}
+    - target: {fileID: 6411649780411246615, guid: a3dabca07104c114f9a9df74082957c8,
+        type: 3}
+      propertyPath: StreetLights.Array.data[1]
+      value: 
+      objectReference: {fileID: 962762846}
+    - target: {fileID: 6411649780411246615, guid: a3dabca07104c114f9a9df74082957c8,
+        type: 3}
       propertyPath: previousHubGameObjects.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -6028,6 +6059,21 @@ PrefabInstance:
       propertyPath: previousHubGameObjects.Array.data[0]
       value: 
       objectReference: {fileID: 253796425}
+    - target: {fileID: 6411649780487386748, guid: a3dabca07104c114f9a9df74082957c8,
+        type: 3}
+      propertyPath: StreetLights.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6411649780487386748, guid: a3dabca07104c114f9a9df74082957c8,
+        type: 3}
+      propertyPath: StreetLights.Array.data[0]
+      value: 
+      objectReference: {fileID: 578382389}
+    - target: {fileID: 6411649780487386748, guid: a3dabca07104c114f9a9df74082957c8,
+        type: 3}
+      propertyPath: StreetLights.Array.data[1]
+      value: 
+      objectReference: {fileID: 962762846}
     - target: {fileID: 6411649780487386748, guid: a3dabca07104c114f9a9df74082957c8,
         type: 3}
       propertyPath: previousHubGameObjects.Array.size
