@@ -58,6 +58,7 @@ namespace Utilities
         private bool rotateActive;
         private Vector3 lastSavedPos;
         private Vector3 lastSavedRotation;
+        public Vector3 spawnPos;
 
 
         private void Awake()
@@ -74,6 +75,8 @@ namespace Utilities
             {
                 rotateSprites.Add(rotateUI.GetChild(i).GetComponent<SpriteRenderer>());
             }
+
+            spawnPos = transform.position;
         }
 
         private void OnDrawGizmosSelected()
