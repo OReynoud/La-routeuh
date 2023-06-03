@@ -155,7 +155,10 @@ namespace Utilities
                 PlayerController.instance.gamepad?.SetMotorSpeeds(PlayerController.instance.rumbleIntensity,PlayerController.instance.rumbleIntensity);
             }
             
-            var oui = Physics.OverlapBox(col.center + transform.position, col.size / 2 + 0.1f * Vector3.one, transform.rotation,~PlayerController.instance.mask,QueryTriggerInteraction.Ignore);
+            var oui = Physics.OverlapBox(col.center + transform.position, 
+                col.size / 2 + 0.1f * Vector3.one,
+                transform.rotation,~PlayerController.instance.mask,
+                QueryTriggerInteraction.Ignore);
             foreach (var non in oui)
             {
                 Debug.Log(non+ "Check si les objets on les bons layers",non );
