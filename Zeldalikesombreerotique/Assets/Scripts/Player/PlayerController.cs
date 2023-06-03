@@ -586,12 +586,13 @@ namespace Player
                 }
                 transform.RotateAround(objectToGrab.position,transform.up, rotationSpeed * dirModifier);
                 
-                
                 var delta = Vector2.Distance(new Vector2(transform.position.x, transform.position.z),
                     new Vector2(objectType.handlePos.position.x, objectType.handlePos.position.z));
-                if (delta > 0.1f)
+                if (delta > 0.05f)
                 {
                     rb.velocity =  Vector3.zero;
+                    transform.position = new Vector3(objectType.handlePos.position.x, transform.position.y,
+                        objectType.handlePos.position.z);
                 }
                 return;
             }
