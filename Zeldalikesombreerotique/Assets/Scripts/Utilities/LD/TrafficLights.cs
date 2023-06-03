@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Managers;
 using UnityEngine;
+using Utilities.Cinematic;
 
 namespace Utilities.LD
 {
@@ -14,6 +15,7 @@ namespace Utilities.LD
         [SerializeField] private GameObject redLight;
         [SerializeField] private float redLightIntensityFactor;
         [SerializeField] private List<Draw> appearedDraws;
+        [SerializeField] private List<Transform> StreetLights;
         private static readonly int ColorRouge = Shader.PropertyToID("_ColorRouge");
         private static readonly int ColorVert = Shader.PropertyToID("_ColorVert");
         
@@ -61,6 +63,10 @@ namespace Utilities.LD
 
         private IEnumerator ChangeLightColor()
         {
+            foreach (var streetLight in StreetLights)
+            {
+                streetLight.GetChild(3).GetComponent<StreetLightTriggerBehavior>().LightStayOn();
+            }
             yield return new WaitUntil(() => appearedDraws.All(draw => draw.Links.All(link => link.link.IsDrawn)));
             
             var redColor = meshRenderer.material.GetColor(ColorRouge);

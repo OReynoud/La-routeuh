@@ -26,6 +26,13 @@ namespace Utilities.Cinematic
         {
             _switchOffWaitForSeconds = new WaitForSeconds(timeBeforeSwitchOff);
         }
+        public void LightStayOn()
+        {
+            canSwitchOff = false;
+            StopCoroutine(_switchOffCoroutine);
+            spotLight.SetActive(true);
+            coneMesh.SetActive(true);
+        }
 
         private void OnTriggerEnter(Collider other)
         {
