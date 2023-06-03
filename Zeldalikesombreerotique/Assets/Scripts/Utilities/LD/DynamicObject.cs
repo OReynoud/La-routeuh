@@ -168,10 +168,7 @@ namespace Utilities
                 do
                 {
                     var closer = PlayerController.instance.transform;
-                    PlayerController.instance.transform.position +=  -closer.forward * .03f;
-                    transform.position = closer.position + 
-                                         closer.forward * 
-                                         Vector3.Distance(transform.position,handlePos.position);
+                    transform.position += -transform.forward * 0.1f; // Vector3.Distance(transform.position,handlePos.position);
                     oui = Physics.OverlapBox(col.center + transform.position, col.size / 2 + 0.1f * Vector3.one, transform.rotation,PlayerController.instance.mask);
                     Debug.Log(oui.Length);
                 } while (oui.Length > 1);
@@ -193,18 +190,16 @@ namespace Utilities
                 PlayerController.instance.canPull = true;
                 PlayerController.instance.canPush = true;
             }
-            foreach (var non in oui)
+            /*foreach (var non in oui)
             {
                 Debug.Log(non, non);
-            }
+            }*/
             for (int i = 0; i < oui.Length; i++)
             {
                 if (oui[i] == col) continue;
                 if (oui[i] == GetComponentInChildren<Collider>()) continue;
                 var distanceToFrontSide = Vector3.Distance(transform.position + frontSide, oui[i].ClosestPoint(transform.position + frontSide));
                 var distanceToBackSide = Vector3.Distance(transform.position + backSide, oui[i].ClosestPoint(transform.position + backSide));
-                Debug.DrawLine(transform.position + frontSide, oui[i].ClosestPoint(transform.position + frontSide),Color.blue);
-                Debug.DrawLine(transform.position + backSide, oui[i].ClosestPoint(transform.position + backSide),Color.red);
                 if (distanceToFrontSide > distanceToBackSide)
                 {
                     PlayerController.instance.canPull = false;

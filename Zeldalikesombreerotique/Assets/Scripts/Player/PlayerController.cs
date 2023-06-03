@@ -123,7 +123,6 @@ namespace Player
             instance = this;
             canMove = true;
             controls = new InputManager();
-            rig[1].transform.rotation = Quaternion.identity;
             controls.Player.Move.performed += Move;
             controls.Player.InteractEnter.performed += PushPullEnter;
             controls.Player.InteractEnter.canceled += PushPullEnter;
@@ -494,7 +493,6 @@ namespace Player
                 var differential = playerDir - fwrd;
                 var absDiff = Mathf.Abs(differential.x) + Mathf.Abs(differential.z);
                 var ctxMax = maxSpeed / objectToGrab.mass;
-                Debug.Log(absDiff);
                 if (Vector3.Distance(playerDir, objectToGrab.transform.forward) < Vector3.Distance(playerDir, -objectToGrab.transform.forward) && canPush) // Pushing
                 {
                     //Debug.Log("pushing");
