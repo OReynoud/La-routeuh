@@ -33,7 +33,7 @@ namespace Utilities.LD
                 _lightedElementsManager.RevealedObjects[gameObject] = true;
             }
             
-            _lightedElementsManager.CurrentCheckCoroutine ??= StartCoroutine(_lightedElementsManager.CheckDictionariesCoroutine());
+            _lightedElementsManager.CurrentCheckCoroutine ??= StartCoroutine(_lightedElementsManager.CheckDictionariesCoroutine(gameObject));
         }
 
         internal void Disable(bool isStreetLight = false)
