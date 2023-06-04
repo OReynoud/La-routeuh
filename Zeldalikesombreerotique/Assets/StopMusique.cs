@@ -13,6 +13,8 @@ public class StopMusique : MonoBehaviour
     public AudioSource murmure2;
     public AudioSource murmure3;
     public AudioSource murmure4;
+    public AudioSource clock;
+    
 
 
     
@@ -21,6 +23,7 @@ public class StopMusique : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
 
+            
             musique.DOFade(0, 0.8f);
             fond.DOFade(0, 0.8f);
             murmure1.DOFade(0, 0.8f);
@@ -28,6 +31,7 @@ public class StopMusique : MonoBehaviour
             murmure3.DOFade(0, 0.8f);
             murmure4.DOFade(0, 0.8f);
 
+            clock.DOPitch(0.5f, 5);
         }
     }
 }
