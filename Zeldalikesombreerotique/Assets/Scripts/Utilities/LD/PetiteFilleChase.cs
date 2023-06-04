@@ -50,14 +50,17 @@ public class PetiteFilleChase : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            chaseScript.TriggerGirl(true);
             if (willSlowDownPlayer)
             {
                 StartCoroutine(ResetPlayerSpeed());
+            }
+            else
+            {
+                chaseScript.TriggerGirl(true);
             }
         }
     }
@@ -66,6 +69,9 @@ public class PetiteFilleChase : MonoBehaviour
     {
         PlayerController.instance.maxSpeed = 0;
         PlayerController.instance.minSpeed = 0;
+        PlayerController.instance.rb.velocity = Vector3.zero;
+        yield return new WaitForSeconds(0.2f);
+        chaseScript.TriggerGirl(true);
         yield return new WaitForSeconds(0.3f);
         willSlowDownPlayer = false;
         PlayerController.instance.maxSpeed = savedMaxSpeed;
