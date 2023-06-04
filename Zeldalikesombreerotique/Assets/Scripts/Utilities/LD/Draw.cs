@@ -50,9 +50,9 @@ namespace Utilities.LD
         {
             if (IsPermanentlyEnabled || IsEnabled) return;
             
-            LinkedTrafficLights.ForEach(x => x.CheckIfLinked());
             IsEnabled = true;
             if (isStreetLight) _isLightedByStreetLight = true;
+            LinkedTrafficLights.ForEach(x => x.CheckIfLinked());
             ChangeLinkValues(true);
         }
 
