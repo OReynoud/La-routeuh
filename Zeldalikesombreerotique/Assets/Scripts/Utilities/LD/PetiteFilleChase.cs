@@ -46,6 +46,7 @@ public class PetiteFilleChase : MonoBehaviour
             }
             PlayerController.instance.maxSpeed = savedMaxSpeed * currentSlowDown;
             PlayerController.instance.minSpeed = savedMinSpeed * currentSlowDown;
+            //METTRE LE SON ICI
         }
     }
 

@@ -152,10 +152,7 @@ namespace Utilities
 
         private void CheckDeSesMorts()
         {
-            if (PlayerPrefs.GetInt("Vibrations", 1) == 1)
-            {
-                PlayerController.instance.gamepad?.SetMotorSpeeds(PlayerController.instance.rumbleIntensity,PlayerController.instance.rumbleIntensity);
-            }
+            
             
             var oui = Physics.OverlapBox(col.center + transform.position, 
                 col.size / 2 + 0.1f * Vector3.one,
@@ -167,6 +164,10 @@ namespace Utilities
             }
             if (oui.Length > 1)
             {
+                if (PlayerPrefs.GetInt("Vibrations", 1) == 1)
+                {
+                    PlayerController.instance.gamepad?.SetMotorSpeeds(PlayerController.instance.rumbleIntensity,PlayerController.instance.rumbleIntensity);
+                }
                 transform.position += -transform.forward * 0.1f; // Vector3.Distance(transform.position,handlePos.position);
             }
         }
