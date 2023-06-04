@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2209674429059700070}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HandlePos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 5263049707537139389}
   - component: {fileID: 2593222660553487857}
   - component: {fileID: 5322959415395568134}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spot
   m_TagString: Objects
   m_Icon: {fileID: 0}
@@ -126,6 +126,7 @@ MonoBehaviour:
   rotationRequired: 0
   pushPullUI: {fileID: 0}
   rotateUI: {fileID: 0}
+  spawnPos: {x: 0, y: 0, z: 0}
 --- !u!1 &8766165274463127469
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +138,7 @@ GameObject:
   - component: {fileID: 8766165274463127468}
   - component: {fileID: 8766165274463127470}
   - component: {fileID: 8766165274463127471}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LightMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -221,7 +222,7 @@ GameObject:
   - component: {fileID: 8766165274628586205}
   - component: {fileID: 8766165274628586202}
   - component: {fileID: 8766165274628586203}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -363,7 +364,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8766165274960030925}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -453,6 +454,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Spot_chantier
       objectReference: {fileID: 0}
+    - target: {fileID: 6787559293742287913, guid: 546ce6735dbbf7b4aa66bc28f4297181,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 546ce6735dbbf7b4aa66bc28f4297181, type: 3}
 --- !u!4 &9177576035541591591 stripped
@@ -472,6 +478,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: vfx interraction
+      objectReference: {fileID: 0}
+    - target: {fileID: 8847361013520917603, guid: 5a09185cefbba2a418319e6904a4d375,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8847361013520917612, guid: 5a09185cefbba2a418319e6904a4d375,
         type: 3}

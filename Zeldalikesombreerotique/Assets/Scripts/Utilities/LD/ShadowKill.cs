@@ -14,9 +14,9 @@ namespace Utilities.LD
         private float _tempPlayerMaxSpeed;
         private Tween _slowDownTween;
         
-        [SerializeField] private float slowDownValue;
-        [SerializeField] private float slowDownTime;
-        [SerializeField] private Ease slowDownEase;
+        private float slowDownValue = 1;
+        private float slowDownTime = 0.1f;
+        private Ease slowDownEase = Ease.Linear;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -55,8 +55,7 @@ namespace Utilities.LD
             PlayerController.instance.rig[0].Play("idle");
             PlayerController.instance.rig[1].Play("idle");
             PlayerController.instance.rig[0].SetBool("isWalking",false);
-            PlayerController.instance.rig[0].SetBool("isPulling",false);
-            PlayerController.instance.rig[0].SetBool("isPushing",false);
+            PlayerController.instance.rig[0].SetBool("IsPushing",false);
             PlayerController.instance.rig[0].SetBool("IsGrabbing",false);
             PlayerController.instance.pushingPullingRotate = false;
             PlayerController.instance.isGrabbing = false;

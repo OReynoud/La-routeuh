@@ -105,8 +105,8 @@ namespace Utilities.Cinematic
             yield return new WaitForEndOfFrame();
             PlayerController.instance.rb.isKinematic = true;
             PlayerController.instance.introCinematic = true;
-            PlayerController.instance.rig[0].SetBool("isWalking",true);
-            PlayerController.instance.rig[1].SetBool("isWalking",true);
+            PlayerController.instance.rig[0].SetBool("isWalking",false);
+            PlayerController.instance.rig[1].SetBool("isWalking",false);
             var maxSpeedTemp = PlayerController.instance.maxSpeed;
             var minSpeedTemp = PlayerController.instance.minSpeed;
             /*DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, 0f, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
@@ -117,8 +117,6 @@ namespace Utilities.Cinematic
             PlayerController.instance.controls.Disable();
             PlayerController.instance.canMove = false;
             yield return new WaitForSeconds(timeToBeginFootprints);
-            PlayerController.instance.rig[0].SetBool("isWalking",false);
-            PlayerController.instance.rig[1].SetBool("isWalking",false);
             yield return new WaitForSeconds(timeBeforeFall - timeToBeginFootprints);
             PlayerController.instance.rb.velocity = Vector3.zero;
             StartCoroutine(PlayerController.instance.OmgJeSuisSurpris(littleSisterScript.objectToMove.transform));

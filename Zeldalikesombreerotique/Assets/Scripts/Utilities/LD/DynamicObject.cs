@@ -136,7 +136,9 @@ namespace Utilities
             if (rotateActive)
             {
                 var diff = Mathf.Abs(lastSavedRotation.magnitude - transform.rotation.eulerAngles.magnitude);
+                lastSavedRotation = transform.rotation.eulerAngles;
                 rotationRequired -= diff;
+                Debug.Log(diff + ", required: "+ rotationRequired);
                 if (rotationRequired <= 0)
                 {
                     rotateActive = false;
