@@ -54,20 +54,19 @@ namespace Utilities.LD
                 }
             }
 
-            StartCoroutine(ChangeLightColor());
+            ChangeLightColor();
             
             NextPuzzle();
             
             return true;
         }
 
-        private IEnumerator ChangeLightColor()
+        private void ChangeLightColor()
         {
             foreach (var streetLight in StreetLights)
             {
                 streetLight.GetChild(3).GetComponent<StreetLightTriggerBehavior>().LightStayOn();
             }
-            yield return new WaitUntil(() => appearedDraws.All(draw => draw.Links.All(link => link.link.IsDrawn)));
             
             var redColor = meshRenderer.material.GetColor(ColorRouge);
             meshRenderer.material.SetColor(ColorRouge, 
