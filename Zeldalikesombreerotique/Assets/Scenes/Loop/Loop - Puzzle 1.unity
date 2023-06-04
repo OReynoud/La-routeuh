@@ -305,8 +305,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UI.MainMenuManager, Assembly-CSharp
+      - m_Target: {fileID: 423471934}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: UpdateSoundSettings
         m_Mode: 1
         m_Arguments:
@@ -1953,8 +1953,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UI.MainMenuManager, Assembly-CSharp
+      - m_Target: {fileID: 423471934}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: UpdateVibrationSettings
         m_Mode: 1
         m_Arguments:
@@ -2396,6 +2396,9 @@ MonoBehaviour:
   settingsOffset: 1000
   controlsOffset: 700
   background: {fileID: 386462550}
+  soundSlider: {fileID: 56625874}
+  musicSlider: {fileID: 893719921}
+  vibrationsCheck: {fileID: 349154192}
 --- !u!1 &434916650
 GameObject:
   m_ObjectHideFlags: 0
@@ -4733,8 +4736,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UI.MainMenuManager, Assembly-CSharp
+      - m_Target: {fileID: 423471934}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: UpdateMusicSettings
         m_Mode: 1
         m_Arguments:

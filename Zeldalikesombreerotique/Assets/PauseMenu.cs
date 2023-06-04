@@ -22,6 +22,9 @@ public class PauseMenu : MonoBehaviour
     public float controlsOffset;
 
     public CanvasGroup background;
+    public Slider soundSlider;
+    public Slider musicSlider;
+    public Toggle vibrationsCheck;
     // Start is called before the first frame update
     public void Awake()
     {
@@ -60,5 +63,19 @@ public class PauseMenu : MonoBehaviour
         input.enabled = false;
         yield return new WaitForSeconds(0.6f);
         input.enabled = true;
+    }
+    
+    public void UpdateSoundSettings()
+    {
+        PlayerPrefs.SetFloat("Sound",soundSlider.value);
+    }
+
+    public void UpdateMusicSettings()
+    {
+        PlayerPrefs.SetFloat("Music",musicSlider.value);
+    }
+    public void UpdateVibrationSettings()
+    {
+        PlayerPrefs.SetInt("Vibrations",vibrationsCheck.isOn? 1:0);
     }
 }
