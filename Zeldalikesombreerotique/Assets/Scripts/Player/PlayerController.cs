@@ -239,6 +239,15 @@ namespace Player
                 }
             }
             var speedFactor = rb.velocity.magnitude / maxSpeed;
+            if (speedFactor > 1)
+            {
+                speedFactor = 1;
+            }
+
+            if (speedFactor < 0.1f)
+            {
+                speedFactor = 0.1f;
+            }
             if (!proofOfConcept) rig[0].SetFloat("Speed",speedFactor);
             if (!canMove)
             {

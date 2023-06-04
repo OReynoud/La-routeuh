@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using Managers;
+using NaughtyAttributes;
 using Player;
 using UnityEngine;
 
@@ -14,9 +15,9 @@ namespace Utilities.LD
         private float _tempPlayerMaxSpeed;
         private Tween _slowDownTween;
         
-        private float slowDownValue = 1;
-        private float slowDownTime = 0.1f;
-        private Ease slowDownEase = Ease.Linear;
+        [ShowNonSerializedField]private readonly float slowDownValue = 1;
+        [ShowNonSerializedField]private readonly float slowDownTime = 0.1f;
+        [ShowNonSerializedField]private readonly Ease slowDownEase = Ease.Linear;
 
         private void OnTriggerEnter(Collider other)
         {
