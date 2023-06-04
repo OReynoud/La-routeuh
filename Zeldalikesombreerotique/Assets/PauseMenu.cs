@@ -68,7 +68,7 @@ public class PauseMenu : MonoBehaviour
 
     public void HideOption()
     {
-        StartCoroutine(AvoidSpams());
+        input.enabled = false;
         optionGroup.DOLocalMove(optionGroup.localPosition + Vector3.left * settingsOffset, 0.5f);
         controlsImage.DOLocalMove(controlsImage.localPosition + Vector3.up * controlsOffset, 0.5f);
         background.DOFade(0f, 0.5f);
