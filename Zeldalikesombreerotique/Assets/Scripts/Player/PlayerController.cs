@@ -6,6 +6,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
+using Managers;
 using Utilities;
 using Vector3 = UnityEngine.Vector3;
 // ReSharper disable Unity.InefficientPropertyAccess
@@ -106,6 +107,7 @@ namespace Player
         private Vector3 savedLeft;
         private Vector3 savedRight;
         [Foldout("Références")] public PauseMenu pauseMenu;
+        [Foldout("Références")] public CameraManager cameraManager;
         [HideInInspector]public bool isDead;
 
         public void OnDrawGizmosSelected()
@@ -132,7 +134,7 @@ namespace Player
             controls.Player.SecondaryEnter.performed += SecondaryInteract;
             controls.Player.SecondaryEnter.canceled +=  SecondaryInteract;
             controls.Player.SecondaryEnter.canceled +=  PushPullEnter;
-            controls.Player.ShowUI.performed += pauseMenu.ShowOption;
+            if (pauseMenu)controls.Player.ShowUI.performed += pauseMenu.ShowOption;
             savedMaxSpeed = maxSpeed;
                 gamepad = Gamepad.current;
                 if (introCinematic)
@@ -877,6 +879,10 @@ namespace Player
             rig[0].SetFloat("Speed", 0.5f);
             rig[1].SetFloat("Speed", 0.5f);
             transform.DOMove(playerDestinations[^1].position, playerTTR[^1]);
+            yield return new WaitForSeconds(playerTTR[^1]);
+            cameraManager.Credits();
+            laPetite.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
 
         IEnumerator LookingAtGirl()
