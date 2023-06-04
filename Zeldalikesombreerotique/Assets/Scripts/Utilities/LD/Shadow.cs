@@ -35,6 +35,7 @@ namespace Utilities.LD
         
         [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] internal bool isPuzzle4Shadow;
         [ShowIf("isPuzzle4Shadow")] [Tooltip("TUS2S2KOUA")] [SerializeField] internal float divisionValue;
+        [ShowIf("isPuzzle4Shadow")] [Tooltip("Point where the player will respawn if they are killed by the shadow")] [SerializeField] private Transform respawnPoint2;
 
         private Vector3 _lastHitPoint;
         private Vector3 _lastLightPosition;
@@ -244,7 +245,16 @@ namespace Utilities.LD
                 
                 _movingSequence.Insert(0f, meshTransform.transform.DOMove(shadowPosition + anchorVector + diffVector / divisionValue, movingDuration).SetEase(movingEase));
             }
-            _movingSequence.AppendCallback(() => _movingSequence.Kill());
+            
+            _movingSequence.AppendCallback(() =>
+            {
+                _movingSequence.Kill();
+
+                foreach (var meshTransform in _meshTransforms)
+                {
+                    meshTransform.transform.GetChild(0).GetComponent<ShadowKill>().RespawnPoint = respawnPoint2;
+                }
+            });
         }
     }
 }
