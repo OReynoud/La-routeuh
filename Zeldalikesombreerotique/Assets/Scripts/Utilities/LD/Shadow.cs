@@ -28,6 +28,8 @@ namespace Utilities.LD
         [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] internal bool hasAnchor;
         [ShowIf("hasAnchor")] [Tooltip("Anchor where to move")] [SerializeField] internal Transform anchor;
         private float _anchorDirectionFactor;
+        
+        [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] internal bool isPuzzle4Shadow;
 
         private Vector3 _lastHitPoint;
         private Vector3 _lastLightPosition;
@@ -42,12 +44,15 @@ namespace Utilities.LD
                 _meshTransforms.Add((child, child.position, localPosition, localScaleX));
                 
                 child.GetChild(0).GetComponent<ShadowKill>().RespawnPoint = respawnPoint;
-                
-                var newCapsuleCollider = gameObject.AddComponent<CapsuleCollider>();
-                newCapsuleCollider.center = localPosition;
-                newCapsuleCollider.radius = localScaleX * 0.5f;
-                newCapsuleCollider.height = 4f;
-                newCapsuleCollider.isTrigger = true;
+
+                if (!isPuzzle4Shadow)
+                {
+                    var newCapsuleCollider = gameObject.AddComponent<CapsuleCollider>();
+                    newCapsuleCollider.center = localPosition;
+                    newCapsuleCollider.radius = localScaleX * 0.5f;
+                    newCapsuleCollider.height = 4f;
+                    newCapsuleCollider.isTrigger = true;
+                }
             }
 
             if (hasAnchor)
