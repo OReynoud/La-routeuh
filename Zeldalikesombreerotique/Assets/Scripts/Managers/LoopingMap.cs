@@ -41,20 +41,30 @@ namespace Managers
                 
                 mapPartToMove.transform.position = newPosition.position;
                 mapPartToMove.SetActive(true);
-                
-                var mapPartOrigin = LightedElementsManager.Instance.OriginOfTheCheck;
-                while (!mapPartOrigin.CompareTag("LoopPart"))
+
+                if (LightedElementsManager.Instance.OriginOfTheCheck)
                 {
-                    mapPartOrigin = mapPartOrigin.transform.parent.gameObject;
-                }
-                
-                foreach (var mapPart in mapPartsToDisable)
-                {
-                    if (mapPartOrigin == mapPart)
+                    var mapPartOrigin = LightedElementsManager.Instance.OriginOfTheCheck;
+                    while (!mapPartOrigin.CompareTag("LoopPart"))
                     {
-                        LightedElementsManager.Instance.MapPartOrigin = mapPart;
+                        mapPartOrigin = mapPartOrigin.transform.parent.gameObject;
                     }
-                    else
+                
+                    foreach (var mapPart in mapPartsToDisable)
+                    {
+                        if (mapPartOrigin == mapPart)
+                        {
+                            LightedElementsManager.Instance.MapPartOrigin = mapPart;
+                        }
+                        else
+                        {
+                            mapPart.SetActive(false);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var mapPart in mapPartsToDisable)
                     {
                         mapPart.SetActive(false);
                     }
