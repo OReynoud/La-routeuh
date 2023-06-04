@@ -68,6 +68,15 @@ namespace Utilities.LD
             {
                 _meshTransforms[i] = (_meshTransforms[i].transform, _meshTransforms[i].position + move, _meshTransforms[i].localPosition, _meshTransforms[i].localScaleX);
             }
+            
+            if (hasAnchor)
+            {
+                var anchorPosition = anchor.position;
+                var position = meshGameObject.transform.position;
+                
+                movingDistance = Vector3.Distance(anchorPosition, position);
+                _anchorDirectionFactor = anchorPosition.x - position.x > 0 ? 1 : -1;
+            }
         }
         
         internal void MoveShadow(float angle, Vector3 hitPoint, Vector3 lightPosition, float lightDistance)
