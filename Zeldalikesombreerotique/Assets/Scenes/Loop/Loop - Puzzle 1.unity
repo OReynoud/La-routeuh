@@ -305,8 +305,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UI.MainMenuManager, Assembly-CSharp
+      - m_Target: {fileID: 423471934}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: UpdateSoundSettings
         m_Mode: 1
         m_Arguments:
@@ -1758,11 +1758,11 @@ RectTransform:
   - {fileID: 1551597161}
   - {fileID: 910860355}
   m_Father: {fileID: 423471931}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1461, y: 90}
+  m_AnchoredPosition: {x: -1461, y: 37}
   m_SizeDelta: {x: 29.130676, y: 117.44882}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &310126995
@@ -1953,8 +1953,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UI.MainMenuManager, Assembly-CSharp
+      - m_Target: {fileID: 423471934}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: UpdateVibrationSettings
         m_Mode: 1
         m_Arguments:
@@ -1997,11 +1997,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 423471931}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1426, y: 19}
+  m_AnchoredPosition: {x: 286, y: 836}
   m_SizeDelta: {x: 441.2, y: 387.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &376605232
@@ -2042,6 +2042,95 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 376605230}
   m_CullTransparentMesh: 1
+--- !u!1 &386462549
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 386462553}
+  - component: {fileID: 386462552}
+  - component: {fileID: 386462551}
+  - component: {fileID: 386462550}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!225 &386462550
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386462549}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &386462551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386462549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &386462552
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386462549}
+  m_CullTransparentMesh: 1
+--- !u!224 &386462553
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386462549}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 423471931}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 2000, y: 1000}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &392838824 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8287383182141188786, guid: c35c1d773b56b5344879b987f7383920,
@@ -2219,6 +2308,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 386462553}
   - {fileID: 1183068357}
   - {fileID: 1523514917}
   - {fileID: 376605231}
@@ -2284,7 +2374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 1293127070}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!114 &423471934
@@ -2299,9 +2389,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d4ad6731db7eca45a2b9d289d9af257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  input: {fileID: 0}
-  optionGroup: {fileID: 0}
-  controlsImage: {fileID: 0}
+  input: {fileID: 423471932}
+  optionGroup: {fileID: 310126994}
+  controlsImage: {fileID: 376605231}
+  backButton: {fileID: 1293127071}
+  settingsOffset: 1000
+  controlsOffset: 700
+  background: {fileID: 386462550}
+  soundSlider: {fileID: 56625874}
+  musicSlider: {fileID: 893719921}
+  vibrationsCheck: {fileID: 349154192}
 --- !u!1 &434916650
 GameObject:
   m_ObjectHideFlags: 0
@@ -4510,8 +4607,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 862692303}
-  - component: {fileID: 862692302}
-  - component: {fileID: 862692301}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -4519,41 +4614,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &862692301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 862692300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
---- !u!114 &862692302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 862692300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
-  m_DragThreshold: 10
 --- !u!4 &862692303
 Transform:
   m_ObjectHideFlags: 0
@@ -4676,8 +4736,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UI.MainMenuManager, Assembly-CSharp
+      - m_Target: {fileID: 423471934}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: UpdateMusicSettings
         m_Mode: 1
         m_Arguments:
@@ -5583,7 +5643,7 @@ RectTransform:
   - {fileID: 681542617}
   - {fileID: 225693513}
   m_Father: {fileID: 423471931}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5904,21 +5964,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UI.MainMenuManager, Assembly-CSharp
-        m_MethodName: HideOptions
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
-        m_MethodName: Select
+      - m_Target: {fileID: 423471934}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: HideOption
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5970,7 +6018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd4eb84a0131af344b2edf1b42c0a640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  self: {fileID: 0}
+  self: {fileID: 1293127071}
   baseScale: 1
   highlightedScale: 1.05
   checkedBox: {fileID: 0}
@@ -6564,7 +6612,7 @@ RectTransform:
   - {fileID: 1892459200}
   - {fileID: 127065038}
   m_Father: {fileID: 423471931}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -13621,6 +13669,11 @@ PrefabInstance:
       objectReference: {fileID: 619196198}
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
+      propertyPath: pauseMenu
+      value: 
+      objectReference: {fileID: 423471934}
+    - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
+        type: 3}
       propertyPath: mask.m_Bits
       value: 968
       objectReference: {fileID: 0}
@@ -13632,7 +13685,7 @@ PrefabInstance:
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
       propertyPath: introCinematic
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
