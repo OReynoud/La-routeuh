@@ -177,7 +177,7 @@ namespace Player
             cone.DOLocalJump(finalConePosition,0.1f,1, conePutOnDuration);
             cone.DOLocalRotate(finalConeRotation, conePutOnDuration);
             yield return new WaitForSeconds(conePutOnDuration);
-            cone.position = finalConePosition;
+            //cone.position = finalConePosition;
             //Debug.Log("Completed");
             introCinematic = false;
             rig[0].SetBool("isBullshit",false);
