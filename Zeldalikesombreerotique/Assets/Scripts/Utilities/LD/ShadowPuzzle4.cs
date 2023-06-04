@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Utilities.LD
 {
-    public class Shadow : MonoBehaviour
+    public class ShadowPuzzle4 : MonoBehaviour
     {
         [Tooltip("Audio source")] [SerializeField] private AudioSource audioSource;
         
@@ -25,11 +25,8 @@ namespace Utilities.LD
         [HideIf("hasAnchor")] [Tooltip("Distance traveled by the moving shadow")] [SerializeField] internal float movingDistance;
         [Tooltip("Scale reached by the moving shadow")] [SerializeField] internal float movingScale;
         
-        [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] internal bool hasAnchor;
-        [ShowIf("hasAnchor")] [Tooltip("Anchor where to move")] [SerializeField] internal Transform anchor;
+        [Tooltip("Anchor where to move")] [SerializeField] internal Transform anchor;
         private float _anchorDirectionFactor;
-        
-        [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] internal bool isPuzzle4Shadow;
 
         private Vector3 _lastHitPoint;
         private Vector3 _lastLightPosition;
@@ -44,25 +41,19 @@ namespace Utilities.LD
                 _meshTransforms.Add((child, child.position, localPosition, localScaleX));
                 
                 child.GetChild(0).GetComponent<ShadowKill>().RespawnPoint = respawnPoint;
-
-                if (!isPuzzle4Shadow)
-                {
-                    var newCapsuleCollider = gameObject.AddComponent<CapsuleCollider>();
-                    newCapsuleCollider.center = localPosition;
-                    newCapsuleCollider.radius = localScaleX * 0.5f;
-                    newCapsuleCollider.height = 4f;
-                    newCapsuleCollider.isTrigger = true;
-                }
-            }
-
-            if (hasAnchor)
-            {
-                var anchorPosition = anchor.position;
-                var position = meshGameObject.transform.position;
                 
-                movingDistance = Vector3.Distance(anchorPosition, position);
-                _anchorDirectionFactor = anchorPosition.x - position.x > 0 ? 1 : -1;
+                var newCapsuleCollider = gameObject.AddComponent<CapsuleCollider>();
+                newCapsuleCollider.center = localPosition;
+                newCapsuleCollider.radius = localScaleX * 0.5f;
+                newCapsuleCollider.height = 4f;
+                newCapsuleCollider.isTrigger = true;
             }
+
+            var anchorPosition = anchor.position;
+            var position = meshGameObject.transform.position;
+                
+            movingDistance = Vector3.Distance(anchorPosition, position);
+            _anchorDirectionFactor = anchorPosition.x - position.x > 0 ? 1 : -1;
 
             StartCoroutine(ShadowWhisperSoundCoroutine());
         }
@@ -74,47 +65,11 @@ namespace Utilities.LD
                 _meshTransforms[i] = (_meshTransforms[i].transform, _meshTransforms[i].position + move, _meshTransforms[i].localPosition, _meshTransforms[i].localScaleX);
             }
             
-            if (hasAnchor)
-            {
-                var anchorPosition = anchor.position;
-                var position = meshGameObject.transform.position;
+            var anchorPosition = anchor.position;
+            var position = meshGameObject.transform.position;
                 
-                movingDistance = Vector3.Distance(anchorPosition, position);
-                _anchorDirectionFactor = anchorPosition.x - position.x > 0 ? 1 : -1;
-            }
-        }
-        
-        internal void MoveShadow(float angle, Vector3 hitPoint, Vector3 lightPosition, float lightDistance)
-        {
-            if (_lastHitPoint != hitPoint || _lastLightPosition != lightPosition)
-            {
-                _lastHitPoint = hitPoint;
-                _lastLightPosition = lightPosition;
-                _movingSequence.Kill();
-                _movingSequence = DOTween.Sequence();
-                
-                foreach (var meshTransform in _meshTransforms)
-                {
-                    var whereToMove = WhereToMove(angle, hitPoint, lightPosition, meshTransform.position, lightDistance);
-                    
-                    var zPositionFactor = hitPoint.z - meshTransform.position.z > 0 ? -1 : 1;
-                
-                    if (whereToMove.hasToMove)
-                    {
-                        _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x + movingDistance * (hasAnchor ? _anchorDirectionFactor : whereToMove.direction * zPositionFactor), movingDuration))
-                            .Join(meshTransform.transform.DOScaleX(movingScale + meshTransform.localScaleX - 1f, movingDuration * 0.5f))
-                            .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(meshTransform.localScaleX, movingDuration * 0.5f));
-                    }
-                    else
-                    {
-                        _movingSequence.Insert(0f, meshTransform.transform.DOLocalMoveX(meshTransform.localPosition.x, movingDuration))
-                            .Join(meshTransform.transform.DOScaleX(movingScale + meshTransform.localScaleX - 1f, movingDuration * 0.5f))
-                            .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(meshTransform.localScaleX, movingDuration * 0.5f));
-                    }
-                }
-                
-                _movingSequence.AppendCallback(() => _movingSequence.Kill());
-            }
+            movingDistance = Vector3.Distance(anchorPosition, position);
+            _anchorDirectionFactor = anchorPosition.x - position.x > 0 ? 1 : -1;
         }
         
         internal void MoveWholeShadow()
