@@ -4,6 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Utilities.LD
 {
@@ -24,12 +25,14 @@ namespace Utilities.LD
         [Tooltip("Duration of the animation of the moving shadow")] [SerializeField] internal float movingDuration;
         [HideIf("hasAnchor")] [Tooltip("Distance traveled by the moving shadow")] [SerializeField] internal float movingDistance;
         [Tooltip("Scale reached by the moving shadow")] [SerializeField] internal float movingScale;
+        [Tooltip("Ease followed by the moving shadow")] [SerializeField] internal Ease movingEase;
         
         [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] internal bool hasAnchor;
         [ShowIf("hasAnchor")] [Tooltip("Anchor where to move")] [SerializeField] internal Transform anchor;
         private float _anchorDirectionFactor;
         
         [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] internal bool isPuzzle4Shadow;
+        [ShowIf("isPuzzle4Shadow")] [Tooltip("TUS2S2KOUA")] [SerializeField] internal float divisionValue;
 
         private Vector3 _lastHitPoint;
         private Vector3 _lastLightPosition;
@@ -218,6 +221,32 @@ namespace Utilities.LD
             yield return new WaitForSeconds(randomSound.length - timeBeforeNextSound);
 
             StartCoroutine(ShadowWhisperSoundCoroutine());
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (isPuzzle4Shadow)
+            {
+                MoveShadowPuzzle4();
+            }
+        }
+        
+        private void MoveShadowPuzzle4()
+        {
+            _movingSequence.Kill();
+            _movingSequence = DOTween.Sequence();
+            
+            var shadowPosition = transform.position;
+            var anchorPosition = anchor.position;
+            var anchorVector = anchorPosition - shadowPosition;
+            
+            foreach (var meshTransform in _meshTransforms)
+            {
+                var diffVector = meshTransform.position - shadowPosition;
+                
+                _movingSequence.Insert(0f, meshTransform.transform.DOMove(shadowPosition + anchorVector + diffVector / divisionValue, movingDuration).SetEase(movingEase));
+            }
+            _movingSequence.AppendCallback(() => _movingSequence.Kill());
         }
     }
 }
