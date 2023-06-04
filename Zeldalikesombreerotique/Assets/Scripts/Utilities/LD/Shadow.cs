@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using NaughtyAttributes;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Sequence = DG.Tweening.Sequence;
 
 namespace Utilities.LD
 {
@@ -223,16 +225,12 @@ namespace Utilities.LD
             StartCoroutine(ShadowWhisperSoundCoroutine());
         }
 
-        private void OnTriggerEnter(Collider other)
+        internal IEnumerator MoveShadowPuzzle4()
         {
-            if (isPuzzle4Shadow)
-            {
-                MoveShadowPuzzle4();
-            }
-        }
-        
-        private void MoveShadowPuzzle4()
-        {
+            gameObject.SetActive(true);
+
+            yield return new WaitForNextFrameUnit();
+            
             _movingSequence.Kill();
             _movingSequence = DOTween.Sequence();
             
