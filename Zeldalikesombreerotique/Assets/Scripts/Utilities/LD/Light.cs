@@ -129,7 +129,7 @@ namespace Utilities.LD
 
             CreateMesh();
 
-            _lightedElementsManager.CurrentCheckCoroutine ??= StartCoroutine(_lightedElementsManager.CheckDictionariesCoroutine());
+            _lightedElementsManager.CurrentCheckCoroutine ??= StartCoroutine(_lightedElementsManager.CheckDictionariesCoroutine(gameObject));
         }
 
         private void ThrowRaycast(Vector3 origin, Vector3 dir, float dist, int i, bool onlyShadows = false)

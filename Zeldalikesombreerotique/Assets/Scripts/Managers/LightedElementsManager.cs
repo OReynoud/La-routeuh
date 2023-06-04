@@ -18,6 +18,8 @@ namespace Managers
         
         internal Coroutine CurrentCheckCoroutine;
         internal bool DoCheckDictionaries = true;
+        internal GameObject OriginOfTheCheck;
+        internal GameObject MapPartOrigin;
 
         private void Awake()
         {
@@ -31,17 +33,26 @@ namespace Managers
             }
         }
 
-        internal IEnumerator CheckDictionariesCoroutine()
+        internal IEnumerator CheckDictionariesCoroutine(GameObject origin)
         {
+            OriginOfTheCheck = origin;
+            
             yield return new WaitForEndOfFrame();
+            
             if (DoCheckDictionaries)
             {
                 CheckDictionaries();
+                if (MapPartOrigin != null)
+                {
+                    MapPartOrigin.SetActive(false);
+                    MapPartOrigin = null;
+                }
             }
             else
             {
                 DoCheckDictionaries = true;
             }
+            
             CurrentCheckCoroutine = null;
         }
 
