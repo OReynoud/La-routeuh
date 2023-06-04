@@ -29,9 +29,6 @@ namespace Utilities.Cinematic
         public void LightStayOn()
         {
             canSwitchOff = false;
-            StopCoroutine(_switchOffCoroutine);
-            spotLight.SetActive(true);
-            coneMesh.SetActive(true);
         }
 
         private void OnTriggerEnter(Collider other)
