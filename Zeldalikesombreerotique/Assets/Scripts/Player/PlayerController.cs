@@ -109,6 +109,9 @@ namespace Player
         [Foldout("Références")] public PauseMenu pauseMenu;
         [Foldout("Références")] public CameraManager cameraManager;
         [HideInInspector]public bool isDead;
+        
+        [SerializeField] private GameObject musicBoxGameObject;
+        private Coroutine _musicBoxCoroutine;
 
         public void OnDrawGizmosSelected()
         {
@@ -892,6 +895,18 @@ namespace Player
                 laPetite.rotation = GetDir(transform.position,laPetite.position);
                 yield return new WaitForFixedUpdate();
             }
+        }
+
+        internal void MusicBoxSound()
+        {
+            _musicBoxCoroutine ??= StartCoroutine(MusicBoxSoundCoroutine());
+        }
+
+        private IEnumerator MusicBoxSoundCoroutine()
+        {
+            musicBoxGameObject.SetActive(true);
+            yield return new WaitForSeconds(musicBoxGameObject.GetComponent<AudioSource>().clip.length);
+            musicBoxGameObject.SetActive(false);
         }
     }
     

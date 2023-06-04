@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Managers;
+using Player;
 using UnityEngine;
 using Utilities.Cinematic;
 
@@ -53,6 +53,8 @@ namespace Utilities.LD
                     link.link.IsTotallyLinked = true;
                 }
             }
+            
+            PlayerController.instance.MusicBoxSound();
 
             ChangeLightColor();
             
