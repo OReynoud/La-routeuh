@@ -12,6 +12,7 @@ namespace Managers
         // Animator hashes
         private static readonly int ToBeKilled = Animator.StringToHash("boutToBeKilled");
         private static readonly int TransitioningBackToMain = Animator.StringToHash("transitioningBackToMain");
+        private static readonly int EndCredits = Animator.StringToHash("EndCredits");
 
         private void Awake()
         {
@@ -32,6 +33,11 @@ namespace Managers
         {
             if (transitioningBackToMain) animator.SetTrigger(TransitioningBackToMain);
             animator.SetBool(ToBeKilled, false);
+        }
+
+        internal void Credits()
+        {
+            animator.SetBool(EndCredits,true);
         }
     }
 }
