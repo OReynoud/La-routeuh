@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Managers;
 using UnityEngine;
 
@@ -13,6 +15,15 @@ namespace Utilities.LD
         internal bool IsEnabled;
         private bool _isLightedByStreetLight;
         internal bool IsPermanentlyEnabled;
+
+        [SerializeField] private AudioSource audioSource1;
+        [SerializeField] private AudioSource audioSource2;
+        private Coroutine _audioCoroutine;
+        private Tweener _audioTweener1;
+        private Tweener _audioTweener2;
+        [SerializeField] private float audioFadeDuration;
+        [SerializeField] private float audioDisablingFadeDuration;
+        private int _counterSound;
         
         private LightedElementsManager _lightedElementsManager;
         
@@ -41,6 +52,8 @@ namespace Utilities.LD
             if (IsPermanentlyEnabled) return;
             if (LinkedTrafficLights.All(x => x.CheckIfLinked())) return;
             
+            StopDrawGlowSound();
+            
             IsEnabled = false;
             if (isStreetLight) _isLightedByStreetLight = false;
             ChangeLinkValues(false);
@@ -49,6 +62,9 @@ namespace Utilities.LD
         internal void Enable(bool isStreetLight = false)
         {
             if (IsPermanentlyEnabled || IsEnabled) return;
+            
+            _counterSound = 0;
+            _audioCoroutine = StartCoroutine(DrawGlowSoundCoroutine());
             
             IsEnabled = true;
             if (isStreetLight) _isLightedByStreetLight = true;
@@ -73,6 +89,51 @@ namespace Utilities.LD
                         break;
                 }
             }
+        }
+        
+        private IEnumerator DrawGlowSoundCoroutine()
+        {
+            if (isEnabledAtStart) yield break;
+            
+            if (_counterSound % 2  == 0)
+            {
+                audioSource1.volume = 0f;
+                audioSource1.Play();
+                _audioTweener1 = audioSource1.DOFade(1f, audioFadeDuration);
+
+                yield return new WaitForSeconds(audioSource1.clip.length - audioFadeDuration);
+
+                _audioTweener1 = audioSource1.DOFade(0f, audioFadeDuration);
+            }
+            else
+            {
+                audioSource2.volume = 0f;
+                audioSource2.Play();
+                _audioTweener2 = audioSource2.DOFade(1f, audioFadeDuration);
+
+                yield return new WaitForSeconds(audioSource2.clip.length - audioFadeDuration);
+
+                _audioTweener2 = audioSource2.DOFade(0f, audioFadeDuration);
+            }
+            
+            _counterSound++;
+            _audioCoroutine = StartCoroutine(DrawGlowSoundCoroutine());
+        }
+        
+        private void StopDrawGlowSound()
+        {
+            if (isEnabledAtStart) return;
+            
+            if (_audioCoroutine != null)
+            {
+                StopCoroutine(_audioCoroutine);
+                _audioCoroutine = null;
+            }
+            
+            _audioTweener1?.Kill();
+            _audioTweener2?.Kill();
+            audioSource1.DOFade(0f, audioDisablingFadeDuration);
+            audioSource2.DOFade(0f, audioDisablingFadeDuration);
         }
     }
 }

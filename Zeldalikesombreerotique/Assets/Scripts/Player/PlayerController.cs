@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 using DG.Tweening;
 using Managers;
 using Utilities;
+using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 // ReSharper disable Unity.InefficientPropertyAccess
 // ReSharper disable Unity.PreferAddressByIdToGraphicsParams
@@ -109,6 +110,13 @@ namespace Player
         [Foldout("Références")] public PauseMenu pauseMenu;
         [Foldout("Références")] public CameraManager cameraManager;
         [HideInInspector]public bool isDead;
+        
+        [SerializeField] private GameObject musicBoxGameObject;
+        private Coroutine _musicBoxCoroutine;
+        [SerializeField] private GameObject scribblingGameObject;
+        private Coroutine _scribblingCoroutine;
+        [SerializeField] private float scribblingFadeDuration;
+        [SerializeField] private float scribblingPitchInterval;
 
         public void OnDrawGizmosSelected()
         {
@@ -892,6 +900,40 @@ namespace Player
                 laPetite.rotation = GetDir(transform.position,laPetite.position);
                 yield return new WaitForFixedUpdate();
             }
+        }
+
+        internal void MusicBoxSound()
+        {
+            _musicBoxCoroutine ??= StartCoroutine(MusicBoxSoundCoroutine());
+        }
+
+        private IEnumerator MusicBoxSoundCoroutine()
+        {
+            musicBoxGameObject.SetActive(true);
+            yield return new WaitForSeconds(musicBoxGameObject.GetComponent<AudioSource>().clip.length);
+            musicBoxGameObject.SetActive(false);
+            _musicBoxCoroutine = null;
+        }
+
+        internal void ScribblingSound(float duration)
+        {
+            if (_scribblingCoroutine != null)
+            {
+                StopCoroutine(_scribblingCoroutine);
+            }
+            StartCoroutine(ScribblingSoundCoroutine(duration));
+        }
+
+        private IEnumerator ScribblingSoundCoroutine(float duration)
+        {
+            scribblingGameObject.GetComponent<AudioSource>().volume = 1;
+            scribblingGameObject.GetComponent<AudioSource>().pitch = Random.Range(1f-scribblingPitchInterval*0.5f, 1f+scribblingPitchInterval*0.5f);
+            scribblingGameObject.SetActive(true);
+            yield return new WaitForSeconds(duration-scribblingFadeDuration);
+            scribblingGameObject.GetComponent<AudioSource>().DOFade(0, scribblingFadeDuration);
+            yield return new WaitForSeconds(scribblingFadeDuration);
+            scribblingGameObject.SetActive(false);
+            _scribblingCoroutine = null;
         }
     }
     

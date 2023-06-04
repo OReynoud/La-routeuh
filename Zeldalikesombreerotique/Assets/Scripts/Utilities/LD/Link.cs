@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Player;
 using UnityEngine;
 
 namespace Utilities.LD
@@ -75,6 +76,8 @@ namespace Utilities.LD
         {
             enabledLineRenderer.SetPositions(new[] { startingPosition, startingPosition });
             enabledLineRenderer.enabled = true;
+            
+            PlayerController.instance.ScribblingSound(timeToBeDrawn);
                 
             _drawSequence = DOTween.Sequence();
             _drawSequence.Append(DOTween.To(() => enabledLineRenderer.GetPosition(positionIndex), 
