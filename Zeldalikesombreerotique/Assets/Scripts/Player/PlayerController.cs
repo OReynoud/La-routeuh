@@ -725,7 +725,7 @@ namespace Player
                     })
                 .Select(obj => obj.GetComponent<Rigidbody>()).FirstOrDefault();
         }
-        private void SetJoint(bool grabbing)
+        public void SetJoint(bool grabbing)
         {
             if (!objectToGrab)return;
             if (grabbing)
