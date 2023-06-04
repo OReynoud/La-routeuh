@@ -62,12 +62,14 @@ namespace Utilities.LD
             PlayerController.instance.isGrabbing = false;
             PlayerController.instance.canMove = true;
             PlayerController.instance.joint.autoConfigureConnectedAnchor = true;
+            PlayerController.instance.SetJoint(false);
             if (PlayerController.instance.objectToGrab)
             {
                 PlayerController.instance.objectToGrab.constraints = RigidbodyConstraints.FreezeRotation;
                 PlayerController.instance.objectToGrab.position = PlayerController.instance.objectType.spawnPos;
                 PlayerController.instance.objectToGrab = null;
             }
+
             PlayerController.instance.objectType = null;
 
             _killPlayerCoroutine = null;
