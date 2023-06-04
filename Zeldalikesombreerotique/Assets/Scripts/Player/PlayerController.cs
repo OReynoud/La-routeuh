@@ -105,6 +105,7 @@ namespace Player
         public Transform laPetite;
         private Vector3 savedLeft;
         private Vector3 savedRight;
+        [Foldout("Références")] public PauseMenu pauseMenu;
         [HideInInspector]public bool isDead;
 
         public void OnDrawGizmosSelected()
@@ -131,6 +132,7 @@ namespace Player
             controls.Player.SecondaryEnter.performed += SecondaryInteract;
             controls.Player.SecondaryEnter.canceled +=  SecondaryInteract;
             controls.Player.SecondaryEnter.canceled +=  PushPullEnter;
+            controls.Player.ShowUI.performed += pauseMenu.ShowOption;
             savedMaxSpeed = maxSpeed;
                 gamepad = Gamepad.current;
                 if (introCinematic)

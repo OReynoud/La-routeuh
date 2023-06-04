@@ -80,6 +80,15 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Press(pressPoint=1.401298E-45,behavior=2)"",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ShowUI"",
+                    ""type"": ""Button"",
+                    ""id"": ""98797b5b-4bf5-403b-9469-5d6cccc99862"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -368,6 +377,28 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
                     ""action"": ""InteractLeave"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ccf93d1-0624-4573-bb7d-6d117ab9a712"",
+                    ""path"": ""<XInputController>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""26e90f7b-5d11-46e9-b27c-cb5c60a03d62"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -410,6 +441,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_SecondaryEnter = m_Player.FindAction("SecondaryEnter", throwIfNotFound: true);
         m_Player_Oui = m_Player.FindAction("Oui", throwIfNotFound: true);
+        m_Player_ShowUI = m_Player.FindAction("ShowUI", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -477,6 +509,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_SecondaryEnter;
     private readonly InputAction m_Player_Oui;
+    private readonly InputAction m_Player_ShowUI;
     public struct PlayerActions
     {
         private @InputManager m_Wrapper;
@@ -487,6 +520,7 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @SecondaryEnter => m_Wrapper.m_Player_SecondaryEnter;
         public InputAction @Oui => m_Wrapper.m_Player_Oui;
+        public InputAction @ShowUI => m_Wrapper.m_Player_ShowUI;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -514,6 +548,9 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @Oui.started += instance.OnOui;
             @Oui.performed += instance.OnOui;
             @Oui.canceled += instance.OnOui;
+            @ShowUI.started += instance.OnShowUI;
+            @ShowUI.performed += instance.OnShowUI;
+            @ShowUI.canceled += instance.OnShowUI;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -536,6 +573,9 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
             @Oui.started -= instance.OnOui;
             @Oui.performed -= instance.OnOui;
             @Oui.canceled -= instance.OnOui;
+            @ShowUI.started -= instance.OnShowUI;
+            @ShowUI.performed -= instance.OnShowUI;
+            @ShowUI.canceled -= instance.OnShowUI;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -579,5 +619,6 @@ public partial class @InputManager: IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnSecondaryEnter(InputAction.CallbackContext context);
         void OnOui(InputAction.CallbackContext context);
+        void OnShowUI(InputAction.CallbackContext context);
     }
 }
