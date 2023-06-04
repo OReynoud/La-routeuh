@@ -58,6 +58,15 @@
                     "processors": "",
                     "interactions": "Press(pressPoint=1.401298E-45,behavior=2)",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ShowUI",
+                    "type": "Button",
+                    "id": "98797b5b-4bf5-403b-9469-5d6cccc99862",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -344,6 +353,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "InteractLeave",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6ccf93d1-0624-4573-bb7d-6d117ab9a712",
+                    "path": "<XInputController>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShowUI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "26e90f7b-5d11-46e9-b27c-cb5c60a03d62",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShowUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
