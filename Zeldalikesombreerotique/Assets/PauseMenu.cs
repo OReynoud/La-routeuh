@@ -36,6 +36,24 @@ public class PauseMenu : MonoBehaviour
         instance = this;
     }
 
+    private void FixedUpdate()
+    {
+        
+        if (Keyboard.current.anyKey.isPressed && Cursor.lockState != CursorLockMode.None)
+        {
+            Debug.Log("switch to mouse kb");
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+        if (Gamepad.current == null)return;
+        if (Gamepad.current.wasUpdatedThisFrame && Cursor.lockState != CursorLockMode.Locked)
+        {
+            Debug.Log("switch to gamepad");
+            Cursor.lockState = CursorLockMode.Locked;
+            backButton.Select();
+        }
+    }
+
     // Update is called once per frame
     public void ShowOption(InputAction.CallbackContext context)
     {
