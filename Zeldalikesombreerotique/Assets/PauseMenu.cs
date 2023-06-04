@@ -54,15 +54,21 @@ public class PauseMenu : MonoBehaviour
         optionGroup.DOLocalMove(optionGroup.localPosition + Vector3.left * settingsOffset, 0.5f);
         controlsImage.DOLocalMove(controlsImage.localPosition + Vector3.up * controlsOffset, 0.5f);
         background.DOFade(0f, 0.5f);
-        
-        PlayerController.instance.introCinematic = false;
-        PlayerController.instance.controls.Enable();
+
+        StartCoroutine(AvoidSpams2());
     }
     public IEnumerator AvoidSpams()
     {
         input.enabled = false;
         yield return new WaitForSeconds(0.6f);
         input.enabled = true;
+    }
+
+    public IEnumerator AvoidSpams2()
+    {
+        yield return new WaitForSeconds(0.6f);
+        PlayerController.instance.introCinematic = false;
+        PlayerController.instance.controls.Enable();
     }
     
     public void UpdateSoundSettings()
