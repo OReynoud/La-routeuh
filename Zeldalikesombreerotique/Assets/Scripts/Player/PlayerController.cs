@@ -908,7 +908,9 @@ namespace Player
             cameraManager.Credits();
             yield return new WaitForSeconds(40);
             PauseMenu.instance.background.DOFade(1, 3f);
-            yield return new WaitForSeconds(8f);
+            yield return new WaitForSeconds(4f);
+            PauseMenu.instance.logoGroup.DOFade(1, 1f);
+            yield return new WaitForSeconds(4f);
             SceneManager.LoadScene("MainMenu");
         }
 
