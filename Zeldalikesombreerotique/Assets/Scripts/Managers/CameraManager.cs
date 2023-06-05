@@ -7,7 +7,7 @@ namespace Managers
         // Singleton
         internal static CameraManager Instance;
         
-        [SerializeField] private Animator animator;
+        public Animator animator;
         
         // Animator hashes
         private static readonly int ToBeKilled = Animator.StringToHash("boutToBeKilled");
