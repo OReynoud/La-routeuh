@@ -262,7 +262,7 @@ namespace Player
                 speedFactor = 1;
             }
 
-            if (speedFactor < 0.1f)
+            if (speedFactor < 0.1f || float.IsNaN(speedFactor))
             {
                 speedFactor = 0.1f;
             }
