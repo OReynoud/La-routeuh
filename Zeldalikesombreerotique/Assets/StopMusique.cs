@@ -69,8 +69,8 @@ public class StopMusique : MonoBehaviour
     IEnumerator Clock()
     {
         clock.DOPitch(0.5f, timeForFade);
-        yield return new WaitForSeconds(timeBeforeReturning);
-        clock.DOPitch(1, 1.5f);
+        yield return new WaitForSeconds(timeForFade + timeBeforeReturning - 0.4f);
+        clock.DOPitch(1, 1.2f);
         self.SetActive(false);
     }
 }

@@ -18,9 +18,9 @@ public class PetiteFilleChase : MonoBehaviour
     private bool stopPlayer;
     
     public LayerMask playerMask;
-    // Start is called before the first frame update
 
-    public float timeBeforeMovingBack = 1f;
+    public StopMusique sfx;
+    // Start is called before the first frame update
     
     
     
@@ -86,7 +86,7 @@ public class PetiteFilleChase : MonoBehaviour
         
         yield return new WaitForSeconds(0.2f);
         chaseScript.TriggerGirl(true);
-        yield return new WaitForSeconds(timeBeforeMovingBack);
+        yield return new WaitForSeconds(sfx.timeBeforeReturning);
         willSlowDownPlayer = false;
         PlayerController.instance.maxSpeed = savedMaxSpeed;
         PlayerController.instance.minSpeed = savedMinSpeed;
