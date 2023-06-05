@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using DG.Tweening;
 using Managers;
@@ -16,6 +15,7 @@ namespace Utilities.Cinematic
         [SerializeField] private Transform respawnPoint;
         private Coroutine _killPlayerCoroutine;
         private Tween _slowDownTween;
+        [SerializeField] private bool isPuzzle4;
         
         [SerializeField] private float slowDownValue;
         [SerializeField] private float slowDownTime;
@@ -31,15 +31,16 @@ namespace Utilities.Cinematic
         {
             if (other.gameObject.CompareTag("Player") && !PlayerController.instance.isProtected)
             {
-
-
                 heartbeat.DOFade(1, 0.5f);
                 breathing.DOFade(1, 0.5f);
-                
-                
+
                 CameraManager.Instance.BoutToBeKilled();
-                _slowDownTween = DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, slowDownValue, slowDownTime).SetEase(slowDownEase);
-                _killPlayerCoroutine = StartCoroutine(KillPlayer());
+                
+                if (!isPuzzle4)
+                {
+                    _slowDownTween = DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, slowDownValue, slowDownTime).SetEase(slowDownEase);
+                    _killPlayerCoroutine = StartCoroutine(KillPlayer());
+                }
             }
         }
 
