@@ -11,8 +11,15 @@ namespace Utilities.LD
         {
             if (other.CompareTag("Player"))
             {
-                StartCoroutine(shadow.MoveShadowPuzzle4());
-                CameraManager.Instance.Puzzle4Cam();
+                if (shadow.isPuzzle4Shadow)
+                {
+                    StartCoroutine(shadow.MoveShadowPuzzle4());
+                    CameraManager.Instance.Puzzle4Cam();
+                }
+                else if (shadow.isPuzzle3Shadow)
+                {
+                    shadow.MoveShadowPuzzle3();
+                }
                 GetComponent<BoxCollider>().enabled = false;
             }
         }
