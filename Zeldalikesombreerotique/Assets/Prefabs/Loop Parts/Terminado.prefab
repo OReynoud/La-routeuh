@@ -214,7 +214,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musique: {fileID: 2720142172037332271}
   fond: {fileID: 769706683375955490}
-  murmure1: {fileID: 8779845081939633739}
+  murmure1: {fileID: 8192770500749110568}
   murmure2: {fileID: 2158469110143075185}
   murmure3: {fileID: 3561334571373776932}
   murmure4: {fileID: 8486800926120642162}
@@ -567,7 +567,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 2720142172037332271}
-  audioClip: {fileID: 8300000, guid: 307ed1ebb78b45f4c9990f5ef741c339, type: 3}
+  audioClip: {fileID: 8300000, guid: 2f99e76aeab12cb48a5ae05bc548f07e, type: 3}
   isPlayingOnce: 1
 --- !u!65 &9007544832650579444
 BoxCollider:
@@ -722,7 +722,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7383337118749622107}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 40.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -745,7 +745,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1337,6 +1337,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3295719959964838380, guid: ec605ef76b7406f49b588a1672d85a85,
+        type: 3}
+      propertyPath: m_Name
+      value: Audio 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4141101943504607683, guid: ec605ef76b7406f49b588a1672d85a85,
         type: 3}
       propertyPath: m_Name
@@ -1377,15 +1382,15 @@ AudioSource:
     type: 3}
   m_PrefabInstance: {fileID: 448333800893577047}
   m_PrefabAsset: {fileID: 0}
---- !u!82 &8486800926120642162 stripped
+--- !u!82 &8192770500749110568 stripped
 AudioSource:
-  m_CorrespondingSourceObject: {fileID: 8358647155861188901, guid: ec605ef76b7406f49b588a1672d85a85,
+  m_CorrespondingSourceObject: {fileID: 8613798854354852479, guid: ec605ef76b7406f49b588a1672d85a85,
     type: 3}
   m_PrefabInstance: {fileID: 448333800893577047}
   m_PrefabAsset: {fileID: 0}
---- !u!82 &8779845081939633739 stripped
+--- !u!82 &8486800926120642162 stripped
 AudioSource:
-  m_CorrespondingSourceObject: {fileID: 9214518369610830108, guid: ec605ef76b7406f49b588a1672d85a85,
+  m_CorrespondingSourceObject: {fileID: 8358647155861188901, guid: ec605ef76b7406f49b588a1672d85a85,
     type: 3}
   m_PrefabInstance: {fileID: 448333800893577047}
   m_PrefabAsset: {fileID: 0}
