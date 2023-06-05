@@ -28,6 +28,7 @@ public class PauseMenu : MonoBehaviour
     public Slider musicSlider;
     public Toggle vibrationsCheck;
     public Toggle fullScreenCheck;
+    public CanvasGroup logoGroup;
 
     public InputUI controls;
     // Start is called before the first frame update
