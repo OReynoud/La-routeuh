@@ -107,9 +107,10 @@ namespace Utilities.LD
             yield return new WaitForEndOfFrame();
             PlayerController.instance.maxSpeed = PlayerController.instance.savedMaxSpeed;
             PlayerController.instance.isDead = false;
-            
-            CameraManager.Instance.NoMoreKill();
+
             CameraManager.Instance.NoMoreBoutToBeKilled();
+            yield return new WaitForSeconds(0.4f);
+            CameraManager.Instance.NoMoreKill();
         }
     }
 }
