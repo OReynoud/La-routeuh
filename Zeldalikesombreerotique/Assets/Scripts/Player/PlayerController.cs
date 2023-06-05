@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
 using Managers;
+using UnityEngine.SceneManagement;
 using Utilities;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
@@ -903,6 +904,10 @@ namespace Player
             gameObject.SetActive(false);
             yield return new WaitForSeconds(4);
             cameraManager.Credits();
+            yield return new WaitForSeconds(40);
+            PauseMenu.instance.background.DOFade(1, 3f);
+            yield return new WaitForSeconds(8f);
+            SceneManager.LoadScene("MainMenu");
         }
 
         IEnumerator LookingAtGirl()
