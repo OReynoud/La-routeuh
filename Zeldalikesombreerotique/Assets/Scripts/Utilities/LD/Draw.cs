@@ -15,6 +15,7 @@ namespace Utilities.LD
         internal bool IsEnabled;
         private bool _isLightedByStreetLight;
         internal bool IsPermanentlyEnabled;
+        [SerializeField] internal Transform linkPoint;
 
         [SerializeField] private AudioSource audioSource1;
         [SerializeField] private AudioSource audioSource2;

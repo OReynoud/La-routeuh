@@ -40,8 +40,8 @@ namespace Utilities.LD
 
         internal void InitializeLineRenderers()
         {
-            _object1Position = objectToLink1.transform.position;
-            _object2Position = objectToLink2.transform.position;
+            _object1Position = objectToLink1.linkPoint ? objectToLink1.linkPoint.position : objectToLink1.transform.position;
+            _object2Position = objectToLink2.linkPoint ? objectToLink2.linkPoint.position : objectToLink2.transform.position;
 
             disabledLineRenderer.SetPositions(new[] { SlightlyLift(_object1Position), SlightlyLift(_object2Position) });
             enabledLineRenderer.SetPositions(new[] { SlightlyLift(_object1Position), SlightlyLift(_object2Position) });

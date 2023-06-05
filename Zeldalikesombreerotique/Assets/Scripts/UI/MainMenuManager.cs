@@ -101,7 +101,15 @@ namespace UI
             {
                 DOTween.To(() => credits.alpha,x => credits.alpha = x,1,0.4f);
                 creditsAnim.Play("ScrollCredits");
+                StartCoroutine(AutoDisableCredits());
+
             }
+        }
+
+        IEnumerator AutoDisableCredits()
+        {
+            yield return new WaitForSeconds(18);
+            ShowCredits();
         }
 
         public void UpdateSoundSettings()
