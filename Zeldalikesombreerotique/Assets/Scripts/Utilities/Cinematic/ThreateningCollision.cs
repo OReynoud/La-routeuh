@@ -86,8 +86,7 @@ namespace Utilities.Cinematic
             PlayerController.instance.rig[0].Play("idle");
             PlayerController.instance.rig[1].Play("idle");
             PlayerController.instance.rig[0].SetBool("isWalking",false);
-            PlayerController.instance.rig[0].SetBool("isPulling",false);
-            PlayerController.instance.rig[0].SetBool("isPushing",false);
+            PlayerController.instance.rig[0].SetBool("IsPushing",false);
             PlayerController.instance.rig[0].SetBool("IsGrabbing",false);
             PlayerController.instance.pushingPullingRotate = false;
             PlayerController.instance.isGrabbing = false;
