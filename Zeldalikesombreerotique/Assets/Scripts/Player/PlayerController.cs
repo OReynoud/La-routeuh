@@ -825,6 +825,7 @@ namespace Player
             introCinematic = true;
             var animFille = laPetite.gameObject.GetComponentInChildren<Animator>();
             transform.DOMove(playerDestinations[0].position, playerTTR[0]);
+            cameraManager.animator.SetBool("LAPETITE", true);
             yield return new WaitForSeconds(filleWaitingTime[0]);
             //Debug.Log("girl picks up hat");
             animFille.SetBool("isPickingUp",true);
@@ -869,6 +870,7 @@ namespace Player
             rig[0].SetFloat("Speed", 1);
             rig[1].SetFloat("Speed", 1);
             yield return new WaitForSeconds(0.3f);
+            cameraManager.animator.SetBool("toDoor", true);
             //Debug.Log("girl runs to door");
             animFille.SetBool("isRunning",true);
             laPetite.rotation = GetDir(filleDestinations[0].position, laPetite.position);
@@ -897,7 +899,7 @@ namespace Player
             characterHead.GetChild(0).gameObject.SetActive(false);
             yield return new WaitForSeconds(1f);
             gameObject.SetActive(false);
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(4);
             cameraManager.Credits();
         }
 

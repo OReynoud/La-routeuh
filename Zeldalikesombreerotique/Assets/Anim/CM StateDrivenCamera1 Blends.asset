@@ -13,11 +13,49 @@ MonoBehaviour:
   m_Name: CM StateDrivenCamera1 Blends
   m_EditorClassIdentifier: 
   m_CustomBlends:
-  - m_From: CM vcam1
+  - m_From: CAM LA PETITE
+    m_To: camDoor
+    m_Blend:
+      m_Style: 6
+      m_Time: 11.6
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0.0141509175
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.8136216
+          value: 0.2652679
+          inSlope: 0.9379672
+          outSlope: 0.9379672
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.31712702
+        - serializedVersion: 3
+          time: 1
+          value: 1
+          inSlope: 10.677842
+          outSlope: 10.677842
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.059616342
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+  - m_From: camDoor
     m_To: IntermediateCam
     m_Blend:
       m_Style: 6
-      m_Time: 3
+      m_Time: 4
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -40,6 +78,17 @@ MonoBehaviour:
     m_Blend:
       m_Style: 6
       m_Time: 30
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: CM vcam1
+    m_To: CAM LA PETITE
+    m_Blend:
+      m_Style: 6
+      m_Time: 2
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []
