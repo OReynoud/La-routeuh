@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Player;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
@@ -25,6 +27,7 @@ public class PauseMenu : MonoBehaviour
     public Slider soundSlider;
     public Slider musicSlider;
     public Toggle vibrationsCheck;
+    public Toggle fullScreenCheck;
     // Start is called before the first frame update
     public void Awake()
     {
@@ -78,6 +81,25 @@ public class PauseMenu : MonoBehaviour
         background.DOFade(0f, 0.5f);
 
         StartCoroutine(AvoidSpams2());
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void ChangeScreen()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
+        /*if (!Screen.fullScreen)
+        {
+            Screen.SetResolution(1366,768,false);
+        }
+        else
+        {
+            Screen.SetResolution(1980,1080,true);
+        }*/
+        
     }
     public IEnumerator AvoidSpams()
     {
