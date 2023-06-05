@@ -66,6 +66,9 @@ public class PauseMenu : MonoBehaviour
     {
         PlayerController.instance.introCinematic = true;
         PlayerController.instance.controls.Disable();
+        PlayerController.instance.rb.velocity = Vector3.zero;
+        PlayerController.instance.rig[0].SetBool("isWalking", false);
+        PlayerController.instance.rig[0].SetBool("IsPushing", false);
         StartCoroutine(AvoidSpams());
         optionGroup.DOLocalMove(optionGroup.localPosition + Vector3.right * settingsOffset, 0.5f);
         controlsImage.DOLocalMove(controlsImage.localPosition + Vector3.down * controlsOffset, 0.5f);
