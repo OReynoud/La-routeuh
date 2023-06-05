@@ -43,6 +43,12 @@ public class PauseMenu : MonoBehaviour
         Application.Quit();
     }
 
+    public void Start()
+    {
+        soundSlider.value = PlayerPrefs.GetFloat("Sound", 0.8f);
+        musicSlider.value = PlayerPrefs.GetFloat("Music", 0.8f);
+    }
+
     private void FixedUpdate()
     {
         
