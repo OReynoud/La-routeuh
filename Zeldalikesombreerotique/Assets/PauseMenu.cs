@@ -35,6 +35,10 @@ public class PauseMenu : MonoBehaviour
 
         instance = this;
     }
+    public void Quit()
+    {
+        Application.Quit();
+    }
 
     private void FixedUpdate()
     {

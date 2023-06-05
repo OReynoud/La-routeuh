@@ -58,6 +58,11 @@ namespace UI
             SceneManager.LoadScene("Loop - Puzzle 1");
         }
 
+        public void Quit()
+        {
+            Application.Quit();
+        }
+
         public void ShowOptions()
         {
             StartCoroutine(AvoidSpams());
