@@ -118,7 +118,7 @@ namespace Player
         [SerializeField] private float scribblingFadeDuration;
         [SerializeField] private float scribblingPitchInterval;
 
-        public float jumpPower = 0.3f;
+        private readonly float jumpPower = 0.3f;
 
         public void OnDrawGizmosSelected()
         {

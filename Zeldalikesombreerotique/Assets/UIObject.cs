@@ -36,19 +36,19 @@ public class UIObject : MonoBehaviour
             return;
         }
 
-        if (objectToFollow.transform.localRotation.eulerAngles.y > 180)
+        if (objectToFollow.transform.localRotation.eulerAngles.y is < 90 or > 270)
         {
             transform.position =
                 new Vector3(objectToFollow.position.x - xOffset, 0.01f, objectToFollow.position.z - yOffset) -
                 objectToFollow.right; 
-            sr.flipY = true;
+            sr.flipY = false;
         }
         else
         {
             transform.position =
                 new Vector3(objectToFollow.position.x + xOffset, 0.01f, objectToFollow.position.z + yOffset) +
                 objectToFollow.right; 
-            sr.flipY = false;
+            sr.flipY = true;
         }
     }
 
