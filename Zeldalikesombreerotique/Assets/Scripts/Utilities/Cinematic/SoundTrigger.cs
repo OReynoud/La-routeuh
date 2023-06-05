@@ -7,12 +7,21 @@ namespace Utilities
         [SerializeField] private AudioSource audioSource;
         [SerializeField] private AudioClip audioClip;
         [SerializeField] private bool isPlayingOnce;
+        [SerializeField] private bool isLooping;
         
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                audioSource.PlayOneShot(audioClip);
+                if (!isLooping)
+                {
+                    audioSource.PlayOneShot(audioClip);
+                }
+                else
+                {
+                    audioSource.clip = audioClip;
+                    audioSource.Play();
+                }
                 if (isPlayingOnce)
                 {
                     gameObject.SetActive(false);
