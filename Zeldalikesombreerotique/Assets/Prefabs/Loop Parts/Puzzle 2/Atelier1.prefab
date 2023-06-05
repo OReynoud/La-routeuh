@@ -21600,6 +21600,37 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -4752143270370784367, guid: 6a701dbdda97dc24b8eb5747a679f5f4, type: 3}
+--- !u!1 &4160932305578808926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4441994976580749461}
+  m_Layer: 0
+  m_Name: Respawn2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4441994976580749461
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4160932305578808926}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -20.7, y: 0, z: -1.800003}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6046728067548375471}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4188086350510926012
 GameObject:
   m_ObjectHideFlags: 0
@@ -32220,6 +32251,7 @@ Transform:
   - {fileID: 2670243347832381729}
   - {fileID: 6046728066787130373}
   - {fileID: 477156571196810354}
+  - {fileID: 4441994976580749461}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -61823,6 +61855,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8235666805811470245, guid: 209ebc707fd69b44ea6d4ee3c87495b8,
+        type: 3}
+      propertyPath: respawnPoint
+      value: 
+      objectReference: {fileID: 4441994976580749461}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 209ebc707fd69b44ea6d4ee3c87495b8, type: 3}
 --- !u!4 &4418699754634515883 stripped
@@ -70336,6 +70373,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8235666805811470245, guid: 209ebc707fd69b44ea6d4ee3c87495b8,
+        type: 3}
+      propertyPath: respawnPoint
+      value: 
+      objectReference: {fileID: 4441994976580749461}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 209ebc707fd69b44ea6d4ee3c87495b8, type: 3}
 --- !u!4 &7926562046175055152 stripped
