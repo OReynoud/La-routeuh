@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,34 +6,42 @@ using UnityEngine.Audio;
 
 public class SoundSettingsUpdater : MonoBehaviour
 {
-    public AudioMixerGroup[] musicGroup;
+    public static SoundSettingsUpdater instance;
+    public AudioMixerGroup musicGroup;
 
-    public AudioMixerGroup[] sfxGroup;
-
-    public float[] musicGroupBase;
-    public float[] sfxGroupBase;
+    public AudioMixerGroup sfxGroup;
     // Start is called before the first frame update
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            DestroyImmediate(gameObject);
+        }
+        instance = this;
+        
+    }
+
     void Start()
     {
-        for (int i = 0; i < musicGroup.Length; i++)
-        {
-            musicGroup[i].audioMixer.GetFloat("Volume", out var baseVolume);
-            Debug.Log(baseVolume);
-            musicGroupBase[i] = baseVolume;
-            musicGroup[i].audioMixer.SetFloat("Volume", -10);
-        }
-        for (int i = 0; i < sfxGroup.Length; i++)
-        {
-            sfxGroup[i].audioMixer.GetFloat("Volume", out var baseVolume);
-            Debug.Log(baseVolume);
-            sfxGroupBase[i] = baseVolume;
-            sfxGroup[i].audioMixer.SetFloat("Volume", -10);
-        }
+        UpdateSfx();
+        UpdateMusic();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void UpdateSfx()
+    {
+        var newDBValue = -80 + PlayerPrefs.GetFloat("Sound",0.8f) * 100 ;
+        sfxGroup.audioMixer.SetFloat("SFX", newDBValue);
+    }
+
+    public void UpdateMusic()
+    {
+        var newDBValue = - 80 + PlayerPrefs.GetFloat("Music",0.8f) * 100 ;
+        sfxGroup.audioMixer.SetFloat("Music", newDBValue);
     }
 }

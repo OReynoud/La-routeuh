@@ -96,11 +96,13 @@ public class PauseMenu : MonoBehaviour
     public void UpdateSoundSettings()
     {
         PlayerPrefs.SetFloat("Sound",soundSlider.value);
+        SoundSettingsUpdater.instance.UpdateSfx();
     }
 
     public void UpdateMusicSettings()
     {
         PlayerPrefs.SetFloat("Music",musicSlider.value);
+        SoundSettingsUpdater.instance.UpdateMusic();
     }
     public void UpdateVibrationSettings()
     {
