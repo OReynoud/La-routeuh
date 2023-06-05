@@ -19,6 +19,10 @@ public class PetiteFilleChase : MonoBehaviour
     public LayerMask playerMask;
     // Start is called before the first frame update
 
+    public float timeBeforeMovingBack = 1f;
+    
+    
+    
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(transform.position, slowDownRadius);
@@ -72,7 +76,7 @@ public class PetiteFilleChase : MonoBehaviour
         PlayerController.instance.rb.velocity = Vector3.zero;
         yield return new WaitForSeconds(0.2f);
         chaseScript.TriggerGirl(true);
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(timeBeforeMovingBack);
         willSlowDownPlayer = false;
         PlayerController.instance.maxSpeed = savedMaxSpeed;
         PlayerController.instance.minSpeed = savedMinSpeed;
