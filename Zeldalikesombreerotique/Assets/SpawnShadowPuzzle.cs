@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnShadowPuzzle : MonoBehaviour
 {
     private GameObject shadowChild;
-    private List<Transform> palier;
+    public List<Transform> palier;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,9 +30,9 @@ public class SpawnShadowPuzzle : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter()
+    private void OnTriggerEnter(Collider col)
     {
-        if(gameObject.name == "Ombres_Paliers")
+        if(col.gameObject.CompareTag("Player") && gameObject.name == "Ombres_Paliers")
         {
             for (int i = 0; i < palier.Count; i++)
             {
@@ -41,9 +41,9 @@ public class SpawnShadowPuzzle : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit()
+    private void OnTriggerExit(Collider col)
     {
-        if(gameObject.name != "Ombres_Paliers")
+        if(col.gameObject.CompareTag("Player") && gameObject.name != "Ombres_Paliers")
         {
             shadowChild.SetActive(true);
         }
