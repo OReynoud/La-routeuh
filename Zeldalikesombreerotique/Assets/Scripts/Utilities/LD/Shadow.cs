@@ -34,7 +34,7 @@ namespace Utilities.LD
         [ShowIf("hasAnchor")] [Tooltip("Anchor where to move")] [SerializeField] private Transform anchor;
         private float _anchorDirectionFactor;
         
-        [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] private bool isPuzzle4Shadow;
+        [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] internal bool isPuzzle4Shadow;
         [ShowIf("isPuzzle4Shadow")] [Tooltip("Value to divide to the distance between shadow's center and sphere's center at the end")] [SerializeField] private float divisionValue;
         [ShowIf("isPuzzle4Shadow")] [Tooltip("Point where the player will respawn if they are killed by the shadow")] [SerializeField] private Transform respawnPoint2;
         [ShowIf("isPuzzle4Shadow")] [Tooltip("Anchor where to move at the beginning")] [SerializeField] private Transform anchorBeginning;
@@ -42,6 +42,8 @@ namespace Utilities.LD
         [Tooltip("Ease followed by the moving shadow at the beginning")] [SerializeField] internal Ease movingEaseBeginning;
         [ShowIf("isPuzzle4Shadow")] [Tooltip("List of the triggers to reset when the player dies")] [SerializeField] private List<GameObject> triggersToReset;
         [ShowIf("isPuzzle4Shadow")] [Tooltip("List of the audios to reset when the player dies")] [SerializeField] private List<AudioSource> audiosToReset;
+        
+        [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] internal bool isPuzzle3Shadow;
 
         private Vector3 _lastHitPoint;
         private Vector3 _lastLightPosition;
@@ -62,7 +64,7 @@ namespace Utilities.LD
                 shadowKill.AudiosToReset = audiosToReset;
                 shadowKill.Shadow = this;
 
-                if (!isPuzzle4Shadow)
+                if (!isPuzzle4Shadow && !isPuzzle3Shadow)
                 {
                     var newCapsuleCollider = gameObject.AddComponent<CapsuleCollider>();
                     newCapsuleCollider.center = localPosition;
@@ -281,6 +283,27 @@ namespace Utilities.LD
             }
             
             CameraManager.Instance.NoMorePuzzle4Cam();
+        }
+
+        internal void MoveShadowPuzzle3()
+        {
+            _movingSequence.Kill();
+            _movingSequence = DOTween.Sequence();
+            
+            var shadowPosition = transform.position;
+            var anchorPosition = anchor.position;
+            var anchorVector = anchorPosition - shadowPosition;
+            
+            foreach (var meshTransform in _meshTransforms)
+            {
+                var diffVector = meshTransform.position - shadowPosition;
+                
+                _movingSequence.Insert(0f, meshTransform.transform.DOMove(shadowPosition + anchorVector + diffVector, movingDuration).SetEase(movingEase))
+                    .Join(meshTransform.transform.DOScaleX(movingScale + meshTransform.localScaleX - 1f, movingDuration * 0.5f))
+                    .Insert(movingDuration * 0.5f, meshTransform.transform.DOScaleX(meshTransform.localScaleX, movingDuration * 0.5f));
+            }
+            
+            _movingSequence.AppendCallback(() => _movingSequence.Kill());
         }
     }
 }

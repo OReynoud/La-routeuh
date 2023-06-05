@@ -28,6 +28,7 @@ namespace UI
         public Slider musicSlider;
         public Toggle vibrationsCheck;
         public Toggle fullScreenCheck;
+        public Animator creditsAnim;
 
         public CanvasGroup credits;
         // Start is called before the first frame update
@@ -94,10 +95,12 @@ namespace UI
             if (credits.alpha == 1)
             {
                 DOTween.To(() => credits.alpha,x => credits.alpha = x,0,0.4f);
+                creditsAnim.Play("Empty");
             }
             else
             {
                 DOTween.To(() => credits.alpha,x => credits.alpha = x,1,0.4f);
+                creditsAnim.Play("ScrollCredits");
             }
         }
 
