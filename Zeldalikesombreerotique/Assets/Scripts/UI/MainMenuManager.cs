@@ -108,7 +108,7 @@ namespace UI
 
         IEnumerator AutoDisableCredits()
         {
-            yield return new WaitForSeconds(18);
+            yield return new WaitForSeconds(30);
             if (credits.alpha == 1)
             {
                 DOTween.To(() => credits.alpha,x => credits.alpha = x,0,0.4f);
