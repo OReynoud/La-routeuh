@@ -15,7 +15,6 @@ namespace Utilities.Cinematic
         [SerializeField] private float timeBeforeKill;
         [SerializeField] private Transform respawnPoint;
         private Coroutine _killPlayerCoroutine;
-        private float _tempPlayerMaxSpeed;
         private Tween _slowDownTween;
         
         [SerializeField] private float slowDownValue;
@@ -39,7 +38,6 @@ namespace Utilities.Cinematic
                 
                 
                 CameraManager.Instance.BoutToBeKilled();
-                _tempPlayerMaxSpeed = PlayerController.instance.maxSpeed;
                 _slowDownTween = DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, slowDownValue, slowDownTime).SetEase(slowDownEase);
                 _killPlayerCoroutine = StartCoroutine(KillPlayer());
             }
@@ -58,7 +56,7 @@ namespace Utilities.Cinematic
                     _killPlayerCoroutine = null;
                     
                     _slowDownTween.Kill();
-                    PlayerController.instance.maxSpeed = _tempPlayerMaxSpeed;
+                    PlayerController.instance.maxSpeed = PlayerController.instance.savedMaxSpeed;
                     CameraManager.Instance.NoMoreBoutToBeKilled(true);
                 }
             }
