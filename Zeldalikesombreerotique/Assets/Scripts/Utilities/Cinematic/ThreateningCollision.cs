@@ -60,6 +60,14 @@ namespace Utilities.Cinematic
                     PlayerController.instance.maxSpeed = PlayerController.instance.savedMaxSpeed;
                     CameraManager.Instance.NoMoreBoutToBeKilled(true);
                 }
+
+                if (isPuzzle4)
+                {
+                    heartbeat.DOFade(0, 0.5f);
+                    breathing.DOFade(0, 0.5f);
+                    
+                    CameraManager.Instance.NoMoreBoutToBeKilled(true);
+                }
             }
         }
 
