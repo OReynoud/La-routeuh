@@ -1,3 +1,4 @@
+using Managers;
 using UnityEngine;
 
 namespace Utilities.LD
@@ -11,6 +12,8 @@ namespace Utilities.LD
             if (other.CompareTag("Player"))
             {
                 StartCoroutine(shadow.MoveShadowPuzzle4());
+                CameraManager.Instance.Puzzle4Cam();
+                GetComponent<BoxCollider>().enabled = false;
             }
         }
     }
