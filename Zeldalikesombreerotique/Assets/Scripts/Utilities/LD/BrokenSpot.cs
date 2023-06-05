@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Managers;
 using UnityEngine;
 
-namespace Utilities
+namespace Utilities.LD
 {
     public class BrokenSpot : MonoBehaviour
     {
@@ -12,12 +13,13 @@ namespace Utilities
         [Tooltip("Time between each blink")] [SerializeField] private List<float> timesBetweenBlinks;
         [Tooltip("Duration of a blink when it is lighted")] [SerializeField] private float lightedBlinkDuration;
         [Tooltip("Sound for the blink")] [SerializeField] private AudioClip blinkSound;
+        private Coroutine _blinkCoroutine;
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                StartCoroutine(BlinkCoroutine());
+                _blinkCoroutine ??= StartCoroutine(BlinkCoroutine());
             }
         }
 
@@ -26,13 +28,27 @@ namespace Utilities
             yield return new WaitForSeconds(timeBeforeBlink);
             foreach (var time in timesBetweenBlinks)
             {
-                lightObject.SetActive(false);
+                if (LightedElementsManager.Instance.OriginOfTheCheck == lightObject)
+                {
+                    LightedElementsManager.Instance.MapPartOrigin = lightObject;
+                }
+                else
+                {
+                    lightObject.SetActive(false);
+                }
                 audioSource.PlayOneShot(blinkSound);
                 yield return new WaitForSeconds(time);
                 lightObject.SetActive(true);
                 yield return new WaitForSeconds(lightedBlinkDuration);
             }
-            lightObject.SetActive(false);
+            if (LightedElementsManager.Instance.OriginOfTheCheck == lightObject)
+            {
+                LightedElementsManager.Instance.MapPartOrigin = lightObject;
+            }
+            else
+            {
+                lightObject.SetActive(false);
+            }
             gameObject.SetActive(false);
         }
     }
