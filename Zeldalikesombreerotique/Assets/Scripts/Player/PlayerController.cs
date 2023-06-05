@@ -875,6 +875,7 @@ namespace Player
             yield return new WaitForSeconds(0.3f);
             cameraManager.animator.SetBool("toDoor", true);
             //Debug.Log("girl runs to door");
+            animFille.SetFloat("Speed",0.8f);
             animFille.SetBool("isRunning",true);
             laPetite.rotation = GetDir(filleDestinations[0].position, laPetite.position);
             laPetite.DOMove(filleDestinations[0].position, filleTTR[0] - 0.3f).SetEase(Ease.Linear);
@@ -888,6 +889,7 @@ namespace Player
             yield return new WaitForSeconds(filleWaitingTime[2]);
             //Debug.Log("girls runs to door");
             animFille.SetBool("isRunning",true);
+            animFille.SetFloat("Speed",0.5f);
             laPetite.DOMove(filleDestinations[1].position, filleTTR[1]);
             yield return new WaitForSeconds(playerWaitingTime[1]);
             //Debug.Log("player follows girls");
