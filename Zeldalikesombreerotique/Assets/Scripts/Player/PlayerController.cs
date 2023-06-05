@@ -144,7 +144,7 @@ namespace Player
             controls.Player.SecondaryEnter.performed += SecondaryInteract;
             controls.Player.SecondaryEnter.canceled +=  SecondaryInteract;
             controls.Player.SecondaryEnter.canceled +=  PushPullEnter;
-            if (pauseMenu)controls.Player.ShowUI.performed += pauseMenu.ShowOption;
+            
             savedMaxSpeed = maxSpeed;
                 gamepad = Gamepad.current;
                 if (introCinematic)
@@ -161,6 +161,7 @@ namespace Player
                         aga.transform.DOLocalRotate(finalConeRotation, 0);
                         Debug.Log("Le cône tête de cul !");
                     }
+                    if (pauseMenu)controls.Player.ShowUI.performed += pauseMenu.ShowOption;
                     rig[0].gameObject.SetActive(false);
                     rig[1].gameObject.SetActive(true);
                     controls.Enable();
@@ -201,6 +202,7 @@ namespace Player
             controls.Player.Enable();
             rb.isKinematic = false;
             CinematicBands.instance.CloseBands();
+            if (pauseMenu)controls.Player.ShowUI.performed += pauseMenu.ShowOption;
         }
         private void FixedUpdate()
         {

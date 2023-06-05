@@ -28,6 +28,8 @@ public class PauseMenu : MonoBehaviour
     public Slider musicSlider;
     public Toggle vibrationsCheck;
     public Toggle fullScreenCheck;
+
+    public InputUI controls;
     // Start is called before the first frame update
     public void Awake()
     {
@@ -37,6 +39,12 @@ public class PauseMenu : MonoBehaviour
         }
 
         instance = this;
+
+        controls = new InputUI();
+        controls.Enable();
+        controls.UI.Enable();
+        controls.UI.Leave.Enable();
+        controls.UI.Leave.performed += LeaveMenus;
     }
     public void Quit()
     {
@@ -64,6 +72,20 @@ public class PauseMenu : MonoBehaviour
             Debug.Log("switch to gamepad");
             Cursor.lockState = CursorLockMode.Locked;
             backButton.Select();
+        }
+
+        if (input.enabled && Input.GetButton("Cancel"))
+        {
+            HideOption();
+        }
+    }
+
+    void LeaveMenus(InputAction.CallbackContext context)
+    {
+        
+        if (input.enabled)
+        {
+            HideOption();
         }
     }
 

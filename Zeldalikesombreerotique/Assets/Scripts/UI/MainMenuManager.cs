@@ -109,7 +109,11 @@ namespace UI
         IEnumerator AutoDisableCredits()
         {
             yield return new WaitForSeconds(18);
-            ShowCredits();
+            if (credits.alpha == 1)
+            {
+                DOTween.To(() => credits.alpha,x => credits.alpha = x,0,0.4f);
+                creditsAnim.Play("Empty");
+            }
         }
 
         public void UpdateSoundSettings()
