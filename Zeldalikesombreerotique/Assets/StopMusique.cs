@@ -16,6 +16,7 @@ public class StopMusique : MonoBehaviour
     public AudioSource clock;
     public float timeBeforeReturning;
     public float timeForFade;
+    public GameObject self;
     
 
 
@@ -70,6 +71,7 @@ public class StopMusique : MonoBehaviour
         clock.DOPitch(0.5f, timeForFade);
         yield return new WaitForSeconds(timeBeforeReturning);
         clock.DOPitch(1, 1.5f);
+        self.SetActive(false);
     }
 }
 
