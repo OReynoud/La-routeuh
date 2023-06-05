@@ -23,6 +23,10 @@ namespace Utilities.Cinematic
         [ShowIf("hasSpotToRotate")] [SerializeField] private float timeToRotateSpot;
         [ShowIf("hasSpotToRotate")] [SerializeField] private Ease easeToRotateSpot;
         [ShowIf("hasSpotToRotate")] [SerializeField] private AudioClip  soundToRotateSpot;
+        public GameObject branch;
+        public bool branchCrack;
+        public float timeForBranch = 3f;
+        
         
         // Footprints
         [Header("Footprints")]
@@ -119,7 +123,9 @@ namespace Utilities.Cinematic
             yield return new WaitForSeconds(timeToBeginFootprints);
             yield return new WaitForSeconds(timeBeforeFall - timeToBeginFootprints);
             PlayerController.instance.rb.velocity = Vector3.zero;
+            
             StartCoroutine(PlayerController.instance.OmgJeSuisSurpris(littleSisterScript.objectToMove.transform));
+            
             //PlayerController.instance.rig[0].SetBool(IsTripping,true);
             
            // yield return new WaitForNextFrameUnit();
@@ -135,6 +141,17 @@ namespace Utilities.Cinematic
             PlayerController.instance.maxSpeed = maxSpeedTemp;
             PlayerController.instance.minSpeed = minSpeedTemp;
             PlayerController.instance.rb.isKinematic = false;
+
+            if (branchCrack == true)
+            {
+                StartCoroutine(Crack());
+            }
+        }
+        IEnumerator Crack()
+        {
+            yield return new WaitForSeconds(timeForBranch);
+            branch.SetActive(true);
+            Debug.Log("crack");
         }
     }
 }

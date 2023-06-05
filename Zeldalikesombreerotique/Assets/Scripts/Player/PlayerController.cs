@@ -118,6 +118,8 @@ namespace Player
         [SerializeField] private float scribblingFadeDuration;
         [SerializeField] private float scribblingPitchInterval;
 
+        public float jumpPower = 0.3f;
+
         public void OnDrawGizmosSelected()
         {
             Gizmos.DrawLine(transform.position, transform.position + Vector3.forward);
@@ -786,7 +788,7 @@ namespace Player
 
         public IEnumerator OmgJeSuisSurpris(Transform objectToLookAt)
         {
-            transform.DOJump(transform.position -transform.forward * 0.5f, 0.3f, 1, 0.2f);
+            transform.DOJump(transform.position -transform.forward * 0.2f, jumpPower, 1, 0.2f);
             yield return new WaitForSeconds(0.4f);
             while (!canMove)
             {
