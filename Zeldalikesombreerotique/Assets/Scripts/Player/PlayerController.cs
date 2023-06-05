@@ -190,7 +190,8 @@ namespace Player
             yield return new WaitForSeconds(0.2f);
             cone.DOLocalJump(finalConePosition,0.1f,1, conePutOnDuration);
             cone.DOLocalRotate(finalConeRotation, conePutOnDuration);
-            yield return new WaitForSeconds(conePutOnDuration);
+            yield return new WaitForSeconds(conePutOnDuration + 0.2f);
+            Destroy(characterHead.GetChild(0).gameObject);
             //cone.position = finalConePosition;
             //Debug.Log("Completed");
             introCinematic = false;
@@ -810,7 +811,7 @@ namespace Player
 
         public IEnumerator LaDerniereRoute()
         {
-            
+            CinematicBands.instance.OpenBands();
             //Debug.Log("Begining Cinematic");
             rb.isKinematic = true;
             DOTween.defaultEaseType = Ease.Linear;
@@ -889,7 +890,7 @@ namespace Player
             rig[0].SetFloat("Speed", 0.5f);
             rig[1].SetFloat("Speed", 0.5f);
             transform.DOMove(playerDestinations[^1].position, playerTTR[^1]);
-            yield return new WaitForSeconds(playerTTR[^1]);
+            yield return new WaitForSeconds(playerTTR[^1] * 0.95f);
             cameraManager.Credits();
             laPetite.gameObject.SetActive(false);
             gameObject.SetActive(false);

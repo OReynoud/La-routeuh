@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using DG.Tweening;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -26,6 +27,8 @@ namespace UI
         public Slider soundSlider;
         public Slider musicSlider;
         public Toggle vibrationsCheck;
+        public Toggle fullScreenCheck;
+        public Animator creditsAnim;
 
         public CanvasGroup credits;
         // Start is called before the first frame update
@@ -52,17 +55,22 @@ namespace UI
                 Cursor.lockState = CursorLockMode.Locked;
             }
         }
-
-        public void Play()
-        {
-            SceneManager.LoadScene("Loop - Puzzle 1");
-        }
-
         public void Quit()
         {
             Application.Quit();
         }
 
+        public void ChangeScreen()
+        {
+            Debug.Log(Screen.fullScreen);
+            //Screen.fullScreenMode = fullScreenCheck.isOn ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
+            Screen.fullScreen = !Screen.fullScreen;
+            Debug.Log(Screen.fullScreenMode);
+        }
+        public void Play()
+        {
+            SceneManager.LoadScene("Loop - Puzzle 1");
+        }
         public void ShowOptions()
         {
             StartCoroutine(AvoidSpams());
@@ -87,10 +95,12 @@ namespace UI
             if (credits.alpha == 1)
             {
                 DOTween.To(() => credits.alpha,x => credits.alpha = x,0,0.4f);
+                creditsAnim.Play("Empty");
             }
             else
             {
                 DOTween.To(() => credits.alpha,x => credits.alpha = x,1,0.4f);
+                creditsAnim.Play("ScrollCredits");
             }
         }
 
