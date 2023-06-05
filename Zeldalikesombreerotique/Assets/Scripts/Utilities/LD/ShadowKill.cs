@@ -76,9 +76,10 @@ namespace Utilities.LD
                 Shadow.ResetShadowPuzzle4();
             }
             
+            CameraManager.Instance.Kill();
+            
             PlayerController.instance.isDead = true;
             _slowDownTween.Kill();
-            CameraManager.Instance.NoMoreBoutToBeKilled();
             PlayerController.instance.transform.position = RespawnPoint.position;
             PlayerController.instance.maxSpeed = PlayerController.instance.savedMaxSpeed;
             PlayerController.instance.rig[0].Play("idle");
@@ -106,6 +107,9 @@ namespace Utilities.LD
             yield return new WaitForEndOfFrame();
             PlayerController.instance.maxSpeed = PlayerController.instance.savedMaxSpeed;
             PlayerController.instance.isDead = false;
+            
+            CameraManager.Instance.NoMoreKill();
+            CameraManager.Instance.NoMoreBoutToBeKilled();
         }
     }
 }

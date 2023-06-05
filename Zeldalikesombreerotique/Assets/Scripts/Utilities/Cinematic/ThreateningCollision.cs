@@ -64,11 +64,12 @@ namespace Utilities.Cinematic
 
         private IEnumerator KillPlayer()
         {
-            
             yield return new WaitForSeconds(timeBeforeKill);
+            
+            CameraManager.Instance.Kill();
+            
             PlayerController.instance.isDead = true;
             _slowDownTween.Kill();
-            CameraManager.Instance.NoMoreBoutToBeKilled();
             heartbeat.DOFade(0, 0.5f);
             breathing.DOFade(0, 0.5f);
             PlayerController.instance.transform.position = respawnPoint.position;
@@ -96,6 +97,9 @@ namespace Utilities.Cinematic
             yield return new WaitForEndOfFrame();
             PlayerController.instance.maxSpeed = PlayerController.instance.savedMaxSpeed;
             PlayerController.instance.isDead = false;
+            
+            CameraManager.Instance.NoMoreKill();
+            CameraManager.Instance.NoMoreBoutToBeKilled();
         }
     }
 }
