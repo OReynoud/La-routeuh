@@ -15,6 +15,7 @@ public class PetiteFilleChase : MonoBehaviour
     [Range(0, 1)] public float percentMaxSlow = 0.4f;
 
     public float slowDownRadius;
+    private bool stopPlayer;
     
     public LayerMask playerMask;
     // Start is called before the first frame update
@@ -48,8 +49,18 @@ public class PetiteFilleChase : MonoBehaviour
             {
                 currentSlowDown = percentMaxSlow;
             }
-            PlayerController.instance.maxSpeed = savedMaxSpeed * currentSlowDown;
-            PlayerController.instance.minSpeed = savedMinSpeed * currentSlowDown;
+
+            if (stopPlayer)
+            {
+                PlayerController.instance.maxSpeed = 0;
+                PlayerController.instance.minSpeed = 0;
+                PlayerController.instance.rb.velocity = Vector3.zero;
+            }
+            else
+            {
+                PlayerController.instance.maxSpeed = savedMaxSpeed * currentSlowDown;
+                PlayerController.instance.minSpeed = savedMinSpeed * currentSlowDown;
+            }
             //METTRE LE SON ICI
         }
     }
@@ -61,6 +72,7 @@ public class PetiteFilleChase : MonoBehaviour
             if (willSlowDownPlayer)
             {
                 StartCoroutine(ResetPlayerSpeed());
+                stopPlayer = true;
             }
             else
             {
@@ -71,14 +83,13 @@ public class PetiteFilleChase : MonoBehaviour
 
     private IEnumerator ResetPlayerSpeed()
     {
-        PlayerController.instance.maxSpeed = 0;
-        PlayerController.instance.minSpeed = 0;
-        PlayerController.instance.rb.velocity = Vector3.zero;
+        
         yield return new WaitForSeconds(0.2f);
         chaseScript.TriggerGirl(true);
         yield return new WaitForSeconds(timeBeforeMovingBack);
         willSlowDownPlayer = false;
         PlayerController.instance.maxSpeed = savedMaxSpeed;
         PlayerController.instance.minSpeed = savedMinSpeed;
+        stopPlayer = false;
     }
 }
