@@ -13,6 +13,7 @@ namespace Managers
         private static readonly int ToBeKilled = Animator.StringToHash("boutToBeKilled");
         private static readonly int TransitioningBackToMain = Animator.StringToHash("transitioningBackToMain");
         private static readonly int EndCredits = Animator.StringToHash("EndCredits");
+        private static readonly int Puzzle4 = Animator.StringToHash("puzzle4");
 
         private void Awake()
         {
@@ -38,6 +39,16 @@ namespace Managers
         internal void Credits()
         {
             animator.SetBool(EndCredits,true);
+        }
+
+        internal void Puzzle4Cam()
+        {
+            animator.SetBool(Puzzle4, true);
+        }
+
+        internal void NoMorePuzzle4Cam()
+        {
+            animator.SetBool(Puzzle4, false);
         }
     }
 }

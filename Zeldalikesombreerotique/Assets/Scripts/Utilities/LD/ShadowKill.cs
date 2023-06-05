@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using Managers;
 using NaughtyAttributes;
@@ -14,17 +15,26 @@ namespace Utilities.LD
         private Coroutine _killPlayerCoroutine;
         private float _tempPlayerMaxSpeed;
         private Tween _slowDownTween;
+
+        [ShowNonSerializedField] private const float SlowDownValue = 1;
+        [ShowNonSerializedField] private const float SlowDownTime = 0.1f;
+        [ShowNonSerializedField] private const Ease SlowDownEase = Ease.Linear;
+
+        internal bool IsPuzzle4Shadow;
+        internal List<GameObject> TriggersToReset;
+        internal List<AudioSource> AudiosToReset;
+        internal Shadow Shadow;
         
-        [ShowNonSerializedField]private readonly float slowDownValue = 1;
-        [ShowNonSerializedField]private readonly float slowDownTime = 0.1f;
-        [ShowNonSerializedField]private readonly Ease slowDownEase = Ease.Linear;
+        private static readonly int IsWalking = Animator.StringToHash("isWalking");
+        private static readonly int IsPushing = Animator.StringToHash("IsPushing");
+        private static readonly int IsGrabbing = Animator.StringToHash("IsGrabbing");
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Player") && !PlayerController.instance.isProtected)
             {
                 CameraManager.Instance.BoutToBeKilled();
-                _slowDownTween = DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, slowDownValue, slowDownTime).SetEase(slowDownEase);
+                _slowDownTween = DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, SlowDownValue, SlowDownTime).SetEase(SlowDownEase);
                 _killPlayerCoroutine = StartCoroutine(KillPlayer());
             }
         }
@@ -48,6 +58,24 @@ namespace Utilities.LD
         private IEnumerator KillPlayer()
         {
             yield return new WaitForSeconds(timeBeforeKill);
+
+            if (IsPuzzle4Shadow)
+            {
+                foreach (var trigger in TriggersToReset)
+                {
+                    trigger.SetActive(true);
+                    trigger.GetComponent<BoxCollider>().enabled = true;
+                }
+                
+                foreach (var audioSource in AudiosToReset)
+                {
+                    audioSource.Stop();
+                    audioSource.volume = 1f;
+                }
+                
+                Shadow.ResetShadowPuzzle4();
+            }
+            
             PlayerController.instance.isDead = true;
             _slowDownTween.Kill();
             CameraManager.Instance.NoMoreBoutToBeKilled();
@@ -55,9 +83,9 @@ namespace Utilities.LD
             PlayerController.instance.maxSpeed = PlayerController.instance.savedMaxSpeed;
             PlayerController.instance.rig[0].Play("idle");
             PlayerController.instance.rig[1].Play("idle");
-            PlayerController.instance.rig[0].SetBool("isWalking",false);
-            PlayerController.instance.rig[0].SetBool("IsPushing",false);
-            PlayerController.instance.rig[0].SetBool("IsGrabbing",false);
+            PlayerController.instance.rig[0].SetBool(IsWalking,false);
+            PlayerController.instance.rig[0].SetBool(IsPushing,false);
+            PlayerController.instance.rig[0].SetBool(IsGrabbing,false);
             PlayerController.instance.pushingPullingRotate = false;
             PlayerController.instance.isGrabbing = false;
             PlayerController.instance.canMove = true;

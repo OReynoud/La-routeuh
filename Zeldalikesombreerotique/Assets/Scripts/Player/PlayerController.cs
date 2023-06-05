@@ -928,11 +928,12 @@ namespace Player
 
         private IEnumerator ScribblingSoundCoroutine(float duration)
         {
-            scribblingGameObject.GetComponent<AudioSource>().volume = 1;
-            scribblingGameObject.GetComponent<AudioSource>().pitch = Random.Range(1f-scribblingPitchInterval*0.5f, 1f+scribblingPitchInterval*0.5f);
+            var audioSource = scribblingGameObject.GetComponent<AudioSource>();
+            audioSource.volume = 1;
+            audioSource.pitch = Random.Range(1f-scribblingPitchInterval*0.5f, 1f+scribblingPitchInterval*0.5f);
             scribblingGameObject.SetActive(true);
             yield return new WaitForSeconds(duration-scribblingFadeDuration);
-            scribblingGameObject.GetComponent<AudioSource>().DOFade(0, scribblingFadeDuration);
+            audioSource.DOFade(0, scribblingFadeDuration);
             yield return new WaitForSeconds(scribblingFadeDuration);
             scribblingGameObject.SetActive(false);
             _scribblingCoroutine = null;

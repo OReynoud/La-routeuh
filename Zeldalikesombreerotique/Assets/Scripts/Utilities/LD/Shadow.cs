@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using Managers;
 using NaughtyAttributes;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -29,13 +30,18 @@ namespace Utilities.LD
         [Tooltip("Scale reached by the moving shadow")] [SerializeField] internal float movingScale;
         [Tooltip("Ease followed by the moving shadow")] [SerializeField] internal Ease movingEase;
         
-        [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] internal bool hasAnchor;
-        [ShowIf("hasAnchor")] [Tooltip("Anchor where to move")] [SerializeField] internal Transform anchor;
+        [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] private bool hasAnchor;
+        [ShowIf("hasAnchor")] [Tooltip("Anchor where to move")] [SerializeField] private Transform anchor;
         private float _anchorDirectionFactor;
         
-        [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] internal bool isPuzzle4Shadow;
-        [ShowIf("isPuzzle4Shadow")] [Tooltip("TUS2S2KOUA")] [SerializeField] internal float divisionValue;
+        [Tooltip("Does the shadow have an anchor where to move?")] [SerializeField] private bool isPuzzle4Shadow;
+        [ShowIf("isPuzzle4Shadow")] [Tooltip("Value to divide to the distance between shadow's center and sphere's center at the end")] [SerializeField] private float divisionValue;
         [ShowIf("isPuzzle4Shadow")] [Tooltip("Point where the player will respawn if they are killed by the shadow")] [SerializeField] private Transform respawnPoint2;
+        [ShowIf("isPuzzle4Shadow")] [Tooltip("Anchor where to move at the beginning")] [SerializeField] private Transform anchorBeginning;
+        [Tooltip("Duration of the animation of the moving shadow at the beginning")] [SerializeField] internal float movingDurationBeginning;
+        [Tooltip("Ease followed by the moving shadow at the beginning")] [SerializeField] internal Ease movingEaseBeginning;
+        [ShowIf("isPuzzle4Shadow")] [Tooltip("List of the triggers to reset when the player dies")] [SerializeField] private List<GameObject> triggersToReset;
+        [ShowIf("isPuzzle4Shadow")] [Tooltip("List of the audios to reset when the player dies")] [SerializeField] private List<AudioSource> audiosToReset;
 
         private Vector3 _lastHitPoint;
         private Vector3 _lastLightPosition;
@@ -48,8 +54,13 @@ namespace Utilities.LD
                 var localScaleX = child.localScale.x;
                 
                 _meshTransforms.Add((child, child.position, localPosition, localScaleX));
-                
-                child.GetChild(0).GetComponent<ShadowKill>().RespawnPoint = respawnPoint;
+
+                var shadowKill = child.GetChild(0).GetComponent<ShadowKill>();
+                shadowKill.RespawnPoint = respawnPoint;
+                shadowKill.IsPuzzle4Shadow = isPuzzle4Shadow;
+                shadowKill.TriggersToReset = triggersToReset;
+                shadowKill.AudiosToReset = audiosToReset;
+                shadowKill.Shadow = this;
 
                 if (!isPuzzle4Shadow)
                 {
@@ -228,8 +239,6 @@ namespace Utilities.LD
 
         internal IEnumerator MoveShadowPuzzle4()
         {
-            gameObject.SetActive(true);
-
             yield return new WaitForNextFrameUnit();
             
             _movingSequence.Kill();
@@ -237,13 +246,16 @@ namespace Utilities.LD
             
             var shadowPosition = transform.position;
             var anchorPosition = anchor.position;
+            var anchorBeginningPosition = anchorBeginning.position;
             var anchorVector = anchorPosition - shadowPosition;
+            var anchorBeginningVector = anchorBeginningPosition - shadowPosition;
             
             foreach (var meshTransform in _meshTransforms)
             {
                 var diffVector = meshTransform.position - shadowPosition;
                 
-                _movingSequence.Insert(0f, meshTransform.transform.DOMove(shadowPosition + anchorVector + diffVector / divisionValue, movingDuration).SetEase(movingEase));
+                _movingSequence.Insert(0f, meshTransform.transform.DOMove(shadowPosition + anchorBeginningVector + diffVector, movingDurationBeginning).SetEase(movingEaseBeginning))
+                    .Insert(movingDurationBeginning, meshTransform.transform.DOMove(shadowPosition + anchorVector + diffVector / divisionValue, movingDuration).SetEase(movingEase));
             }
             
             _movingSequence.AppendCallback(() =>
@@ -254,7 +266,21 @@ namespace Utilities.LD
                 {
                     meshTransform.transform.GetChild(0).GetComponent<ShadowKill>().RespawnPoint = respawnPoint2;
                 }
+                
+                CameraManager.Instance.NoMorePuzzle4Cam();
             });
+        }
+
+        internal void ResetShadowPuzzle4()
+        {
+            _movingSequence.Kill();
+            
+            foreach (var meshTransform in _meshTransforms)
+            {
+                meshTransform.transform.position = meshTransform.position;
+            }
+            
+            CameraManager.Instance.NoMorePuzzle4Cam();
         }
     }
 }
