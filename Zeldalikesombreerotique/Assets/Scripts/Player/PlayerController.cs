@@ -155,6 +155,7 @@ namespace Player
                 {
                     if (cone)
                     {
+                        Destroy(characterHead.GetChild(0).gameObject);
                         var aga = Instantiate(cone.gameObject, characterHead.position,Quaternion.identity, characterHead);
                         aga.transform.localPosition = finalConePosition;
                         aga.transform.DOLocalRotate(finalConeRotation, 0);
@@ -890,10 +891,14 @@ namespace Player
             rig[0].SetFloat("Speed", 0.5f);
             rig[1].SetFloat("Speed", 0.5f);
             transform.DOMove(playerDestinations[^1].position, playerTTR[^1]);
-            yield return new WaitForSeconds(playerTTR[^1] * 0.95f);
-            cameraManager.Credits();
+            yield return new WaitForSeconds(filleTTR[^1] * 0.95f);
             laPetite.gameObject.SetActive(false);
+            yield return new WaitForSeconds((playerTTR[^1] - filleTTR[^1])* 0.5f );
+            characterHead.GetChild(0).gameObject.SetActive(false);
+            yield return new WaitForSeconds(1f);
             gameObject.SetActive(false);
+            yield return new WaitForSeconds(3);
+            cameraManager.Credits();
         }
 
         IEnumerator LookingAtGirl()
