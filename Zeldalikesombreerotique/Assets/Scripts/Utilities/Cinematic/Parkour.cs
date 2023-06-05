@@ -19,6 +19,7 @@ public class Parkour : MonoBehaviour
     public GameObject objectToMove;
     private Animator petiteFilleRig;
 
+    public bool isSinging = true;
 
     public AudioSource song;
     public GameObject bush;
@@ -83,13 +84,13 @@ public class Parkour : MonoBehaviour
             bush.SetActive(true);
         }
         
-        if (song != null)
+        if (song != null && isSinging == true)
         {
             song.DOFade(0, 0.15f);
 
         }
         
-        if (audiobreathe != null)
+        if (audiobreathe != null && isSinging == true)
         {
             audiobreathe.SetActive(true);
 
