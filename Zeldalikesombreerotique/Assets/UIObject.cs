@@ -41,14 +41,14 @@ public class UIObject : MonoBehaviour
             transform.position =
                 new Vector3(objectToFollow.position.x - xOffset, 0.01f, objectToFollow.position.z - yOffset) -
                 objectToFollow.right; 
-            sr.flipY = false;
+            sr.flipY = true;
         }
         else
         {
             transform.position =
                 new Vector3(objectToFollow.position.x + xOffset, 0.01f, objectToFollow.position.z + yOffset) +
                 objectToFollow.right; 
-            sr.flipY = true;
+            sr.flipY = false;
         }
     }
 
