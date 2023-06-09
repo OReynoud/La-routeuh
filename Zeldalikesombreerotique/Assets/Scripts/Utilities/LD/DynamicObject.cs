@@ -174,7 +174,8 @@ namespace Utilities
 
         private void LautreCheckDeSesMorts()
         {
-            var oui = Physics.OverlapBox(transform.position, col.size * PlayerController.instance.overlapBoxSize + Vector3.up, transform.rotation,~PlayerController.instance.mask);
+            var oui = Physics.OverlapBox(transform.position, col.size * PlayerController.instance.overlapBoxSize + Vector3.up, transform.rotation,~PlayerController.instance.mask,
+                QueryTriggerInteraction.Ignore);
 
             
 
