@@ -1,16 +1,13 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using Player;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Networking.PlayerConnection;
 
 // ReSharper disable Unity.InefficientPropertyAccess
 // ReSharper disable BitwiseOperatorOnEnumWithoutFlags
 
-namespace Utilities
+namespace Utilities.LD
 {
     public class DynamicObject : MonoBehaviour
     {
@@ -66,11 +63,14 @@ namespace Utilities
             mesh = GetComponentInChildren<MeshRenderer>();
             rb = GetComponent<Rigidbody>();
             col = GetComponent<BoxCollider>();
+            
             if (!isTutorial) return;
+            
             for (int i = 0; i < pushPullUI.childCount; i++)
             {
                 pushPullSprites.Add(pushPullUI.GetChild(i).GetComponent<SpriteRenderer>());
             }
+            
             for (int i = 0; i < rotateUI.childCount; i++)
             {
                 rotateSprites.Add(rotateUI.GetChild(i).GetComponent<SpriteRenderer>());
@@ -83,8 +83,10 @@ namespace Utilities
         {
             //if (!_start || gameObject.CompareTag("Footprint")) return;
             //Gizmos.matrix = transform.localToWorldMatrix;
+            
             Gizmos.color = Color.red;
             Gizmos.DrawWireCube(transform.position + Vector3.up * 0.5f, overlapBox * Vector3.one);
+            
             if (isTutorial)
             {
                 Gizmos.color = Color.blue;
@@ -125,6 +127,7 @@ namespace Utilities
             {
                 var diff = Mathf.Abs(lastSavedPos.magnitude - transform.position.magnitude);
                 distanceTravelledRequired -= diff;
+                
                 if (distanceTravelledRequired <= 0)
                 {
                     pushPullActive = false;
@@ -138,30 +141,34 @@ namespace Utilities
                 var diff = Mathf.Abs(lastSavedRotation.magnitude - transform.rotation.eulerAngles.magnitude);
                 lastSavedRotation = transform.rotation.eulerAngles;
                 rotationRequired -= diff;
-                Debug.Log(diff + ", required: "+ rotationRequired);
+                
+                // Debug.Log(diff + ", required: "+ rotationRequired);
+                
                 if (rotationRequired <= 0)
                 {
                     rotateActive = false;
                     StartCoroutine(FadeOut(rotateSprites, false));
                 }
             }
+            
             if (visibilityType != VisibilityType.DelayedReappear) return;
+            
             mesh.material.color = Color.Lerp(mesh.material.color, Color.white, reappearanceSpeed);
             childCollider.enabled = mesh.material.color.a > 0.9f;
         }
 
         private void CheckDeSesMorts()
         {
-            
-            
             var oui = Physics.OverlapBox(col.center + transform.position, 
                 col.size / 2 + 0.1f * Vector3.one,
                 transform.rotation,~PlayerController.instance.mask,
                 QueryTriggerInteraction.Ignore);
-            foreach (var non in oui)
+            
+            /*foreach (var non in oui)
             {
                 Debug.Log(non+ "Check si les objets on les bons layers",non );
-            }
+            }*/
+            
             if (oui.Length > 1)
             {
                 if (PlayerPrefs.GetInt("Vibrations", 1) == 1)
@@ -176,27 +183,28 @@ namespace Utilities
         {
             var oui = Physics.OverlapBox(transform.position, col.size * PlayerController.instance.overlapBoxSize + Vector3.up, transform.rotation,~PlayerController.instance.mask,
                 QueryTriggerInteraction.Ignore);
-
             
-
             var frontSide = transform.forward;
             var backSide = -transform.forward;
-            if (oui.Length ==1)
+            
+            if (oui.Length == 1)
             {
-                
                 PlayerController.instance.canPull = true;
                 PlayerController.instance.canPush = true;
             }
+            
             /*foreach (var non in oui)
             {
                 Debug.Log(non, non);
             }*/
-            for (int i = 0; i < oui.Length; i++)
+            
+            for (var i = 0; i < oui.Length; i++)
             {
                 if (oui[i] == col) continue;
                 if (oui[i] == GetComponentInChildren<Collider>()) continue;
                 var distanceToFrontSide = Vector3.Distance(transform.position + frontSide, oui[i].ClosestPoint(transform.position + frontSide));
                 var distanceToBackSide = Vector3.Distance(transform.position + backSide, oui[i].ClosestPoint(transform.position + backSide));
+                
                 if (distanceToFrontSide > distanceToBackSide)
                 {
                     PlayerController.instance.canPull = false;
@@ -209,18 +217,20 @@ namespace Utilities
                 }
             }
         }
+        
         /*private void OnCollisionEnter(Collision other)
         {
             CheckDeSesMorts();
         }*/
+        
         private void OnCollisionStay(Collision other)
         {
             if (other.gameObject.CompareTag("Player"))
             {
                 PlayerController.instance.isProtected = true;
             }
-            
         }
+        
         private void OnCollisionExit(Collision other)
         {
             if (other.gameObject.CompareTag("Player"))
@@ -229,47 +239,54 @@ namespace Utilities
             }
 
             if (other.gameObject.CompareTag("Untagged") || other.gameObject.CompareTag("Player")) return;
+            
             if (PlayerController.instance.pushingPullingRotate)
             {
                 rb.constraints = RigidbodyConstraints.FreezeRotationX | 
                                  RigidbodyConstraints.FreezePosition |
                                  RigidbodyConstraints.FreezeRotationZ;
             }
+            
             isColliding = false;
             PlayerController.instance.canRotateClockwise = true;
             PlayerController.instance.canRotateCounterClockwise = true;
         }
 
-        IEnumerator FadeOut(List<SpriteRenderer> sprites, bool chainFadeIn)
+        private IEnumerator FadeOut(List<SpriteRenderer> sprites, bool chainFadeIn)
         {
             foreach (var sr in sprites)
             {
                 sr.color = Color.Lerp(sr.color,
                     new Color(sr.color.r, sr.color.g, sr.color.b, 0),0.06f);
             }
+            
             yield return new WaitForFixedUpdate();
+            
             if (sprites[0].color.a > 0.001f)
             {
                 StartCoroutine(FadeOut(sprites, chainFadeIn));
-                Debug.Log("oui");
+                // Debug.Log("oui");
                 yield break;
             }
 
             if (chainFadeIn)
             {
-                Debug.Log("cbon laaa");
+                // Debug.Log("cbon laaa");
                 lastSavedRotation = transform.rotation.eulerAngles;
                 StartCoroutine(FadeIn(rotateSprites));
             }
         }
-        IEnumerator FadeIn(List<SpriteRenderer> sprites)
+
+        private IEnumerator FadeIn(List<SpriteRenderer> sprites)
         {
             foreach (var sr in sprites)
             {
                 sr.color = Color.Lerp(sr.color,
                     new Color(sr.color.r, sr.color.g, sr.color.b, 1),0.03f);
             }
+            
             yield return new WaitForFixedUpdate();
+            
             if (sprites[0].color.a <= 0.9f)
             {
                 StartCoroutine(FadeIn(sprites));

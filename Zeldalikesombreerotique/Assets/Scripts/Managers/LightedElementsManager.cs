@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Utilities;
 using Utilities.LD;
 using Light = Utilities.LD.Light;
 
@@ -42,11 +41,6 @@ namespace Managers
             if (DoCheckDictionaries)
             {
                 CheckDictionaries();
-                if (MapPartOrigin != null)
-                {
-                    MapPartOrigin.SetActive(false);
-                    MapPartOrigin = null;
-                }
             }
             else
             {
@@ -54,6 +48,13 @@ namespace Managers
             }
             
             CurrentCheckCoroutine = null;
+            
+            if (DoCheckDictionaries && MapPartOrigin)
+            {
+                var tempMapPartOrigin = MapPartOrigin;
+                MapPartOrigin = null;
+                tempMapPartOrigin.SetActive(false);
+            }
         }
 
         private void CheckDictionaries()

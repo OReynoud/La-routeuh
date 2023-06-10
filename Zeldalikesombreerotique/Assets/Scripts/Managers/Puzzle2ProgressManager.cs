@@ -6,6 +6,7 @@ using Player;
 using Unity.VisualScripting;
 using UnityEngine;
 using Utilities;
+using Utilities.LD;
 
 public class Puzzle2ProgressManager : MonoBehaviour
 {

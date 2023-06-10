@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using DG.Tweening;
 using NaughtyAttributes;
 using Player;
-using Unity.VisualScripting;
 using UnityEngine;
 using Utilities.LD;
 
@@ -52,6 +51,8 @@ namespace Utilities.Cinematic
         
         // Hashed strings
         private static readonly int IsTripping = Animator.StringToHash("isTripping");
+        private static readonly int IsWalking = Animator.StringToHash("isWalking");
+        private static readonly int Speed = Animator.StringToHash("Speed");
 
         private void Awake()
         {
@@ -109,14 +110,14 @@ namespace Utilities.Cinematic
             yield return new WaitForEndOfFrame();
             PlayerController.instance.rb.isKinematic = true;
             PlayerController.instance.introCinematic = true;
-            PlayerController.instance.rig[0].SetBool("isWalking",false);
-            PlayerController.instance.rig[1].SetBool("isWalking",false);
+            PlayerController.instance.rig[0].SetBool(IsWalking,false);
+            PlayerController.instance.rig[1].SetBool(IsWalking,false);
             var maxSpeedTemp = PlayerController.instance.maxSpeed;
             var minSpeedTemp = PlayerController.instance.minSpeed;
             /*DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, 0f, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
             DOTween.To(()=> PlayerController.instance.minSpeed, x=> PlayerController.instance.minSpeed = x, 0f, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);*/
             DOTween.To(()=> PlayerController.instance.rb.velocity, x=> PlayerController.instance.rb.velocity = x, Vector3.zero, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
-            DOTween.To(()=> PlayerController.instance.rig[0].GetFloat("Speed"), x=> PlayerController.instance.rig[0].GetFloat("Speed"), 0, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
+            DOTween.To(()=> PlayerController.instance.rig[0].GetFloat(Speed), x=> PlayerController.instance.rig[0].GetFloat(Speed), 0, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
             CinematicBands.instance.OpenBands();
             PlayerController.instance.controls.Disable();
             PlayerController.instance.canMove = false;
@@ -142,16 +143,17 @@ namespace Utilities.Cinematic
             PlayerController.instance.minSpeed = minSpeedTemp;
             PlayerController.instance.rb.isKinematic = false;
 
-            if (branchCrack == true)
+            if (branchCrack)
             {
                 StartCoroutine(Crack());
             }
         }
-        IEnumerator Crack()
+
+        private IEnumerator Crack()
         {
             yield return new WaitForSeconds(timeForBranch);
             branch.SetActive(true);
-            Debug.Log("crack");
+            // Debug.Log("crack");
         }
     }
 }

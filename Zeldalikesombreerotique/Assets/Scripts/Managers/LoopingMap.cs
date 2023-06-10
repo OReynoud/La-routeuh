@@ -52,7 +52,7 @@ namespace Managers
                 
                     foreach (var mapPart in mapPartsToDisable)
                     {
-                        if (mapPartOrigin == mapPart)
+                        if (mapPartOrigin == mapPart && mapPart.activeSelf)
                         {
                             LightedElementsManager.Instance.MapPartOrigin = mapPart;
                         }

@@ -5,6 +5,7 @@ using DG.Tweening;
 using Player;
 using UnityEngine;
 using Utilities;
+using Utilities.LD;
 
 public class TrucPourAttirerLattention : MonoBehaviour
 {
