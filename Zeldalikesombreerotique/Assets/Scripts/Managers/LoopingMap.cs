@@ -16,12 +16,12 @@ namespace Managers
 
         private void Start()
         {
-            foreach (var shadow in FindObjectsOfType<Shadow>())
+            foreach (var shadow in FindObjectsOfType<Shadow>(true))
             {
                 _shadowsToReset.Add(shadow);
             }
             
-            foreach (var link in FindObjectsOfType<Link>())
+            foreach (var link in FindObjectsOfType<Link>(true))
             {
                 _linksToReset.Add(link);
             }
