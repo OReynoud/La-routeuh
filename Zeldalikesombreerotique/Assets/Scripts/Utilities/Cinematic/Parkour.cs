@@ -50,7 +50,7 @@ public class Parkour : MonoBehaviour
             if (_timer < 1)
             {
                 petiteFilleRig.SetBool("isRunning",true);
-                _timer += (speed/ Vector3.Distance(startPoint[0].position,endPoint[0].position)) * Time.fixedDeltaTime;
+                _timer += (speed/ Vector3.Distance(startPoint[0].position,endPoint[0].position))  * Time.deltaTime;
                 
                 var m1 = Vector3.Lerp( startPoint[0].position, controlPoint[0].position, _timer );
                 var m2 = Vector3.Lerp( controlPoint[0].position, endPoint[0].position, _timer );
