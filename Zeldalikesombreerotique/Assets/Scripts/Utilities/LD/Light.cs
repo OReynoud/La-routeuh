@@ -41,6 +41,7 @@ namespace Utilities.LD
         
         private bool _stopMesh;
         private Bounds _bounds;
+        public LayerMask mask;
 
         private void Awake()
         {
@@ -135,7 +136,7 @@ namespace Utilities.LD
         private void ThrowRaycast(Vector3 origin, Vector3 dir, float dist, int i, bool onlyShadows = false)
         {
             // Raycast
-            if (Physics.Raycast(origin, dir, out var raycastHit, dist)) // If the raycast hits something
+            if (Physics.Raycast(origin, dir, out var raycastHit, dist, ~mask, QueryTriggerInteraction.Ignore)) // If the raycast hits something
             {
                 Debug.DrawRay(origin, dir * raycastHit.distance, Color.red);
 
