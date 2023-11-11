@@ -170,7 +170,6 @@ namespace Player
                         var aga = Instantiate(cone.gameObject, characterHead.position,Quaternion.identity, characterHead);
                         aga.transform.localPosition = finalConePosition;
                         aga.transform.DOLocalRotate(finalConeRotation, 0);
-                        Debug.Log("Le cône tête de cul !");
                     }
                     if (pauseMenu)controls.Player.ShowUI.performed += pauseMenu.ShowOption;
                     rig[0].gameObject.SetActive(false);
@@ -220,7 +219,7 @@ namespace Player
             if (introCinematic)return;
             if (rb.velocity.y > 0)
             {
-                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+                rb.velocity = new Vector3(rb.velocity.x, -1, rb.velocity.z);
             }
             //incrémentation du inputBuffer pour éviter le spam de bouttons
             if (inputLag > 0)
@@ -335,7 +334,7 @@ namespace Player
         public void Move(InputAction.CallbackContext context)
         {
             var dir = context.ReadValue<Vector2>();
-            playerDir = new Vector3(dir.x,playerDir.y, dir.y);
+            playerDir = new Vector3(dir.x,-1, dir.y);
         }
         
                                                                             #region ManipulationDobjets
