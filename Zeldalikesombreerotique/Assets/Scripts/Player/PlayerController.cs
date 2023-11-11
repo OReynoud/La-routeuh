@@ -802,8 +802,6 @@ namespace Player
 
         public IEnumerator OmgJeSuisSurpris(Transform objectToLookAt)
         {
-            transform.DOJump(transform.position -transform.forward * 0.2f, jumpPower, 1, 0.2f);
-            yield return new WaitForSeconds(0.4f);
             while (!canMove)
             {
                 Vector3 dir = objectToLookAt.position - transform.position;

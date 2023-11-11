@@ -161,10 +161,15 @@ namespace Utilities.LD
 
         private void CheckDeSesMorts()
         {
+            if (!(Mathf.Abs(PlayerController.instance.playerDir.x) >= 0.1f) &&
+                !(Mathf.Abs(PlayerController.instance.playerDir.z) >= 0.1f))return;
+
+            var pl = PlayerController.instance.transform;
             var oui = Physics.OverlapBox(col.center + transform.position, 
-                col.size / 2 + 0.1f * Vector3.one,
+                col.size * PlayerController.instance.overlapBoxSize + Vector3.up,
                 transform.rotation,~PlayerController.instance.mask,
                 QueryTriggerInteraction.Ignore);
+            
             
             /*foreach (var non in oui)
             {
@@ -177,7 +182,28 @@ namespace Utilities.LD
                 {
                     PlayerController.instance.gamepad?.SetMotorSpeeds(PlayerController.instance.rumbleIntensity,PlayerController.instance.rumbleIntensity);
                 }
-                transform.position += -transform.forward * 0.1f; // Vector3.Distance(transform.position,handlePos.position);
+
+                var rightSide = transform.right;
+                var leftSide = -transform.right;
+                for (int i = 0; i < oui.Length; i++)
+                {
+                    if (oui[i] == col) continue;
+                    if (oui[i] == GetComponentInChildren<Collider>()) continue;
+                    var distToRight = Vector3.Distance(transform.position + rightSide, oui[i].ClosestPoint(transform.position + rightSide));
+                    var distToLeft = Vector3.Distance(transform.position + leftSide, oui[i].ClosestPoint(transform.position + leftSide));
+                    if (distToRight < distToLeft)
+                    {
+                        transform.position += -transform.right * 0.01f;
+                        pl.position += -pl.right * 0.01f;
+                    }
+                    else
+                    {
+                        transform.position += transform.right * 0.01f;
+                        pl.position += pl.right * 0.01f;
+                    }
+                    transform.position += -transform.forward * 0.01f; // Vector3.Distance(transform.position,handlePos.position);
+                    pl.position += -pl.forward * 0.01f;
+                }
             }
         }
 
@@ -219,21 +245,32 @@ namespace Utilities.LD
                 switch (closestPos.IndexOf(closestPos.Min()))
                 {
                     case 0:
-                        Debug.Log("a");
-                        transform.position -= transform.right * 0.01f;
-                        PlayerController.instance.transform.position -= PlayerController.instance.transform.right * 0.01f;
+                        if (Mathf.Abs(closestPos[0] - closestPos[1]) >= 0.3f)
+                        {
+                            transform.position -= transform.right * 0.01f;
+                            PlayerController.instance.transform.position -= PlayerController.instance.transform.right * 0.01f;   
+                        }
                         break;
                     case 1:
-                        transform.position += transform.right * 0.01f;
-                        PlayerController.instance.transform.position += PlayerController.instance.transform.right * 0.01f;
+                        if (Mathf.Abs(closestPos[0] - closestPos[1]) >= 0.3f)
+                        {
+                            transform.position += transform.right * 0.01f;
+                            PlayerController.instance.transform.position += PlayerController.instance.transform.right * 0.01f;
+                        }
                         break;
                     case 2:
-                        transform.position -= transform.right * 0.01f;
-                        PlayerController.instance.transform.position -= PlayerController.instance.transform.right * 0.01f;
+                        if (Mathf.Abs(closestPos[2] - closestPos[3]) >= 0.3f)
+                        {
+                            transform.position -= transform.right * 0.01f;
+                            PlayerController.instance.transform.position -= PlayerController.instance.transform.right * 0.01f;
+                        }
                         break;
                     case 3:
-                        transform.position += transform.right * 0.01f;
-                        PlayerController.instance.transform.position += PlayerController.instance.transform.right * 0.01f;
+                        if (Mathf.Abs(closestPos[2] - closestPos[3]) >= 0.3f)
+                        {
+                            transform.position += transform.right * 0.01f;
+                            PlayerController.instance.transform.position += PlayerController.instance.transform.right * 0.01f;
+                        }
                         break;
                 }
                 /*if (distanceToFrontSide > distanceToBackSide)
