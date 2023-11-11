@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NaughtyAttributes;
 using Player;
 using UnityEngine;
@@ -56,6 +57,7 @@ namespace Utilities.LD
         private Vector3 lastSavedPos;
         private Vector3 lastSavedRotation;
         public Vector3 spawnPos;
+        private List<float> closestPos = new List<float>();
 
 
         private void Awake()
@@ -186,6 +188,10 @@ namespace Utilities.LD
             
             var frontSide = transform.forward;
             var backSide = -transform.forward;
+            var frontRight = frontSide + transform.right;
+            var frontLeft = frontSide - transform.right;
+            var backRight = backSide + transform.right;
+            var backLeft = backSide - transform.right;
             
             if (oui.Length == 1)
             {
@@ -202,10 +208,35 @@ namespace Utilities.LD
             {
                 if (oui[i] == col) continue;
                 if (oui[i] == GetComponentInChildren<Collider>()) continue;
-                var distanceToFrontSide = Vector3.Distance(transform.position + frontSide, oui[i].ClosestPoint(transform.position + frontSide));
-                var distanceToBackSide = Vector3.Distance(transform.position + backSide, oui[i].ClosestPoint(transform.position + backSide));
+                closestPos.Clear();
                 
-                if (distanceToFrontSide > distanceToBackSide)
+                closestPos.Add(Vector3.Distance(transform.position + frontRight, oui[i].ClosestPoint(transform.position + frontRight)));  //FrontRight = 0
+                closestPos.Add(Vector3.Distance(transform.position + frontLeft, oui[i].ClosestPoint(transform.position + frontLeft)));    //FrontLeft  = 1
+                closestPos.Add(Vector3.Distance(transform.position + backRight, oui[i].ClosestPoint(transform.position + backRight)));    //BackRight  = 2
+                closestPos.Add(Vector3.Distance(transform.position + backLeft, oui[i].ClosestPoint(transform.position + backLeft)));      //BackLeft   = 3
+
+
+                switch (closestPos.IndexOf(closestPos.Min()))
+                {
+                    case 0:
+                        Debug.Log("a");
+                        transform.position -= transform.right * 0.01f;
+                        PlayerController.instance.transform.position -= PlayerController.instance.transform.right * 0.01f;
+                        break;
+                    case 1:
+                        transform.position += transform.right * 0.01f;
+                        PlayerController.instance.transform.position += PlayerController.instance.transform.right * 0.01f;
+                        break;
+                    case 2:
+                        transform.position -= transform.right * 0.01f;
+                        PlayerController.instance.transform.position -= PlayerController.instance.transform.right * 0.01f;
+                        break;
+                    case 3:
+                        transform.position += transform.right * 0.01f;
+                        PlayerController.instance.transform.position += PlayerController.instance.transform.right * 0.01f;
+                        break;
+                }
+                /*if (distanceToFrontSide > distanceToBackSide)
                 {
                     PlayerController.instance.canPull = false;
                     PlayerController.instance.canPush = true;
@@ -214,14 +245,9 @@ namespace Utilities.LD
                 {
                     PlayerController.instance.canPull = true;
                     PlayerController.instance.canPush = false;
-                }
+                }*/
             }
         }
-        
-        /*private void OnCollisionEnter(Collision other)
-        {
-            CheckDeSesMorts();
-        }*/
         
         private void OnCollisionStay(Collision other)
         {
