@@ -77,6 +77,11 @@ namespace Player
         private float grabTimer = 0;
         private bool oui;
         [Foldout("Autre")] public LayerMask mask;
+
+        #region AnimStuff
+
+        
+
         [HorizontalLine(2,EColor.Blue)]
         [BoxGroup("Anim d'intro")]public bool introCinematic;
         [BoxGroup("Anim d'intro")] [ShowIf("introCinematic")] public Transform pointToMove;
@@ -106,6 +111,10 @@ namespace Player
         [BoxGroup("Cinématique de fin")] [ShowIf("cinematiqueDeFin")] public Transform girlHead;
         [BoxGroup("Cinématique de fin")] [ShowIf("cinematiqueDeFin")] public Transform chapo;
         [BoxGroup("Cinématique de fin")] [ShowIf("cinematiqueDeFin")] public GameObject fireHead;
+        
+        #endregion
+        
+        
         public Transform laPetite;
         private Vector3 savedLeft;
         private Vector3 savedRight;
