@@ -118,7 +118,7 @@ namespace Utilities.Cinematic
             DOTween.To(()=> PlayerController.instance.minSpeed, x=> PlayerController.instance.minSpeed = x, 0f, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);*/
             DOTween.To(()=> PlayerController.instance.rb.velocity, x=> PlayerController.instance.rb.velocity = x, Vector3.zero, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
             DOTween.To(()=> PlayerController.instance.rig[0].GetFloat(Speed), x=> PlayerController.instance.rig[0].GetFloat(Speed), 0, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
-            //CinematicBands.instance.OpenBands();
+            CinematicBands.instance.OpenBands();
             PlayerController.instance.controls.Disable();
             PlayerController.instance.canMove = false;
             yield return new WaitForSeconds(timeToBeginFootprints);
@@ -126,7 +126,6 @@ namespace Utilities.Cinematic
             PlayerController.instance.rb.velocity = Vector3.zero;
             
             StartCoroutine(PlayerController.instance.OmgJeSuisSurpris(littleSisterScript.objectToMove.transform));
-            
             //PlayerController.instance.rig[0].SetBool(IsTripping,true);
             
            // yield return new WaitForNextFrameUnit();
@@ -135,7 +134,7 @@ namespace Utilities.Cinematic
             yield return new WaitForSeconds(timeToFall);
             PlayerController.instance.introCinematic = false;
             PlayerController.instance.rig[0].SetBool(IsTripping,false);
-           // CinematicBands.instance.CloseBands();
+            CinematicBands.instance.CloseBands();
             PlayerController.instance.controls.Enable();
             PlayerController.instance.canMove = true;
             PlayerController.instance.rb.velocity = Vector3.zero;
