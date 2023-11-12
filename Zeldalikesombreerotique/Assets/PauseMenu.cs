@@ -52,7 +52,10 @@ public class PauseMenu : MonoBehaviour
     }
     public void Quit()
     {
-        Application.Quit();
+        DOTween.To(() => blackScreen.alpha, x => blackScreen.alpha = x, 1, 0.6f).OnComplete(() =>
+        {
+            Application.Quit();
+        });
     }
 
     public void Start()

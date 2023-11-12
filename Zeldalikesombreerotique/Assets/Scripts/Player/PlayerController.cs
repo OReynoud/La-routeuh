@@ -823,7 +823,7 @@ namespace Player
 
         public IEnumerator LaDerniereRoute()
         {
-         //   CinematicBands.instance.OpenBands();
+            CinematicBands.instance.OpenBands();
             //Debug.Log("Begining Cinematic");
             rb.isKinematic = true;
             DOTween.defaultEaseType = Ease.Linear;
@@ -920,7 +920,12 @@ namespace Player
             yield return new WaitForSeconds(4f);
             PauseMenu.instance.logoGroup.DOFade(1, 1f);
             yield return new WaitForSeconds(4f);
-            SceneManager.LoadScene("MainMenu");
+            
+            DOTween.To(() => PauseMenu.instance.blackScreen.alpha, x => PauseMenu.instance.blackScreen.alpha = x, 1, 0.6f).OnComplete(
+                () =>
+                {
+                    SceneManager.LoadScene("MainMenu");
+                });
         }
 
         IEnumerator LookingAtGirl()
