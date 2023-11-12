@@ -413,8 +413,6 @@ MonoBehaviour:
   childCollider: {fileID: 0}
   reappearanceSpeed: 0
   handlePos: {fileID: 5993942374077063223}
-  hasToppled: 0
-  toppleForce: 0
   isColliding: 0
   overlapBox: 1.6
   isTutorial: 0
@@ -423,6 +421,7 @@ MonoBehaviour:
   rotationRequired: 0
   pushPullUI: {fileID: 0}
   rotateUI: {fileID: 0}
+  limitations: []
   spawnPos: {x: 0, y: 0, z: 0}
 --- !u!82 &2516332761904786950
 AudioSource:
@@ -437,7 +436,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
-  m_Pitch: 1
+  m_Pitch: 0.8
   Loop: 0
   Mute: 0
   Spatialize: 0
