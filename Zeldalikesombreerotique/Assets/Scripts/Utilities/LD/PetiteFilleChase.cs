@@ -52,7 +52,7 @@ public class PetiteFilleChase : MonoBehaviour
             if (!playerCollider.gameObject.CompareTag("Player")) return;
             var currentSlowDown =
                 Vector3.Distance(playerCollider.ClosestPoint(transform.position), transform.position) / (slowDownFactor + slowDownRadius);
-            clockShader.SetFloat("_Rotation_Speed", currentSlowDown * 10);
+            clockShader.SetFloat("_Rotation_Speed", currentSlowDown * 5);
             if (currentSlowDown < percentMaxSlow)
             {
                 currentSlowDown = percentMaxSlow;
