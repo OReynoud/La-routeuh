@@ -28,9 +28,11 @@ namespace Utilities.LD
         internal bool IsTotallyLinked;
         
         // Bezier values
+        [Header("Bezier values")]
         [SerializeField] private List<Transform> startPoints;
         [SerializeField] private List<Transform> controlPoints;
         [SerializeField] private List<Transform> endPoints;
+        [SerializeField] private int pointsNumber;
         private readonly List<Vector3> _bezierPoints = new();
         private float _totalDistance;
 
@@ -70,7 +72,7 @@ namespace Utilities.LD
                 
                 while (timer < 1)
                 {
-                    timer += timeToBeDrawn / Vector3.Distance(startPoints[i].position,endPoints[i].position) * Time.deltaTime;
+                    timer += 1f / pointsNumber;
                     var m1 = Vector3.Lerp(startPoints[i].position, controlPoints[i].position, timer);
                     var m2 = Vector3.Lerp(controlPoints[i].position, endPoints[i].position, timer);
                     m1 = new Vector3(m1.x, -0.1f, m1.z);
@@ -85,6 +87,7 @@ namespace Utilities.LD
             for (var i = 0; i < _bezierPoints.Count; i++)
             {
                 disabledLineRenderer.SetPosition(i, _bezierPoints[i]);
+                enabledLineRenderer.SetPosition(i, _bezierPoints[i]);
             }
 
             for (var i = 0; i < _bezierPoints.Count - 1; i++)
