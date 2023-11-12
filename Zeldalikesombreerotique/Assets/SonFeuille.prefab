@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1941082794683725187}
   - component: {fileID: 3712247964522431585}
-  - component: {fileID: 2547209850998337665}
+  - component: {fileID: 1598962756509633168}
+  - component: {fileID: 5518952151831895663}
   m_Layer: 0
   m_Name: SonFeuille
   m_TagString: Untagged
@@ -26,11 +27,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1277839395253038905}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 60.66798, y: 0.3456335, z: -44.843292}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7310464142548746029}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47,7 +47,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.2582917, y: 1.73, z: 3.042285}
   m_Center: {x: -1.0561358, y: 0.06971544, z: 0.35069886}
---- !u!114 &2547209850998337665
+--- !u!114 &1598962756509633168
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,56 +56,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1277839395253038905}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fb7ea7b344aac643a265c916e605162, type: 3}
+  m_Script: {fileID: 11500000, guid: 6dae7556268ff72459d48fb7e206caf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 4480081546965185966}
---- !u!1 &3099707034072618256
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7310464142548746029}
-  - component: {fileID: 4480081546965185966}
-  m_Layer: 0
-  m_Name: Crack
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7310464142548746029
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3099707034072618256}
-  m_LocalRotation: {x: -0.000000016987382, y: -0.629191, z: 0.0000000137514045, w: 0.7772508}
-  m_LocalPosition: {x: -6.4205103, y: -10.749297, z: -1.7527328}
-  m_LocalScale: {x: 0.9999996, y: 1, z: 0.9999996}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1941082794683725187}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &4480081546965185966
+  feuille: {fileID: 5518952151831895663}
+--- !u!82 &5518952151831895663
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3099707034072618256}
+  m_GameObject: {fileID: 1277839395253038905}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -8142624863235100889, guid: c8b83561e557ac045887219e0526677b,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: b5c48ccd5706ff745836508cc68466de, type: 3}
-  m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_PlayOnAwake: 0
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -116,7 +84,7 @@ AudioSource:
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
