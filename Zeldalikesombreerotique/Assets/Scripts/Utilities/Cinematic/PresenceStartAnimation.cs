@@ -38,6 +38,8 @@ namespace Utilities.Cinematic
         [Header("Little Sister")]
         [SerializeField] private Parkour littleSisterScript;
         [SerializeField] private bool isStandingAtStart;
+        [SerializeField] private AudioClip LeafCrackSound;
+        public Transform locationToWalk;
 
         // Fall
         [Header("Fall")]
@@ -108,10 +110,6 @@ namespace Utilities.Cinematic
         private IEnumerator WaitToFallCoroutine()
         {
             yield return new WaitForEndOfFrame();
-            PlayerController.instance.rb.isKinematic = true;
-            PlayerController.instance.introCinematic = true;
-            PlayerController.instance.rig[0].SetBool(IsWalking,false);
-            PlayerController.instance.rig[1].SetBool(IsWalking,false);
             var maxSpeedTemp = PlayerController.instance.maxSpeed;
             var minSpeedTemp = PlayerController.instance.minSpeed;
             /*DOTween.To(()=> PlayerController.instance.maxSpeed, x=> PlayerController.instance.maxSpeed = x, 0f, timeToBeginFootprints).SetEase(easeToSlowDownBeforeFall);
@@ -122,6 +120,12 @@ namespace Utilities.Cinematic
             PlayerController.instance.controls.Disable();
             PlayerController.instance.canMove = false;
             yield return new WaitForSeconds(timeToBeginFootprints);
+            
+            PlayerController.instance.rb.isKinematic = true;
+            PlayerController.instance.introCinematic = true;
+            _audioSource.PlayOneShot(LeafCrackSound);
+            PlayerController.instance.rig[0].SetBool(IsWalking,false);
+            PlayerController.instance.rig[1].SetBool(IsWalking,false);
             StartCoroutine(PlayerController.instance.OmgJeSuisSurpris(littleSisterScript.objectToMove.transform));
             yield return new WaitForSeconds(timeBeforeFall - timeToBeginFootprints);
             PlayerController.instance.rb.velocity = Vector3.zero;

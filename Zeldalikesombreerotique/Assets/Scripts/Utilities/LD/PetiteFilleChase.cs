@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Player;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class PetiteFilleChase : MonoBehaviour
@@ -23,7 +22,6 @@ public class PetiteFilleChase : MonoBehaviour
     public StopMusique sfx;
     
     public Material clockShader;
-    public ShaderInput input;
     // Start is called before the first frame update
     
     
