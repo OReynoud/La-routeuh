@@ -823,7 +823,7 @@ namespace Player
 
         public IEnumerator LaDerniereRoute()
         {
-            CinematicBands.instance.OpenBands();
+         //   CinematicBands.instance.OpenBands();
             //Debug.Log("Begining Cinematic");
             rb.isKinematic = true;
             DOTween.defaultEaseType = Ease.Linear;
@@ -851,11 +851,12 @@ namespace Player
             rig[1].SetBool("isWalking", false);
             yield return new WaitForSeconds(timeToPickChapo);
             chapo.SetParent(girlHand);
+            chapo.DOLocalRotate(Vector3.zero, timeToPutChapo);
             yield return new WaitForSeconds(timeToPutChapo);
             chapo.SetParent(girlHead);
-            yield return new WaitForSeconds(0.2f);
-            chapo.DOLocalJump(Vector3.up * 0.1f, 0.1f,1, conePutOnDuration);
+            //yield return new WaitForSeconds(0.2f);
             chapo.DOLocalRotate(Vector3.zero, conePutOnDuration);
+            chapo.DOLocalJump(Vector3.up * 0.1f, 0.1f,1, conePutOnDuration);
             fireHead.SetActive(false);
             yield return new WaitForSeconds(filleWaitingTime[1] - timeToPickChapo - timeToPutChapo -conePutOnDuration - 0.2f);
             //Debug.Log("Girl Looks at PLayer");
