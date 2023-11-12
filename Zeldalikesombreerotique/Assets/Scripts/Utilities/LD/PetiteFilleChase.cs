@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Player;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class PetiteFilleChase : MonoBehaviour
@@ -20,6 +21,9 @@ public class PetiteFilleChase : MonoBehaviour
     public LayerMask playerMask;
 
     public StopMusique sfx;
+    
+    public Material clockShader;
+    public ShaderInput input;
     // Start is called before the first frame update
     
     
@@ -33,6 +37,9 @@ public class PetiteFilleChase : MonoBehaviour
     {
         savedMaxSpeed = PlayerController.instance.maxSpeed;
         savedMinSpeed = PlayerController.instance.minSpeed;
+        //clockShader.SetFloat();
+        
+        Debug.Log(clockShader.GetFloat("_Rotation_Speed"));
     }
 
     // Update is called once per frame
@@ -45,9 +52,11 @@ public class PetiteFilleChase : MonoBehaviour
             if (!playerCollider.gameObject.CompareTag("Player")) return;
             var currentSlowDown =
                 Vector3.Distance(playerCollider.ClosestPoint(transform.position), transform.position) / (slowDownFactor + slowDownRadius);
+            clockShader.SetFloat("_Rotation_Speed", currentSlowDown * 10);
             if (currentSlowDown < percentMaxSlow)
             {
                 currentSlowDown = percentMaxSlow;
+                clockShader.SetFloat("_Rotation_Speed", percentMaxSlow * 10);
             }
 
             if (stopPlayer)
@@ -90,6 +99,7 @@ public class PetiteFilleChase : MonoBehaviour
         willSlowDownPlayer = false;
         PlayerController.instance.maxSpeed = savedMaxSpeed;
         PlayerController.instance.minSpeed = savedMinSpeed;
+        clockShader.SetFloat("_Rotation_Speed",10);
         stopPlayer = false;
     }
 }

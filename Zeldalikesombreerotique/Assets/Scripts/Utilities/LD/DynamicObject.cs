@@ -36,9 +36,7 @@ namespace Utilities.LD
         [ShowIf("visibilityType",VisibilityType.DelayedReappear)][SerializeField][Tooltip("Valeur entre 0 et 1, détermine la vitesse à laquelle l'ombre réapparait")] internal float reappearanceSpeed;
         private float pushTimer;
         [ShowIf("mobilityType",MobilityType.MoveWithHandle)][SerializeField][Tooltip("La ou l'avatar du joueur se positionne pour manipuler objet")] internal Transform handlePos;
-        [Tooltip("Est'ce que l'objet a essayé de se renverser?")]public bool hasToppled;
         private Rigidbody rb;
-        [Tooltip("La force utilisée pour renverser l'objet(les plus gros objets nécessiteront plus de force)")]public float toppleForce;
         private BoxCollider col;
         private bool clockwiseTimer;
         private bool counterClockwiseTimer;
@@ -52,6 +50,7 @@ namespace Utilities.LD
         private List<SpriteRenderer> pushPullSprites = new List<SpriteRenderer>();
         [ShowIf("isTutorial")] public Transform rotateUI;
         private List<SpriteRenderer> rotateSprites = new List<SpriteRenderer>();
+        public SpriteRenderer[] limitations;
         private bool pushPullActive;
         private bool rotateActive;
         private Vector3 lastSavedPos;
@@ -107,6 +106,11 @@ namespace Utilities.LD
                 else if (PlayerController.instance.pushingPullingRotate && PlayerController.instance.objectType == this)
                 {
                     CheckDeSesMorts();
+                }
+
+                foreach (var sprite in limitations)
+                {
+                    
                 }
             }
 

@@ -802,12 +802,13 @@ namespace Player
 
         public IEnumerator OmgJeSuisSurpris(Transform objectToLookAt)
         {
+            rig[0].Play("suprise");
             while (!canMove)
             {
                 Vector3 dir = objectToLookAt.position - transform.position;
                 var dirNormed = dir.normalized;
                 var angle2 = Mathf.Atan2(dirNormed.x, dirNormed.z) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.AngleAxis(angle2,Vector3.up);
+                //transform.rotation = Quaternion.AngleAxis(angle2,Vector3.up);
                 yield return new WaitForFixedUpdate();
             }
         }
