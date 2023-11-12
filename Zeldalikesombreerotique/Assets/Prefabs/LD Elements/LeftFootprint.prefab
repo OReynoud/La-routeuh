@@ -78,6 +78,9 @@ MonoBehaviour:
   rotateUI: {fileID: 0}
   limitations: []
   spawnPos: {x: 0, y: 0, z: 0}
+  timer: 0
+  appearColor: {r: 0, g: 0, b: 0, a: 0}
+  invisColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &9143577213458638948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,7 +217,7 @@ Transform:
   m_GameObject: {fileID: 2643460363795113219}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.02, z: 0}
-  m_LocalScale: {x: 0.015, y: 0.015, z: 0.015}
+  m_LocalScale: {x: 0.025, y: 0.025, z: 0.025}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2643460362958697227}
@@ -240,7 +243,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 342f64e5c2b10cb4d918f3ae3f5ca042, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -261,12 +264,12 @@ SpriteRenderer:
   m_SortingLayerID: -822311507
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: cc0e0f02206054e4198b50cb6e008eec, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.627451}
+  m_Sprite: {fileID: 21300000, guid: ac61e332c34cd03428f095fdf2c81092, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.43137255}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.88, y: 4.77}
+  m_Size: {x: 20.48, y: 20.48}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
