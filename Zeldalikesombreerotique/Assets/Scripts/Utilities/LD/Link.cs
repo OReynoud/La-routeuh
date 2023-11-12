@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DG.Tweening;
 using Player;
 using UnityEngine;
@@ -17,16 +18,21 @@ namespace Utilities.LD
         [SerializeField] private Draw objectToLink2;
         internal bool IsObject1Enabled;
         internal bool IsObject2Enabled;
-        private Vector3 _object1Position;
-        private Vector3 _object2Position;
         
         // Draw values
         [Header("Draw values")]
         [SerializeField] private float timeToBeDrawn;
         [SerializeField] private Ease easeToDraw;
         private Sequence _drawSequence;
+        private Sequence _drawReversedSequence;
         internal bool IsTotallyLinked;
-        internal bool IsDrawn;
+        
+        // Bezier values
+        [SerializeField] private List<Transform> startPoints;
+        [SerializeField] private List<Transform> controlPoints;
+        [SerializeField] private List<Transform> endPoints;
+        private readonly List<Vector3> _bezierPoints = new();
+        private float _totalDistance;
 
         private void Awake()
         {
@@ -37,14 +43,102 @@ namespace Utilities.LD
             objectToLink1.Links.Add((this, 1));
             objectToLink2.Links.Add((this, 2));
         }
+        
+        public void OnDrawGizmos()
+        {
+            for (var j = 0; j < startPoints.Count; j++)
+            {
+                for (var i = 0f; i < 1f; i += 0.05f)
+                {
+                    var m1 = Vector3.Lerp(startPoints[j].position, controlPoints[j].position, i);
+                    var m2 = Vector3.Lerp(controlPoints[j].position, endPoints[j].position, i);
+                    Gizmos.DrawSphere(Vector3.Lerp(m1, m2, i),0.1f);
+                    Gizmos.DrawLine(startPoints[j].position, controlPoints[j].position);
+                    Gizmos.DrawLine(endPoints[j].position, controlPoints[j].position);
+                }
+            }
+        }
 
         internal void InitializeLineRenderers()
         {
-            _object1Position = objectToLink1.linkPoint ? objectToLink1.linkPoint.position : objectToLink1.transform.position;
-            _object2Position = objectToLink2.linkPoint ? objectToLink2.linkPoint.position : objectToLink2.transform.position;
+            _bezierPoints.Clear();
+            _bezierPoints.Add(SlightlyLift(startPoints[0].position));
+            
+            for (var i = 0; i < startPoints.Count; i++)
+            {
+                var timer = 0f;
+                
+                while (timer < 1)
+                {
+                    timer += timeToBeDrawn / Vector3.Distance(startPoints[i].position,endPoints[i].position) * Time.deltaTime;
+                    var m1 = Vector3.Lerp(startPoints[i].position, controlPoints[i].position, timer);
+                    var m2 = Vector3.Lerp(controlPoints[i].position, endPoints[i].position, timer);
+                    m1 = new Vector3(m1.x, -0.1f, m1.z);
+                    m2 = new Vector3(m2.x, -0.1f, m2.z);
+                    _bezierPoints.Add(SlightlyLift(Vector3.Lerp(m1, m2, timer)));
+                }
+            }
+            
+            disabledLineRenderer.positionCount = _bezierPoints.Count;
+            enabledLineRenderer.positionCount = _bezierPoints.Count;
 
-            disabledLineRenderer.SetPositions(new[] { SlightlyLift(_object1Position), SlightlyLift(_object2Position) });
-            enabledLineRenderer.SetPositions(new[] { SlightlyLift(_object1Position), SlightlyLift(_object2Position) });
+            for (var i = 0; i < _bezierPoints.Count; i++)
+            {
+                disabledLineRenderer.SetPosition(i, _bezierPoints[i]);
+            }
+
+            for (var i = 0; i < _bezierPoints.Count - 1; i++)
+            {
+                _totalDistance += Vector3.Distance(_bezierPoints[i], _bezierPoints[i + 1]);
+            }
+            
+            InitializeSequences();
+        }
+
+        private void InitializeSequences()
+        {
+            _drawSequence = DOTween.Sequence();
+            _drawReversedSequence = DOTween.Sequence();
+            
+            _drawSequence.SetAutoKill(false);
+            _drawReversedSequence.SetAutoKill(false);
+            
+            for (var i = 1; i < enabledLineRenderer.positionCount; i++)
+            {
+                var tempSequence = DOTween.Sequence();
+                
+                for (var j = i; j < enabledLineRenderer.positionCount; j++)
+                {
+                    var index = j;
+                    
+                    tempSequence.Join(DOTween.To(() => enabledLineRenderer.GetPosition(index), 
+                            x => enabledLineRenderer.SetPosition(index, x), _bezierPoints[i], 
+                            timeToBeDrawn * (Vector3.Distance(_bezierPoints[i], _bezierPoints[i - 1]) / _totalDistance))
+                        .SetEase(easeToDraw));
+                }
+                
+                _drawSequence.Append(tempSequence);
+            }
+            
+            for (var i = enabledLineRenderer.positionCount - 2; i >= 0; i--)
+            {
+                var tempSequence = DOTween.Sequence();
+                
+                for (var j = i; j >= 0; j--)
+                {
+                    var index = j;
+                    
+                    tempSequence.Join(DOTween.To(() => enabledLineRenderer.GetPosition(index), 
+                            x => enabledLineRenderer.SetPosition(index, x), _bezierPoints[i],
+                            timeToBeDrawn * (Vector3.Distance(_bezierPoints[i], _bezierPoints[i + 1]) / _totalDistance))
+                        .SetEase(easeToDraw));
+                }
+                
+                _drawReversedSequence.Append(tempSequence);
+            }
+            
+            _drawSequence.Rewind();
+            _drawReversedSequence.Rewind();
         }
 
         internal void CheckIfBothObjectsAreEnabled(int index)
@@ -54,11 +148,11 @@ namespace Utilities.LD
                 switch (index)
                 {
                     case 1:
-                        DrawLine(SlightlyLift(_object1Position), SlightlyLift(_object2Position), 1);
+                        DrawLine(false);
                         break;
                     
                     case 2:
-                        DrawLine(SlightlyLift(_object2Position), SlightlyLift(_object1Position), 0);
+                        DrawLine(true);
                         break;
                 }
             }
@@ -66,28 +160,41 @@ namespace Utilities.LD
             {
                 if (!IsTotallyLinked)
                 {
-                    _drawSequence?.Kill();
+                    _drawSequence?.Rewind();
                     enabledLineRenderer.enabled = false;
                 }
             }
         }
 
-        private void DrawLine(Vector3 startingPosition, Vector3 endingPosition, int positionIndex)
+        private void DrawLine(bool isReversed)
         {
-            enabledLineRenderer.SetPositions(new[] { startingPosition, startingPosition });
+            if (isReversed)
+            {
+                for (var i = 0; i < enabledLineRenderer.positionCount; i++)
+                {
+                    enabledLineRenderer.SetPosition(i, _bezierPoints[^1]);
+                }
+            }
+            else
+            {
+                for (var i = 0; i < enabledLineRenderer.positionCount; i++)
+                {
+                    enabledLineRenderer.SetPosition(i, _bezierPoints[0]);
+                }
+            }
+            
             enabledLineRenderer.enabled = true;
             
             PlayerController.instance.ScribblingSound(timeToBeDrawn);
-                
-            _drawSequence = DOTween.Sequence();
-            _drawSequence.Append(DOTween.To(() => enabledLineRenderer.GetPosition(positionIndex), 
-                    x => enabledLineRenderer.SetPosition(positionIndex, x), 
-                    endingPosition, timeToBeDrawn).SetEase(easeToDraw)
-                .OnComplete(() =>
-                {
-                    _drawSequence = null;
-                    IsDrawn = true;
-                }));
+            
+            if (isReversed)
+            {
+                _drawReversedSequence.Restart();
+            }
+            else
+            {
+                _drawSequence.Restart();
+            }
         }
         
         private static Vector3 SlightlyLift(Vector3 position)
