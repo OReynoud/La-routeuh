@@ -37,6 +37,8 @@ namespace UI
         void Start()
         {
             SceneValue = PlayerPrefs.GetInt("TheValue", SceneValue);
+            credits.alpha = 1;
+            DOTween.To(() => credits.alpha, x => credits.alpha = x, 0, 0.6f);
             Cursor.lockState = CursorLockMode.Locked;
         }
         // Update is called once per frame
@@ -69,7 +71,7 @@ namespace UI
         }
         public void Play()
         {
-            DOTween.To(() => credits.alpha,x => credits.alpha = x,0,0.4f).OnComplete(() =>
+            DOTween.To(() => credits.alpha,x => credits.alpha = x,1,0.6f).OnComplete(() =>
             {
                 SceneManager.LoadScene("Loop - Puzzle 1");
             });
