@@ -704,6 +704,11 @@ PrefabInstance:
       propertyPath: sfx
       value: 
       objectReference: {fileID: 437367264}
+    - target: {fileID: 1091270052980945694, guid: 6361689bb1d73f6498708fee52945204,
+        type: 3}
+      propertyPath: clockShader
+      value: 
+      objectReference: {fileID: 2100000, guid: 0769806582130864e8aee9dd31a8c534, type: 2}
     - target: {fileID: 5130666385164180578, guid: 6361689bb1d73f6498708fee52945204,
         type: 3}
       propertyPath: timeBeforeReturning
@@ -724,6 +729,11 @@ PrefabInstance:
       propertyPath: gameObjectsToDisable.Array.data[0]
       value: 
       objectReference: {fileID: 698381972}
+    - target: {fileID: 6573735221422193506, guid: 6361689bb1d73f6498708fee52945204,
+        type: 3}
+      propertyPath: clockShader
+      value: 
+      objectReference: {fileID: 2100000, guid: 0769806582130864e8aee9dd31a8c534, type: 2}
     - target: {fileID: 7930023085543182168, guid: 6361689bb1d73f6498708fee52945204,
         type: 3}
       propertyPath: mapPartToMove
@@ -759,6 +769,11 @@ PrefabInstance:
       propertyPath: gameObjectsToDisable.Array.data[0]
       value: 
       objectReference: {fileID: 392838824}
+    - target: {fileID: 8147725348410819478, guid: 6361689bb1d73f6498708fee52945204,
+        type: 3}
+      propertyPath: clockShader
+      value: 
+      objectReference: {fileID: 2100000, guid: 0769806582130864e8aee9dd31a8c534, type: 2}
     - target: {fileID: 8909916335915420484, guid: 6361689bb1d73f6498708fee52945204,
         type: 3}
       propertyPath: mapPartToMove
@@ -4109,7 +4124,7 @@ PrefabInstance:
     - target: {fileID: 8740017080087081594, guid: 906abc5d6c5c86547b0e91b4c8cb1980,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.7710037
+      value: -2.3
       objectReference: {fileID: 0}
     - target: {fileID: 8740017080087081594, guid: 906abc5d6c5c86547b0e91b4c8cb1980,
         type: 3}
@@ -4119,7 +4134,7 @@ PrefabInstance:
     - target: {fileID: 8740017080087081594, guid: 906abc5d6c5c86547b0e91b4c8cb1980,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -19.977997
+      value: -23.08
       objectReference: {fileID: 0}
     - target: {fileID: 8740017080087081594, guid: 906abc5d6c5c86547b0e91b4c8cb1980,
         type: 3}
@@ -6892,7 +6907,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1082412841}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.0800018, y: 0.29000092, z: -20.031998}
+  m_LocalPosition: {x: -2.61, y: 0.16, z: -23.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14355,6 +14370,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 971736665, guid: d5a95edf64d31d342b035a2cb222a9ab, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.209961
+      objectReference: {fileID: 0}
     - target: {fileID: 4951847770326391763, guid: d5a95edf64d31d342b035a2cb222a9ab,
         type: 3}
       propertyPath: mapPartToMove
@@ -14470,6 +14489,21 @@ PrefabInstance:
       propertyPath: mapPartsToDisable.Array.data[0]
       value: 
       objectReference: {fileID: 1985743312}
+    - target: {fileID: 6929485553903750776, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.8599548
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167184344340832426, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.909256
+      objectReference: {fileID: 0}
+    - target: {fileID: 7495487186210784211, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.459961
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5a95edf64d31d342b035a2cb222a9ab, type: 3}
 --- !u!1001 &6998835612094475220
@@ -15912,7 +15946,7 @@ PrefabInstance:
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
       propertyPath: introCinematic
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329058, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
