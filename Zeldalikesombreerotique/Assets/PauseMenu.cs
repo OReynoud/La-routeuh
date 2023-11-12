@@ -29,6 +29,7 @@ public class PauseMenu : MonoBehaviour
     public Toggle vibrationsCheck;
     public Toggle fullScreenCheck;
     public CanvasGroup logoGroup;
+    public CanvasGroup blackScreen;
 
     public InputUI controls;
     // Start is called before the first frame update
@@ -46,6 +47,8 @@ public class PauseMenu : MonoBehaviour
         controls.UI.Enable();
         controls.UI.Leave.Enable();
         controls.UI.Leave.performed += LeaveMenus;
+        blackScreen.alpha = 1;
+        DOTween.To(() => blackScreen.alpha, x => blackScreen.alpha = x, 0, 0.6f);
     }
     public void Quit()
     {

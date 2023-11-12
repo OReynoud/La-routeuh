@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 701333955440044648}
   - component: {fileID: 701333955440044654}
   - component: {fileID: 701333955440044655}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: BrokenLight
   m_TagString: Untagged
   m_Icon: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
@@ -210,6 +210,9 @@ MonoBehaviour:
   light: {fileID: 701333956156210696}
   lightMeshRenderer: {fileID: 701333954648114044}
   meshFilter: {fileID: 701333954648114045}
+  mask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!108 &701333956156210696
 Light:
   m_ObjectHideFlags: 0

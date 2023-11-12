@@ -189,6 +189,7 @@ namespace Utilities.LD
                 {
                     if (oui[i] == col) continue;
                     if (oui[i] == GetComponentInChildren<Collider>()) continue;
+                    Debug.Log(oui[i].name,oui[i].gameObject);
                     var distToRight = Vector3.Distance(transform.position + rightSide, oui[i].ClosestPoint(transform.position + rightSide));
                     var distToLeft = Vector3.Distance(transform.position + leftSide, oui[i].ClosestPoint(transform.position + leftSide));
                     if (distToRight < distToLeft)
@@ -234,6 +235,8 @@ namespace Utilities.LD
             {
                 if (oui[i] == col) continue;
                 if (oui[i] == GetComponentInChildren<Collider>()) continue;
+                
+                Debug.Log(oui[i].name,oui[i].gameObject);
                 closestPos.Clear();
                 
                 closestPos.Add(Vector3.Distance(transform.position + frontRight, oui[i].ClosestPoint(transform.position + frontRight)));  //FrontRight = 0

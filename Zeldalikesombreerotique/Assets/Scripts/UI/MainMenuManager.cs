@@ -69,7 +69,10 @@ namespace UI
         }
         public void Play()
         {
-            SceneManager.LoadScene("Loop - Puzzle 1");
+            DOTween.To(() => credits.alpha,x => credits.alpha = x,0,0.4f).OnComplete(() =>
+            {
+                SceneManager.LoadScene("Loop - Puzzle 1");
+            });
         }
         public void ShowOptions()
         {
