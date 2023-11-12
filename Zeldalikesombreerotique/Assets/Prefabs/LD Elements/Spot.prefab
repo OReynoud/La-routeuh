@@ -116,8 +116,6 @@ MonoBehaviour:
   childCollider: {fileID: 0}
   reappearanceSpeed: 0
   handlePos: {fileID: 2209674429059700070}
-  hasToppled: 0
-  toppleForce: 0
   isColliding: 0
   overlapBox: 1.6
   isTutorial: 0
@@ -126,7 +124,11 @@ MonoBehaviour:
   rotationRequired: 0
   pushPullUI: {fileID: 0}
   rotateUI: {fileID: 0}
+  limitations: []
   spawnPos: {x: 0, y: 0, z: 0}
+  timer: 0
+  appearColor: {r: 1, g: 1, b: 1, a: 0.5686275}
+  invisColor: {r: 1, g: 1, b: 1, a: 0}
 --- !u!1 &8766165274463127469
 GameObject:
   m_ObjectHideFlags: 0

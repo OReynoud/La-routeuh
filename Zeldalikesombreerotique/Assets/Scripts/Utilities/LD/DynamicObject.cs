@@ -57,6 +57,9 @@ namespace Utilities.LD
         private Vector3 lastSavedRotation;
         public Vector3 spawnPos;
         private List<float> closestPos = new List<float>();
+        public float timer = 0;
+        public Color appearColor;
+        public Color invisColor;
 
 
         private void Awake()
@@ -108,11 +111,31 @@ namespace Utilities.LD
                     CheckDeSesMorts();
                 }
 
-                foreach (var sprite in limitations)
+                if (PlayerController.instance.objectType == this)
                 {
-                    
+                    if (timer <= 1)
+                    { 
+                        timer += Time.deltaTime;
+                    }
+                    foreach (var sprite in limitations)
+                    {
+                        sprite.color = Color.Lerp(invisColor, appearColor,timer);
+                    }
                 }
+                else
+                {
+                    if (timer >= 0)
+                    {
+                        timer -= Time.deltaTime;
+                    }
+                    foreach (var sprite in limitations)
+                    {
+                        sprite.color = Color.Lerp( invisColor, appearColor,timer);
+                    }
+                }
+                
             }
+            
 
             if (isTutorial && PlayerController.instance)
             {
