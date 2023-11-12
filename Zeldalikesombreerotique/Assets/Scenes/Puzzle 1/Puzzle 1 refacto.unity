@@ -219,7 +219,7 @@ PrefabInstance:
     - target: {fileID: 6998835611510329070, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 21.26
+      value: 31.96
       objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329070, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
@@ -229,7 +229,7 @@ PrefabInstance:
     - target: {fileID: 6998835611510329070, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.68
+      value: -22.83
       objectReference: {fileID: 0}
     - target: {fileID: 6998835611510329070, guid: 77fd2c943eb0e2442bf7233e3b5054df,
         type: 3}
@@ -347,6 +347,43 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &314585659
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 314585660}
+  m_Layer: 0
+  m_Name: PlayerMove
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &314585660
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314585659}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.03, y: 0, z: -10.46}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 686208907}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &686208907 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3053988616075360686, guid: d5a95edf64d31d342b035a2cb222a9ab,
+    type: 3}
+  m_PrefabInstance: {fileID: 1173518653}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &769164802
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,7 +655,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1106815508}
   m_LocalRotation: {x: 0.42261827, y: 0, z: 0, w: 0.9063079}
-  m_LocalPosition: {x: -115.939995, y: 9.3349, z: 101.86122}
+  m_LocalPosition: {x: -105.24, y: 9.334899, z: 93.71122}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -633,6 +670,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 971736665, guid: d5a95edf64d31d342b035a2cb222a9ab, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.2099571
+      objectReference: {fileID: 0}
+    - target: {fileID: 126467123241979916, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
+      propertyPath: LeafCrackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 3352e4c9016f32f46ba76332768701a5, type: 3}
+    - target: {fileID: 126467123241979916, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
+      propertyPath: locationToWalk
+      value: 
+      objectReference: {fileID: 314585660}
+    - target: {fileID: 126467123241979919, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
+      propertyPath: bush
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4951847771638643907, guid: d5a95edf64d31d342b035a2cb222a9ab,
         type: 3}
       propertyPath: m_RootOrder
@@ -692,6 +748,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Puzzle 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6929485553903750776, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.8599567
+      objectReference: {fileID: 0}
+    - target: {fileID: 7167184344340832426, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.9092522
+      objectReference: {fileID: 0}
+    - target: {fileID: 7495487186210784211, guid: d5a95edf64d31d342b035a2cb222a9ab,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.4599571
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5a95edf64d31d342b035a2cb222a9ab, type: 3}
@@ -811,7 +882,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1943832717}
   m_LocalRotation: {x: 0.42261827, y: -0, z: -0, w: 0.9063079}
-  m_LocalPosition: {x: -115.939995, y: 9.3349, z: 101.86122}
+  m_LocalPosition: {x: -105.24, y: 9.334899, z: 93.71122}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
