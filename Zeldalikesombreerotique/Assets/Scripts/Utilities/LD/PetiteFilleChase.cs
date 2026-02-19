@@ -37,7 +37,7 @@ public class PetiteFilleChase : MonoBehaviour
         savedMinSpeed = PlayerController.instance.minSpeed;
         //clockShader.SetFloat();
         
-        Debug.Log(clockShader.GetFloat("_Rotation_Speed"));
+        // Debug.Log(clockShader.GetFloat("_Rotation_Speed"));
     }
 
     // Update is called once per frame
